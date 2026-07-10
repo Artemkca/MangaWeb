@@ -1,0 +1,26 @@
+## Ignore Visual Studio / .NET Core build outputs and configurations
+bin/
+obj/
+out/
+.vs/
+.idea/
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Nesting profiles
+Properties/launchSettings.json
+
+# Rider / IntelliJ Rider
+.idea/
+
+# Local configuration files
+appsettings.Development.json
+appsettings.local.json
