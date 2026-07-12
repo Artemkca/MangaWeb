@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import { useCallback } from 'react';
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24">
@@ -44,41 +44,7 @@ const providers = [
 
 const BOT_ID = '8604912855';
 
-export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
-  // Listen for postMessage from Telegram OAuth popup
-  useEffect(() => {
-    const handler = (e) => {
-      console.log('[TG Auth] postMessage received:', e.origin, e.data);
-      // Accept messages from Telegram domains
-      if (e.origin !== 'https://oauth.telegram.org') return;
-      
-      const data = e.data;
-      if (!data) return;
-
-      // Telegram may send data in various formats
-      let userData = null;
-      
-      if (typeof data === 'object' && data.id) {
-        // Direct user object
-        userData = data;
-      } else if (typeof data === 'object' && data.event === 'auth_result' && data.result) {
-        userData = data.result;
-      } else if (typeof data === 'object' && data.user) {
-        userData = data.user;
-      } else if (typeof data === 'string') {
-        try {
-          userData = JSON.parse(data);
-        } catch (e) { /* not JSON */ }
-      }
-      
-      if (userData && userData.id && onTelegram) {
-        console.log('[TG Auth] User data extracted:', userData);
-        onTelegram(userData);
-      }
-    };
-    window.addEventListener('message', handler);
-    return () => window.removeEventListener('message', handler);
-  }, [onTelegram]);
+export default function SocialButtons({ onGoogle, onSocial }) {
 
   const handleTelegramClick = useCallback(() => {
     const origin = window.location.origin;
@@ -86,60 +52,8 @@ export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
     const left = Math.round(window.screenX + (window.outerWidth - w) / 2);
     const top = Math.round(window.screenY + (window.outerHeight - h) / 2);
     const url = `https://oauth.telegram.org/auth?bot_id=${BOT_ID}&origin=${encodeURIComponent(origin)}&request_access=write&return_to=${encodeURIComponent(origin)}`;
-    const popup = window.open(url, 'telegram_auth', `width=${w},height=${h},left=${left},top=${top}`);
-    
-    if (!popup) return;
-
-    // Also poll the popup as a fallback
-    const timer = setInterval(() => {
-      try {
-        if (popup.closed) {
-          clearInterval(timer);
-          return;
-        }
-        if (popup.location.origin === origin) {
-          const hash = popup.location.hash;
-          const search = popup.location.search;
-          console.log('[TG Auth] Popup redirected to our origin. Hash:', hash, 'Search:', search);
-          
-          // Check hash for tgAuthResult
-          if (hash) {
-            const params = new URLSearchParams(hash.substring(1));
-            const tgAuthResult = params.get('tgAuthResult');
-            if (tgAuthResult) {
-              popup.close();
-              clearInterval(timer);
-              try {
-                const decoded = atob(tgAuthResult.replace(/-/g, '+').replace(/_/g, '/'));
-                const userData = JSON.parse(decoded);
-                console.log('[TG Auth] Decoded tgAuthResult:', userData);
-                if (onTelegram) onTelegram(userData);
-              } catch (e) {
-                console.error('[TG Auth] Failed to parse tgAuthResult', e);
-              }
-              return;
-            }
-          }
-          // Check query params
-          if (search) {
-            const qp = new URLSearchParams(search);
-            const id = qp.get('id');
-            if (id) {
-              popup.close();
-              clearInterval(timer);
-              const userData = {};
-              for (const [k, v] of qp.entries()) userData[k] = v;
-              console.log('[TG Auth] Extracted from query params:', userData);
-              if (onTelegram) onTelegram(userData);
-              return;
-            }
-          }
-        }
-      } catch (e) {
-        // Cross-origin — expected while on telegram.org
-      }
-    }, 300);
-  }, [onTelegram]);
+    window.open(url, 'telegram_auth', `width=${w},height=${h},left=${left},top=${top}`);
+  }, []);
 
   return (
     <div className="auth-social">

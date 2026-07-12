@@ -169,6 +169,32 @@ export function AuthProvider({ children }) {
     }
   }, [finishAuth]);
 
+  // Global listener for Telegram OAuth popup postMessage
+  useEffect(() => {
+    const handler = (e) => {
+      console.log('[TG Auth] postMessage received:', e.origin, e.data);
+      if (e.origin !== 'https://oauth.telegram.org') return;
+      
+      const data = e.data;
+      if (!data || typeof data !== 'object') return;
+
+      let userData = null;
+
+      if (data.event === 'auth_result' && data.result && typeof data.result === 'object') {
+        userData = data.result;
+      } else if (data.id) {
+        userData = data;
+      }
+
+      if (userData && userData.id) {
+        console.log('[TG Auth] User data extracted, calling handleTelegramLogin:', userData);
+        handleTelegramLogin(userData);
+      }
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [handleTelegramLogin]);
+
   const value = useMemo(() => ({
     session,
     authOpen,
