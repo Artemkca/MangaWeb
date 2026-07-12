@@ -102,13 +102,16 @@ export function AuthProvider({ children }) {
       setAuthMessage({ text: 'Сначала укажите VITE_GOOGLE_CLIENT_ID в .env.', type: 'error' });
       return;
     }
-    if (!window.google?.accounts?.id) {
-      setAuthMessage({ text: 'Google SDK ещё загружается. Попробуйте через пару секунд.', type: 'info' });
-      return;
-    }
-    initGoogleIdentity();
-    window.google.accounts.id.prompt(); // Triggers the Google Sign-in Prompt / One Tap dialog
-  }, [initGoogleIdentity]);
+    const nonce = Math.random().toString(36).substring(2);
+    const redirectUri = window.location.origin + window.location.pathname;
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${googleClientId}&` +
+      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+      `response_type=id_token&` +
+      `scope=openid%20email%20profile&` +
+      `nonce=${nonce}`;
+    window.location.href = authUrl;
+  }, []);
 
   const handleTelegramLogin = useCallback(async (user) => {
     try {
@@ -138,6 +141,30 @@ export function AuthProvider({ children }) {
     document.head.appendChild(script);
     return () => script.remove();
   }, [initGoogleIdentity]);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1));
+      const idToken = params.get('id_token');
+      if (idToken) {
+        // Clean URL hash
+        window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
+        
+        // Show loading modal state
+        setAuthOpen(true);
+        setAuthMessage({ text: 'Выполняем вход через Google...', type: 'info' });
+        
+        loginWithGoogle(idToken)
+          .then(user => {
+            finishAuth(user, 'Вход через Google выполнен.');
+          })
+          .catch(err => {
+            setAuthMessage({ text: err.message || 'Ошибка входа через Google.', type: 'error' });
+          });
+      }
+    }
+  }, [finishAuth]);
 
   const value = useMemo(() => ({
     session,
