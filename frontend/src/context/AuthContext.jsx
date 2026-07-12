@@ -107,6 +107,7 @@ export function AuthProvider({ children }) {
       return;
     }
     initGoogleIdentity();
+    window.google.accounts.id.prompt(); // Triggers the Google Sign-in Prompt / One Tap dialog
   }, [initGoogleIdentity]);
 
   const handleSocialStub = useCallback((provider) => {
