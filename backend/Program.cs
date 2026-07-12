@@ -14,6 +14,9 @@ builder.Services.AddDbContext<MangaDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+// Register Telegram Auth Store (shared between bot and API)
+builder.Services.AddSingleton<TelegramAuthStore>();
+
 // Register Telegram Bot Service
 builder.Services.AddHostedService<TelegramBotService>();
 

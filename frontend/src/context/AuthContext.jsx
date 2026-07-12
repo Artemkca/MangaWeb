@@ -7,6 +7,8 @@ import {
   saveSession,
   loginWithGoogle,
   loginWithTelegram,
+  initTelegramAuth,
+  checkTelegramAuthStatus,
 } from '../services/authService';
 
 const AuthContext = createContext(null);
@@ -113,15 +115,39 @@ export function AuthProvider({ children }) {
     window.location.href = authUrl;
   }, []);
 
-  const handleTelegramLogin = useCallback(async (user) => {
+  const handleTelegramStart = useCallback(async () => {
     try {
-      console.log('[TG Auth] handleTelegramLogin called with:', JSON.stringify(user));
-      const dbUser = await loginWithTelegram(user);
-      console.log('[TG Auth] Backend response:', JSON.stringify(dbUser));
-      finishAuth(dbUser, 'Вход через Telegram выполнен.');
+      setAuthMessage({ text: 'Инициализация Telegram...', type: 'info' });
+      const { code } = await initTelegramAuth();
+      
+      const botUrl = `https://t.me/Mangaweb_DT_bot?start=${code}`;
+      window.open(botUrl, '_blank');
+      
+      setAuthMessage({ text: 'Откройте бота и нажмите Start/Запустить...', type: 'info' });
+
+      // Poll for status
+      const pollTimer = setInterval(async () => {
+        try {
+          const status = await checkTelegramAuthStatus(code);
+          if (status && status.confirmed) {
+            clearInterval(pollTimer);
+            finishAuth(status, 'Вход через Telegram выполнен.');
+          }
+        } catch (err) {
+          clearInterval(pollTimer);
+          setAuthMessage({ text: 'Ошибка проверки статуса.', type: 'error' });
+        }
+      }, 2000);
+
+      // Timeout after 5 minutes (300000 ms)
+      setTimeout(() => {
+        clearInterval(pollTimer);
+        setAuthMessage({ text: 'Время ожидания авторизации истекло.', type: 'error' });
+      }, 300000);
+
     } catch (err) {
-      console.error('[TG Auth] Backend error:', err);
-      setAuthMessage({ text: err.message || 'Ошибка входа через Telegram.', type: 'error' });
+      console.error('[TG Auth] Error:', err);
+      setAuthMessage({ text: err.message || 'Ошибка запуска Telegram.', type: 'error' });
     }
   }, [finishAuth]);
 
@@ -169,31 +195,7 @@ export function AuthProvider({ children }) {
     }
   }, [finishAuth]);
 
-  // Global listener for Telegram OAuth popup postMessage
-  useEffect(() => {
-    const handler = (e) => {
-      console.log('[TG Auth] postMessage received:', e.origin, e.data);
-      if (e.origin !== 'https://oauth.telegram.org') return;
-      
-      const data = e.data;
-      if (!data || typeof data !== 'object') return;
-
-      let userData = null;
-
-      if (data.event === 'auth_result' && data.result && typeof data.result === 'object') {
-        userData = data.result;
-      } else if (data.id) {
-        userData = data;
-      }
-
-      if (userData && userData.id) {
-        console.log('[TG Auth] User data extracted, calling handleTelegramLogin:', userData);
-        handleTelegramLogin(userData);
-      }
-    };
-    window.addEventListener('message', handler);
-    return () => window.removeEventListener('message', handler);
-  }, [handleTelegramLogin]);
+  // Removed legacy postMessage listener
 
   const value = useMemo(() => ({
     session,
@@ -209,13 +211,13 @@ export function AuthProvider({ children }) {
     handleRegister,
     handleLogin,
     handleGoogleClick,
-    handleTelegramLogin,
+    handleTelegramStart,
     handleSocialStub,
     refreshSession,
   }), [
     session, authOpen, authTab, authMessage, openAuth, closeAuth, logout,
     handleAuthButtonClick, handleRegister, handleLogin, handleGoogleClick,
-    handleTelegramLogin, handleSocialStub, refreshSession,
+    handleTelegramStart, handleSocialStub, refreshSession,
   ]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

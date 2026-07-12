@@ -22,16 +22,19 @@ namespace MangaWeb.Backend.Services
         private readonly IConfiguration _configuration;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<TelegramBotService> _logger;
+        private readonly TelegramAuthStore _authStore;
         private TelegramBotClient? _botClient;
 
         public TelegramBotService(
             IConfiguration configuration,
             IServiceScopeFactory serviceScopeFactory,
-            ILogger<TelegramBotService> logger)
+            ILogger<TelegramBotService> logger,
+            TelegramAuthStore authStore)
         {
             _configuration = configuration;
             _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
+            _authStore = authStore;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -83,6 +86,36 @@ namespace MangaWeb.Backend.Services
 
             if (command.StartsWith("/start"))
             {
+                // Check if there's an auth code after /start
+                var parts = command.Split(' ', 2);
+                if (parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]))
+                {
+                    var authCode = parts[1].Trim();
+                    var telegramId = message.From?.Id ?? 0;
+                    var username = message.From?.Username ?? $"tg_{telegramId}";
+                    var firstName = message.From?.FirstName ?? "User";
+
+                    var confirmed = _authStore.ConfirmCode(authCode, telegramId, username, firstName);
+
+                    if (confirmed)
+                    {
+                        _logger.LogInformation($"Auth code '{authCode}' confirmed for Telegram user @{username} (ID: {telegramId})");
+                        await botClient.SendTextMessageAsync(chatId,
+                            $"✅ **Авторизация подтверждена!**\n\n" +
+                            $"Привет, {firstName}! Ты успешно вошёл на MangaWeb.\n" +
+                            $"Можешь вернуться на сайт — вход произойдёт автоматически. 🎉",
+                            parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
+                    }
+                    else
+                    {
+                        await botClient.SendTextMessageAsync(chatId,
+                            "❌ Код авторизации не найден или истёк.\n\nПопробуйте ещё раз на сайте.",
+                            cancellationToken: cancellationToken);
+                    }
+                    return;
+                }
+
+                // Normal /start without auth code
                 var welcomeText = $"👋 Привет, {message.From?.FirstName ?? "друг"}!\n\n" +
                                   "Добро пожаловать в **MangaWeb Bot**! 📚\n\n" +
                                   "С моей помощью ты можешь искать мангу прямо в нашем каталоге!\n\n" +
@@ -90,7 +123,7 @@ namespace MangaWeb.Backend.Services
                                   "• `/manga` — Показать популярную мангу из БД\n" +
                                   "• `/search [название]` — Поиск манги в каталоге\n" +
                                   "• Или просто напиши название манги мне в чат!\n\n" +
-                                  "🌐 Наш веб-сайт: http://localhost:5173";
+                                  "🌐 Наш веб-сайт: http://lvh.me:5173";
 
                 await botClient.SendTextMessageAsync(chatId, welcomeText, parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
             }

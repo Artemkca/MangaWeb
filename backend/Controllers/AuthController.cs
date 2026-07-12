@@ -5,6 +5,7 @@ using Google.Apis.Auth;
 using MangaWeb.Backend.Data;
 using MangaWeb.Backend.Models;
 using System.Security.Cryptography;
+using MangaWeb.Backend.Services;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
@@ -19,12 +20,14 @@ namespace MangaWeb.Backend.Controllers
         private readonly MangaDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly PasswordHasher<User> _passwordHasher;
+        private readonly TelegramAuthStore _telegramAuthStore;
 
-        public AuthController(MangaDbContext context, IConfiguration configuration)
+        public AuthController(MangaDbContext context, IConfiguration configuration, TelegramAuthStore telegramAuthStore)
         {
             _context = context;
             _configuration = configuration;
             _passwordHasher = new PasswordHasher<User>();
+            _telegramAuthStore = telegramAuthStore;
         }
 
         // DTOs for Requests
@@ -119,7 +122,64 @@ namespace MangaWeb.Backend.Controllers
             });
         }
 
-        // 3. POST: api/auth/telegram
+        // 3a. POST: api/auth/telegram/init — Generate auth code for bot-based login
+        [HttpPost("telegram/init")]
+        public IActionResult TelegramInit()
+        {
+            var code = _telegramAuthStore.GenerateCode();
+            return Ok(new { code });
+        }
+
+        // 3b. GET: api/auth/telegram/status/{code} — Poll for auth confirmation
+        [HttpGet("telegram/status/{code}")]
+        public async Task<IActionResult> TelegramStatus(string code)
+        {
+            var entry = _telegramAuthStore.GetEntry(code);
+            if (entry == null)
+                return NotFound(new { error = "Code not found or expired." });
+
+            if (!entry.Confirmed)
+                return Ok(new { confirmed = false });
+
+            // Auth confirmed — find or create user in DB
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.TelegramId == entry.TelegramId);
+            if (user == null)
+            {
+                var username = !string.IsNullOrEmpty(entry.TelegramUsername) ? entry.TelegramUsername : $"tg_{entry.TelegramId}";
+                user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        Username = username,
+                        Email = $"{username}@telegram.mangaweb",
+                        TelegramId = entry.TelegramId,
+                        CreatedAt = DateTime.UtcNow
+                    };
+                    _context.Users.Add(user);
+                }
+                else
+                {
+                    user.TelegramId = entry.TelegramId;
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            // Clean up the used code
+            _telegramAuthStore.RemoveCode(code);
+
+            return Ok(new
+            {
+                confirmed = true,
+                token = Guid.NewGuid().ToString(),
+                username = user.Username,
+                email = user.Email,
+                telegramId = user.TelegramId
+            });
+        }
+
+        // 3c. POST: api/auth/telegram (legacy widget-based — kept for compatibility)
         [HttpPost("telegram")]
         public async Task<IActionResult> TelegramLogin([FromBody] TelegramLoginRequest request)
         {
@@ -129,24 +189,20 @@ namespace MangaWeb.Backend.Controllers
                 return BadRequest(new { error = "Telegram Authentication is not configured on the server." });
             }
 
-            // Verify the Telegram authentication signature (hash)
             if (!VerifyTelegramHash(request, botToken))
             {
                 return Unauthorized(new { error = "Telegram authentication signature verification failed." });
             }
 
-            // Check if authentication date is too old (e.g., older than 24 hours)
             var authDateTime = DateTimeOffset.FromUnixTimeSeconds(request.Auth_Date).UtcDateTime;
             if (DateTime.UtcNow - authDateTime > TimeSpan.FromDays(1))
             {
                 return Unauthorized(new { error = "Telegram session has expired." });
             }
 
-            // Find or create user
             var user = await _context.Users.FirstOrDefaultAsync(u => u.TelegramId == request.Id);
             if (user == null)
             {
-                // Fallback: search by username if they don't have Telegram ID linked yet
                 var username = request.Username ?? $"tg_{request.Id}";
                 user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
 
@@ -155,7 +211,7 @@ namespace MangaWeb.Backend.Controllers
                     user = new User
                     {
                         Username = username,
-                        Email = $"{username}@telegram.mangaweb", // Mock email for Telegram signup
+                        Email = $"{username}@telegram.mangaweb",
                         TelegramId = request.Id,
                         CreatedAt = DateTime.UtcNow
                     };
@@ -170,7 +226,7 @@ namespace MangaWeb.Backend.Controllers
 
             return Ok(new
             {
-                token = Guid.NewGuid().ToString(), // Mock session token
+                token = Guid.NewGuid().ToString(),
                 username = user.Username,
                 email = user.Email,
                 telegramId = user.TelegramId

@@ -42,19 +42,7 @@ const providers = [
   { id: 'telegram', label: 'Telegram', Icon: TelegramIcon },
 ];
 
-const BOT_ID = '8604912855';
-
-export default function SocialButtons({ onGoogle, onSocial }) {
-
-  const handleTelegramClick = useCallback(() => {
-    const origin = window.location.origin;
-    const w = 550, h = 470;
-    const left = Math.round(window.screenX + (window.outerWidth - w) / 2);
-    const top = Math.round(window.screenY + (window.outerHeight - h) / 2);
-    const url = `https://oauth.telegram.org/auth?bot_id=${BOT_ID}&origin=${encodeURIComponent(origin)}&request_access=write&return_to=${encodeURIComponent(origin)}`;
-    window.open(url, 'telegram_auth', `width=${w},height=${h},left=${left},top=${top}`);
-  }, []);
-
+export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
   return (
     <div className="auth-social">
       <div className="auth-social__row">
@@ -62,30 +50,24 @@ export default function SocialButtons({ onGoogle, onSocial }) {
           <button
             key={id}
             type="button"
-            className="auth-social-btn"
-            onClick={() => (id === 'google' ? onGoogle() : onSocial(id))}
+            className="auth-social__btn"
+            onClick={id === 'google' ? onGoogle : () => onSocial(id)}
+            title={label}
           >
-            <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
-            {label}
+            <Icon />
           </button>
         ))}
       </div>
-      <div className="auth-social__row auth-social__row--triple">
-        {providers.slice(2).map(({ id, label, Icon }) => (
+      <div className="auth-social__row">
+        {providers.slice(2, 5).map(({ id, label, Icon }) => (
           <button
             key={id}
             type="button"
-            className="auth-social-btn"
-            onClick={() => {
-              if (id === 'telegram') {
-                handleTelegramClick();
-              } else {
-                onSocial(id);
-              }
-            }}
+            className="auth-social__btn"
+            onClick={id === 'telegram' ? onTelegram : () => onSocial(id)}
+            title={label}
           >
-            <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
-            {label}
+            <Icon />
           </button>
         ))}
       </div>

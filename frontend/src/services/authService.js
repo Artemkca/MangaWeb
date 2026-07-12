@@ -161,3 +161,21 @@ export async function loginWithTelegram(telegramData) {
   return user;
 }
 
+export async function initTelegramAuth() {
+  const response = await fetch('/api/auth/telegram/init', {
+    method: 'POST',
+  });
+  if (!response.ok) throw new Error('Failed to init Telegram auth');
+  return await response.json();
+}
+
+export async function checkTelegramAuthStatus(code) {
+  const response = await fetch(`/api/auth/telegram/status/${code}`);
+  if (!response.ok) return null;
+  const data = await response.json();
+  if (data.confirmed && data.token) {
+    saveSession(data, true);
+    return data;
+  }
+  return data;
+}
