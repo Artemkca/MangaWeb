@@ -43,11 +43,10 @@ const providers = [
 ];
 
 export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
-  const [showTelegram, setShowTelegram] = useState(false);
   const tgContainerRef = useRef(null);
 
   useEffect(() => {
-    if (showTelegram && tgContainerRef.current) {
+    if (tgContainerRef.current) {
       window.onTelegramAuth = (user) => {
         onTelegram(user);
       };
@@ -67,7 +66,7 @@ export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
         delete window.onTelegramAuth;
       };
     }
-  }, [showTelegram, onTelegram]);
+  }, [onTelegram]);
 
   return (
     <div className="auth-social">
@@ -88,19 +87,8 @@ export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
         {providers.slice(2).map(({ id, label, Icon }) => {
           if (id === 'telegram') {
             return (
-              <div key={id} className="auth-social-btn-wrapper" style={{ minWidth: '100px', display: 'flex', justifyContent: 'center' }}>
-                {!showTelegram ? (
-                  <button
-                    type="button"
-                    className="auth-social-btn"
-                    onClick={() => setShowTelegram(true)}
-                  >
-                    <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
-                    {label}
-                  </button>
-                ) : (
-                  <div ref={tgContainerRef} className="tg-widget-container" />
-                )}
+              <div key={id} className="auth-social-btn-wrapper" style={{ minWidth: '100px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div ref={tgContainerRef} className="tg-widget-container" />
               </div>
             );
           }
