@@ -45,14 +45,17 @@ const providers = [
 
 const TelegramWidget = React.memo(({ onTelegram }) => {
   const containerRef = useRef(null);
+  const onTelegramRef = useRef(onTelegram);
+  onTelegramRef.current = onTelegram;
 
   useEffect(() => {
     if (containerRef.current) {
       window.onTelegramAuth = (user) => {
-        onTelegram(user);
+        onTelegramRef.current(user);
       };
       const script = document.createElement('script');
-      script.src = 'https://telegram.org/js/telegram-widget.js?22';
+      // Append a cache-buster timestamp to force script re-evaluation upon remount
+      script.src = 'https://telegram.org/js/telegram-widget.js?22&t=' + Date.now();
       script.setAttribute('data-telegram-login', 'Mangaweb_DT_bot'); // Your telegram bot username
       script.setAttribute('data-size', 'medium');
       script.setAttribute('data-onauth', 'onTelegramAuth(user)');
@@ -67,7 +70,7 @@ const TelegramWidget = React.memo(({ onTelegram }) => {
         delete window.onTelegramAuth;
       };
     }
-  }, [onTelegram]);
+  }, []); // Run exactly once on mount
 
   return <div ref={containerRef} className="tg-widget-container" />;
 }, () => true); // Never re-render to prevent React from wiping out Telegram's iframe
