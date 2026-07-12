@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24">
@@ -42,11 +42,12 @@ const providers = [
   { id: 'telegram', label: 'Telegram', Icon: TelegramIcon },
 ];
 
-export default function SocialButtons({ onGoogle, onSocial, onTelegram, active }) {
-  const tgContainerRef = useRef(null);
+
+const TelegramWidget = React.memo(({ onTelegram }) => {
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    if (active && tgContainerRef.current) {
+    if (containerRef.current) {
       window.onTelegramAuth = (user) => {
         onTelegram(user);
       };
@@ -57,17 +58,21 @@ export default function SocialButtons({ onGoogle, onSocial, onTelegram, active }
       script.setAttribute('data-onauth', 'onTelegramAuth(user)');
       script.setAttribute('data-request-access', 'write');
       script.async = true;
-      tgContainerRef.current.appendChild(script);
+      containerRef.current.appendChild(script);
 
       return () => {
-        if (tgContainerRef.current) {
-          tgContainerRef.current.innerHTML = '';
+        if (containerRef.current) {
+          containerRef.current.innerHTML = '';
         }
         delete window.onTelegramAuth;
       };
     }
-  }, [onTelegram, active]);
+  }, [onTelegram]);
 
+  return <div ref={containerRef} className="tg-widget-container" />;
+}, () => true); // Never re-render to prevent React from wiping out Telegram's iframe
+
+export default function SocialButtons({ onGoogle, onSocial, onTelegram, active }) {
   return (
     <div className="auth-social">
       <div className="auth-social__row">
@@ -101,7 +106,7 @@ export default function SocialButtons({ onGoogle, onSocial, onTelegram, active }
             }
             return (
               <div key={id} className="auth-social-btn-wrapper" style={{ minWidth: '100px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div ref={tgContainerRef} className="tg-widget-container" />
+                <TelegramWidget onTelegram={onTelegram} />
               </div>
             );
           }
