@@ -9,6 +9,8 @@ import HomePage from './pages/HomePage';
 import CatalogPage from './pages/CatalogPage';
 import MangaPage from './pages/MangaPage';
 
+import AdminPanel from './pages/AdminPanel';
+
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -20,6 +22,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/manga/:id" element={<MangaPage />} />
+        <Route path="/admin" element={<AdminPanel />} />
       </Routes>
 
       <Footer />

@@ -156,6 +156,16 @@ namespace MangaWeb.Backend.Services
                     await SearchMangaAsync(botClient, chatId, query, frontendUrl, cancellationToken);
                 }
             }
+            else if (command.StartsWith("/clear"))
+            {
+                // Send 50 blank lines to push old messages out of view
+                var blankLines = string.Join("\n", Enumerable.Repeat("ㅤ", 50));
+                await botClient.SendTextMessageAsync(chatId, blankLines + "\n✅ Чат очищен!", cancellationToken: cancellationToken);
+            }
+            else if (command.StartsWith("/addmanga"))
+            {
+                await HandleAddMangaCommand(botClient, chatId, command, cancellationToken);
+            }
             else
             {
                 // Simple search by default text message
@@ -314,6 +324,52 @@ namespace MangaWeb.Backend.Services
 
             _logger.LogError($"Bot polling error: {errorMessage}");
             return Task.CompletedTask;
+        }
+        private async Task HandleAddMangaCommand(ITelegramBotClient botClient, long chatId, string command, CancellationToken cancellationToken)
+        {
+            // Format: /addmanga Title | Author | Description | Genres (comma separated)
+            var input = command.Substring("/addmanga".Length).Trim();
+            if (string.IsNullOrEmpty(input))
+            {
+                await botClient.SendTextMessageAsync(chatId, "⚠️ Формат команды:\n`/addmanga Название | Автор | Описание | Жанр1, Жанр2`", parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
+                return;
+            }
+
+            var parts = input.Split('|').Select(p => p.Trim()).ToArray();
+            if (parts.Length < 2)
+            {
+                await botClient.SendTextMessageAsync(chatId, "⚠️ Укажите хотя бы Название и Автора, разделив их символом `|`.", parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
+                return;
+            }
+
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<MangaDbContext>();
+                try
+                {
+                    var manga = new Manga
+                    {
+                        Title = parts[0],
+                        Author = parts[1],
+                        Description = parts.Length > 2 ? parts[2] : "",
+                        Genres = parts.Length > 3 ? parts[3].Split(',').Select(g => g.Trim()).Where(g => !string.IsNullOrEmpty(g)).ToList() : new List<string>(),
+                        Cover = "",
+                        Rating = 0,
+                        Chapters = 0,
+                        Status = "Ongoing"
+                    };
+
+                    context.Mangas.Add(manga);
+                    await context.SaveChangesAsync(cancellationToken);
+
+                    await botClient.SendTextMessageAsync(chatId, $"✅ Манга **{manga.Title}** успешно добавлена в базу данных!", parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Database error during /addmanga: {ex.Message}");
+                    await botClient.SendTextMessageAsync(chatId, "❌ Ошибка при добавлении манги в базу данных.", cancellationToken: cancellationToken);
+                }
+            }
         }
     }
 }

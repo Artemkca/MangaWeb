@@ -92,5 +92,23 @@ namespace MangaWeb.Backend.Controllers
 
             return CreatedAtAction(nameof(GetReviews), new { id = id }, newReview);
         }
+
+        // 5. POST: api/manga
+        [HttpPost]
+        public async Task<ActionResult<Manga>> AddManga([FromBody] Manga mangaInput)
+        {
+            if (mangaInput == null || string.IsNullOrEmpty(mangaInput.Title))
+            {
+                return BadRequest(new { error = "Manga title is required." });
+            }
+
+            // Ensure ID is 0 so EF Core generates a new one
+            mangaInput.Id = 0;
+
+            _context.Mangas.Add(mangaInput);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetManga), new { id = mangaInput.Id }, mangaInput);
+        }
     }
 }
