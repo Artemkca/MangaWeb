@@ -50,24 +50,30 @@ export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
           <button
             key={id}
             type="button"
-            className="auth-social__btn"
-            onClick={id === 'google' ? onGoogle : () => onSocial(id)}
-            title={label}
+            className="auth-social-btn"
+            onClick={() => (id === 'google' ? onGoogle() : onSocial(id))}
           >
-            <Icon />
+            <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
+            {label}
           </button>
         ))}
       </div>
-      <div className="auth-social__row">
-        {providers.slice(2, 5).map(({ id, label, Icon }) => (
+      <div className="auth-social__row auth-social__row--triple">
+        {providers.slice(2).map(({ id, label, Icon }) => (
           <button
             key={id}
             type="button"
-            className="auth-social__btn"
-            onClick={id === 'telegram' ? onTelegram : () => onSocial(id)}
-            title={label}
+            className="auth-social-btn"
+            onClick={() => {
+              if (id === 'telegram') {
+                onTelegram();
+              } else {
+                onSocial(id);
+              }
+            }}
           >
-            <Icon />
+            <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
+            {label}
           </button>
         ))}
       </div>
