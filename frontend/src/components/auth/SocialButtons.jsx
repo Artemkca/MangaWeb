@@ -45,6 +45,27 @@ const providers = [
 export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
   const [showTelegram, setShowTelegram] = useState(false);
   const tgContainerRef = useRef(null);
+  const googleContainerRef = useRef(null);
+
+  useEffect(() => {
+    const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim() || '';
+    if (!googleClientId) return;
+
+    const interval = setInterval(() => {
+      if (window.google?.accounts?.id && googleContainerRef.current) {
+        window.google.accounts.id.renderButton(googleContainerRef.current, {
+          theme: "outline",
+          size: "large",
+          text: "continue_with",
+          shape: "rectangular",
+          width: 180,
+        });
+        clearInterval(interval);
+      }
+    }, 300);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (showTelegram && tgContainerRef.current) {
@@ -71,18 +92,27 @@ export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
 
   return (
     <div className="auth-social">
-      <div className="auth-social__row">
-        {providers.slice(0, 2).map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            className="auth-social-btn"
-            onClick={() => (id === 'google' ? onGoogle() : onSocial(id))}
-          >
-            <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
-            {label}
-          </button>
-        ))}
+      <div className="auth-social__row" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        {providers.slice(0, 2).map(({ id, label, Icon }) => {
+          if (id === 'google') {
+            return (
+              <div key={id} className="auth-social-btn-wrapper" style={{ width: '180px', display: 'flex', justifyContent: 'center' }}>
+                <div ref={googleContainerRef} />
+              </div>
+            );
+          }
+          return (
+            <button
+              key={id}
+              type="button"
+              className="auth-social-btn"
+              onClick={() => onSocial(id)}
+            >
+              <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
+              {label}
+            </button>
+          );
+        })}
       </div>
       <div className="auth-social__row auth-social__row--triple">
         {providers.slice(2).map(({ id, label, Icon }) => {
