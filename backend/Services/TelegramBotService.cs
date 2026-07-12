@@ -7,6 +7,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using MangaWeb.Backend.Data;
 using MangaWeb.Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -84,6 +85,8 @@ namespace MangaWeb.Backend.Services
 
             var command = messageText.Trim();
 
+            var frontendUrl = _configuration["AppSettings:FrontendUrl"] ?? "http://localhost:5173";
+
             if (command.StartsWith("/start"))
             {
                 // Check if there's an auth code after /start
@@ -104,13 +107,13 @@ namespace MangaWeb.Backend.Services
                             $"✅ **Авторизация подтверждена!**\n\n" +
                             $"Привет, {firstName}! Ты успешно вошёл на MangaWeb.\n" +
                             $"Можешь вернуться на сайт — вход произойдёт автоматически. 🎉",
-                            parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
+                            parseMode: ParseMode.Markdown, replyMarkup: GetMainMenuKeyboard(frontendUrl), cancellationToken: cancellationToken);
                     }
                     else
                     {
                         await botClient.SendTextMessageAsync(chatId,
                             "❌ Код авторизации не найден или истёк.\n\nПопробуйте ещё раз на сайте.",
-                            cancellationToken: cancellationToken);
+                            replyMarkup: GetMainMenuKeyboard(frontendUrl), cancellationToken: cancellationToken);
                     }
                     return;
                 }
@@ -118,18 +121,21 @@ namespace MangaWeb.Backend.Services
                 // Normal /start without auth code
                 var welcomeText = $"👋 Привет, {message.From?.FirstName ?? "друг"}!\n\n" +
                                   "Добро пожаловать в **MangaWeb Bot**! 📚\n\n" +
-                                  "С моей помощью ты можешь искать мангу прямо в нашем каталоге!\n\n" +
-                                  "📍 **Доступные команды:**\n" +
-                                  "• `/manga` — Показать популярную мангу из БД\n" +
-                                  "• `/search [название]` — Поиск манги в каталоге\n" +
-                                  "• Или просто напиши название манги мне в чат!\n\n" +
-                                  "🌐 Наш веб-сайт: http://lvh.me:5173";
+                                  "Выбери действие в меню ниже или просто напиши название манги для поиска!";
 
-                await botClient.SendTextMessageAsync(chatId, welcomeText, parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
+                await botClient.SendTextMessageAsync(chatId, welcomeText, parseMode: ParseMode.Markdown, replyMarkup: GetMainMenuKeyboard(frontendUrl), cancellationToken: cancellationToken);
             }
-            else if (command.StartsWith("/manga"))
+            else if (command.StartsWith("/manga") || command == "🔥 Топ популярного")
             {
-                await SendPopularMangaAsync(botClient, chatId, cancellationToken);
+                await SendPopularMangaAsync(botClient, chatId, frontendUrl, cancellationToken);
+            }
+            else if (command.StartsWith("/random") || command == "🎲 Случайная манга")
+            {
+                await SendRandomMangaAsync(botClient, chatId, frontendUrl, cancellationToken);
+            }
+            else if (command == "🔍 Поиск манги")
+            {
+                await botClient.SendTextMessageAsync(chatId, "⌨️ Напишите название манги в чат, и я найду её для вас!", cancellationToken: cancellationToken);
             }
             else if (command.StartsWith("/search"))
             {
@@ -140,17 +146,38 @@ namespace MangaWeb.Backend.Services
                 }
                 else
                 {
-                    await SearchMangaAsync(botClient, chatId, query, cancellationToken);
+                    await SearchMangaAsync(botClient, chatId, query, frontendUrl, cancellationToken);
                 }
             }
             else
             {
                 // Simple search by default text message
-                await SearchMangaAsync(botClient, chatId, command, cancellationToken);
+                await SearchMangaAsync(botClient, chatId, command, frontendUrl, cancellationToken);
             }
         }
 
-        private async Task SendPopularMangaAsync(ITelegramBotClient botClient, long chatId, CancellationToken cancellationToken)
+        private IReplyMarkup GetMainMenuKeyboard(string frontendUrl)
+        {
+            return new ReplyKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    new KeyboardButton("🔍 Поиск манги"),
+                    new KeyboardButton("🔥 Топ популярного")
+                },
+                new[]
+                {
+                    new KeyboardButton("🎲 Случайная манга"),
+                    KeyboardButton.WithWebApp("🌐 Открыть сайт", new WebAppInfo { Url = frontendUrl })
+                }
+            })
+            {
+                ResizeKeyboard = true,
+                IsPersistent = true
+            };
+        }
+
+        private async Task SendPopularMangaAsync(ITelegramBotClient botClient, long chatId, string frontendUrl, CancellationToken cancellationToken)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -161,7 +188,7 @@ namespace MangaWeb.Backend.Services
 
                     if (!mangas.Any())
                     {
-                        await botClient.SendTextMessageAsync(chatId, "📭 В каталоге базы данных пока нет манги.", cancellationToken: cancellationToken);
+                        await botClient.SendTextMessageAsync(chatId, "📭 В каталоге базы данных пока нет манги.", replyMarkup: GetMainMenuKeyboard(frontendUrl), cancellationToken: cancellationToken);
                         return;
                     }
 
@@ -173,10 +200,13 @@ namespace MangaWeb.Backend.Services
                                    $"👤 Автор: {manga.Author}\n" +
                                    $"⭐️ Рейтинг: {manga.Rating.ToString("F1")}/5.0\n" +
                                    $"📖 Глав: {manga.Chapters}\n" +
-                                   $"🏷 Жанры: {string.Join(", ", manga.Genres)}\n\n" +
-                                   $"🔗 [Читать на MangaWeb](http://localhost:5173)";
+                                   $"🏷 Жанры: {string.Join(", ", manga.Genres)}";
 
-                        await botClient.SendTextMessageAsync(chatId, text, parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
+                        var inlineKeyboard = new InlineKeyboardMarkup(
+                            InlineKeyboardButton.WithUrl("📖 Читать на сайте", frontendUrl)
+                        );
+
+                        await botClient.SendTextMessageAsync(chatId, text, parseMode: ParseMode.Markdown, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
                     }
                 }
                 catch (Exception ex)
@@ -187,7 +217,7 @@ namespace MangaWeb.Backend.Services
             }
         }
 
-        private async Task SearchMangaAsync(ITelegramBotClient botClient, long chatId, string query, CancellationToken cancellationToken)
+        private async Task SearchMangaAsync(ITelegramBotClient botClient, long chatId, string query, string frontendUrl, CancellationToken cancellationToken)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
@@ -201,7 +231,7 @@ namespace MangaWeb.Backend.Services
 
                     if (!mangas.Any())
                     {
-                        await botClient.SendTextMessageAsync(chatId, $"🔍 По запросу \"{query}\" ничего не найдено.", cancellationToken: cancellationToken);
+                        await botClient.SendTextMessageAsync(chatId, $"🔍 По запросу \"{query}\" ничего не найдено.", replyMarkup: GetMainMenuKeyboard(frontendUrl), cancellationToken: cancellationToken);
                         return;
                     }
 
@@ -212,15 +242,55 @@ namespace MangaWeb.Backend.Services
                         var text = $"📚 *{manga.Title}*\n" +
                                    $"👤 Автор: {manga.Author}\n" +
                                    $"⭐️ Рейтинг: {manga.Rating.ToString("F1")}/5.0\n" +
-                                   $"🏷 Жанры: {string.Join(", ", manga.Genres)}\n\n" +
-                                   $"🔗 [Читать на MangaWeb](http://localhost:5173)";
+                                   $"🏷 Жанры: {string.Join(", ", manga.Genres)}";
 
-                        await botClient.SendTextMessageAsync(chatId, text, parseMode: ParseMode.Markdown, cancellationToken: cancellationToken);
+                        var inlineKeyboard = new InlineKeyboardMarkup(
+                            InlineKeyboardButton.WithUrl("📖 Читать на сайте", frontendUrl)
+                        );
+
+                        await botClient.SendTextMessageAsync(chatId, text, parseMode: ParseMode.Markdown, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
                     }
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError($"Database error during search execution: {ex.Message}");
+                    await botClient.SendTextMessageAsync(chatId, "❌ Произошла ошибка при поиске по базе данных.", cancellationToken: cancellationToken);
+                }
+            }
+        }
+
+        private async Task SendRandomMangaAsync(ITelegramBotClient botClient, long chatId, string frontendUrl, CancellationToken cancellationToken)
+        {
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<MangaDbContext>();
+                try
+                {
+                    // OrderBy(Guid.NewGuid()) is a simple way to get a random record in EF Core
+                    var manga = await context.Mangas.OrderBy(m => Guid.NewGuid()).FirstOrDefaultAsync(cancellationToken);
+
+                    if (manga == null)
+                    {
+                        await botClient.SendTextMessageAsync(chatId, "📭 В каталоге базы данных пока нет манги.", replyMarkup: GetMainMenuKeyboard(frontendUrl), cancellationToken: cancellationToken);
+                        return;
+                    }
+
+                    var text = $"🎲 **Случайная манга:**\n\n" +
+                               $"📚 *{manga.Title}*\n" +
+                               $"👤 Автор: {manga.Author}\n" +
+                               $"⭐️ Рейтинг: {manga.Rating.ToString("F1")}/5.0\n" +
+                               $"📖 Глав: {manga.Chapters}\n" +
+                               $"🏷 Жанры: {string.Join(", ", manga.Genres)}";
+
+                    var inlineKeyboard = new InlineKeyboardMarkup(
+                        InlineKeyboardButton.WithUrl("📖 Читать на сайте", frontendUrl)
+                    );
+
+                    await botClient.SendTextMessageAsync(chatId, text, parseMode: ParseMode.Markdown, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Database error during /random execution: {ex.Message}");
                     await botClient.SendTextMessageAsync(chatId, "❌ Произошла ошибка при поиске по базе данных.", cancellationToken: cancellationToken);
                 }
             }
