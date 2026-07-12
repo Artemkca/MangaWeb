@@ -103,7 +103,7 @@ export function AuthProvider({ children }) {
       return;
     }
     const nonce = Math.random().toString(36).substring(2);
-    const redirectUri = window.location.origin + window.location.pathname;
+    const redirectUri = window.location.origin;
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${googleClientId}&` +
       `redirect_uri=${encodeURIComponent(redirectUri)}&` +
