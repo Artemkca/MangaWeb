@@ -79,57 +79,85 @@ export async function registerUser({ username, email, password, passwordConfirm 
   if (password !== passwordConfirm) {
     throw new Error('Пароли не совпадают.');
   }
-  const normalized = normalizeEmail(email);
-  const users = getUsers();
-  if (users[normalized]) {
-    throw new Error('Аккаунт с такой почтой уже существует. Попробуйте войти.');
+
+  const response = await fetch('/api/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, email, password }),
+  });
+
+  if (!response.ok) {
+    let errMsg = 'Ошибка регистрации';
+    try {
+      const err = await response.json();
+      errMsg = err.error || errMsg;
+    } catch {}
+    throw new Error(errMsg);
   }
-  const user = {
-    username,
-    email: normalized,
-    passwordHash: await hashPassword(password),
-    provider: 'email',
-    createdAt: new Date().toISOString(),
-  };
-  users[normalized] = user;
-  saveUsers(users);
-  return user;
+
+  return await response.json();
 }
 
 export async function loginUser({ email, password, remember }) {
-  const normalized = normalizeEmail(email);
-  const users = getUsers();
-  const user = users[normalized];
-  if (!user) throw new Error('Аккаунт с такой почтой не найден.');
-  if (user.provider === 'google' && !user.passwordHash) {
-    throw new Error('Этот аккаунт создан через Google. Нажмите кнопку Google ниже.');
+  const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!response.ok) {
+    let errMsg = 'Неверная почта или пароль';
+    try {
+      const err = await response.json();
+      errMsg = err.error || errMsg;
+    } catch {}
+    throw new Error(errMsg);
   }
-  const passwordHash = await hashPassword(password);
-  if (passwordHash !== user.passwordHash) throw new Error('Неверный пароль.');
+
+  const user = await response.json();
   saveSession(user, remember);
   return user;
 }
 
-export function signInWithGoogleProfile(profile) {
-  const email = normalizeEmail(profile.email);
-  if (!email || !email.includes('@')) throw new Error('Google не вернул корректную почту.');
-  if (profile.email_verified === false) throw new Error('Google не подтвердил эту почту.');
+export async function loginWithGoogle(idToken) {
+  const response = await fetch('/api/auth/google', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idToken }),
+  });
 
-  const users = getUsers();
-  const user = users[email] || {
-    username: profile.name || profile.given_name || email.split('@')[0],
-    email,
-    provider: 'google',
-    createdAt: new Date().toISOString(),
-  };
+  if (!response.ok) {
+    let errMsg = 'Ошибка входа через Google';
+    try {
+      const err = await response.json();
+      errMsg = err.error || errMsg;
+    } catch {}
+    throw new Error(errMsg);
+  }
 
-  user.provider = user.provider || 'google';
-  user.googleLinked = true;
-  user.googleSub = profile.sub || user.googleSub;
-  user.avatar = profile.picture || user.avatar;
-  user.username = user.username || profile.name || profile.given_name || email.split('@')[0];
-  users[email] = user;
-  saveUsers(users);
+  const user = await response.json();
   saveSession(user, true);
   return user;
 }
+
+export async function loginWithTelegram(telegramData) {
+  const response = await fetch('/api/auth/telegram', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(telegramData),
+  });
+
+  if (!response.ok) {
+    let errMsg = 'Ошибка входа через Telegram';
+    try {
+      const err = await response.json();
+      errMsg = err.error || errMsg;
+    } catch {}
+    throw new Error(errMsg);
+  }
+
+  const user = await response.json();
+  saveSession(user, true);
+  return user;
+}
+

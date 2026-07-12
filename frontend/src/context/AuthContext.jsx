@@ -1,12 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   clearSession,
-  decodeGoogleJwt,
   getSession,
   loginUser,
   registerUser,
   saveSession,
-  signInWithGoogleProfile,
+  loginWithGoogle,
+  loginWithTelegram,
 } from '../services/authService';
 
 const AuthContext = createContext(null);
@@ -70,16 +70,16 @@ export function AuthProvider({ children }) {
     return user;
   }, [closeAuth]);
 
-  const handleGoogleCredential = useCallback((response) => {
+  const handleGoogleCredential = useCallback(async (response) => {
     try {
       if (!response?.credential) {
         setAuthMessage({ text: 'Google не вернул токен входа.', type: 'error' });
         return;
       }
-      const user = signInWithGoogleProfile(decodeGoogleJwt(response.credential));
+      const user = await loginWithGoogle(response.credential);
       finishAuth(user, 'Вход через Google выполнен.');
-    } catch {
-      setAuthMessage({ text: 'Не получилось прочитать ответ Google.', type: 'error' });
+    } catch (err) {
+      setAuthMessage({ text: err.message || 'Ошибка входа через Google.', type: 'error' });
     }
   }, [finishAuth]);
 
@@ -110,8 +110,17 @@ export function AuthProvider({ children }) {
     window.google.accounts.id.prompt(); // Triggers the Google Sign-in Prompt / One Tap dialog
   }, [initGoogleIdentity]);
 
+  const handleTelegramLogin = useCallback(async (user) => {
+    try {
+      const dbUser = await loginWithTelegram(user);
+      finishAuth(dbUser, 'Вход через Telegram выполнен.');
+    } catch (err) {
+      setAuthMessage({ text: err.message || 'Ошибка входа через Telegram.', type: 'error' });
+    }
+  }, [finishAuth]);
+
   const handleSocialStub = useCallback((provider) => {
-    const names = { apple: 'Apple', yandex: 'Яндекс', vk: 'ВК', telegram: 'Telegram' };
+    const names = { apple: 'Apple', yandex: 'Яндекс', vk: 'ВК' };
     setAuthMessage({ text: `Вход через ${names[provider] || 'сервис'} пока только в дизайне.`, type: 'info' });
   }, []);
 
@@ -144,12 +153,13 @@ export function AuthProvider({ children }) {
     handleRegister,
     handleLogin,
     handleGoogleClick,
+    handleTelegramLogin,
     handleSocialStub,
     refreshSession,
   }), [
     session, authOpen, authTab, authMessage, openAuth, closeAuth, logout,
     handleAuthButtonClick, handleRegister, handleLogin, handleGoogleClick,
-    handleSocialStub, refreshSession,
+    handleTelegramLogin, handleSocialStub, refreshSession,
   ]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -42,6 +42,7 @@ export default function AuthModal() {
     handleRegister,
     handleLogin,
     handleGoogleClick,
+    handleTelegramLogin,
     handleSocialStub,
   } = useAuth();
 
@@ -128,7 +129,7 @@ export default function AuthModal() {
             Нет аккаунта? <span className="auth-link" onClick={() => setAuthTab('register')}>Зарегистрироваться</span>
           </p>
           <p className="auth-divider">Или через</p>
-          <SocialButtons onGoogle={handleGoogleClick} onSocial={handleSocialStub} />
+          <SocialButtons onGoogle={handleGoogleClick} onSocial={handleSocialStub} onTelegram={handleTelegramLogin} />
         </form>
 
         <form className={`auth-form${authTab === 'register' ? ' auth-form--active' : ''}`} onSubmit={onRegister}>

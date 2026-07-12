@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
+
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24">
     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -40,7 +42,33 @@ const providers = [
   { id: 'telegram', label: 'Telegram', Icon: TelegramIcon },
 ];
 
-export default function SocialButtons({ onGoogle, onSocial }) {
+export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
+  const [showTelegram, setShowTelegram] = useState(false);
+  const tgContainerRef = useRef(null);
+
+  useEffect(() => {
+    if (showTelegram && tgContainerRef.current) {
+      window.onTelegramAuth = (user) => {
+        onTelegram(user);
+      };
+      const script = document.createElement('script');
+      script.src = 'https://telegram.org/js/telegram-widget.js?22';
+      script.setAttribute('data-telegram-login', 'Mangaweb_DT_bot'); // Your telegram bot username
+      script.setAttribute('data-size', 'medium');
+      script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+      script.setAttribute('data-request-access', 'write');
+      script.async = true;
+      tgContainerRef.current.appendChild(script);
+
+      return () => {
+        if (tgContainerRef.current) {
+          tgContainerRef.current.innerHTML = '';
+        }
+        delete window.onTelegramAuth;
+      };
+    }
+  }, [showTelegram, onTelegram]);
+
   return (
     <div className="auth-social">
       <div className="auth-social__row">
@@ -57,17 +85,37 @@ export default function SocialButtons({ onGoogle, onSocial }) {
         ))}
       </div>
       <div className="auth-social__row auth-social__row--triple">
-        {providers.slice(2).map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            className="auth-social-btn"
-            onClick={() => onSocial(id)}
-          >
-            <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
-            {label}
-          </button>
-        ))}
+        {providers.slice(2).map(({ id, label, Icon }) => {
+          if (id === 'telegram') {
+            return (
+              <div key={id} className="auth-social-btn-wrapper" style={{ minWidth: '100px', display: 'flex', justifyContent: 'center' }}>
+                {!showTelegram ? (
+                  <button
+                    type="button"
+                    className="auth-social-btn"
+                    onClick={() => setShowTelegram(true)}
+                  >
+                    <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
+                    {label}
+                  </button>
+                ) : (
+                  <div ref={tgContainerRef} className="tg-widget-container" />
+                )}
+              </div>
+            );
+          }
+          return (
+            <button
+              key={id}
+              type="button"
+              className="auth-social-btn"
+              onClick={() => onSocial(id)}
+            >
+              <span className="auth-social-btn__icon" aria-hidden="true"><Icon /></span>
+              {label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
