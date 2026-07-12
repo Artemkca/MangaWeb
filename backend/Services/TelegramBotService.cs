@@ -51,7 +51,7 @@ namespace MangaWeb.Backend.Services
             };
 
             _logger.LogInformation("Starting Telegram Bot listener...");
-            
+
             try
             {
                 _botClient.StartReceiving(
@@ -125,7 +125,7 @@ namespace MangaWeb.Backend.Services
                 try
                 {
                     var mangas = await context.Mangas.OrderByDescending(m => m.Rating).Take(5).ToListAsync(cancellationToken);
-                    
+
                     if (!mangas.Any())
                     {
                         await botClient.SendTextMessageAsync(chatId, "📭 В каталоге базы данных пока нет манги.", cancellationToken: cancellationToken);
