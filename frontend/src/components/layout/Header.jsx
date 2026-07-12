@@ -1,0 +1,59 @@
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+
+const LoginIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+    <polyline points="10 17 15 12 10 7" />
+    <line x1="15" y1="12" x2="3" y2="12" />
+  </svg>
+);
+
+const AccountIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="8" r="4" />
+    <path d="M20 21a8 8 0 0 0-16 0" />
+  </svg>
+);
+
+export default function Header({ onOpenSearch }) {
+  const location = useLocation();
+  const { session, handleAuthButtonClick } = useAuth();
+
+  const isActive = (path) => location.pathname === path;
+
+  return (
+    <header className="header">
+      <div className="header__inner">
+        <Link to="/" className="logo">MangaFlow</Link>
+
+        <nav className="nav nav--desktop">
+          <button type="button" className="nav__btn" onClick={onOpenSearch}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            Поиск
+          </button>
+          <Link to="/catalog" className={`nav__btn${isActive('/catalog') ? ' nav__btn--active' : ''}`}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></svg>
+            Каталог
+          </Link>
+          <button type="button" className="nav__btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>
+            Ещё
+          </button>
+        </nav>
+
+        <div className="header__actions">
+          <button
+            type="button"
+            className={`btn btn--login${session ? ' btn--account' : ''}`}
+            title={session ? 'Нажмите, чтобы выйти' : 'Войти'}
+            onClick={handleAuthButtonClick}
+          >
+            {session ? <AccountIcon /> : <LoginIcon />}
+            {session ? session.username : 'Войти'}
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
