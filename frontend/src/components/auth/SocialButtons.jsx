@@ -42,7 +42,7 @@ const providers = [
   { id: 'telegram', label: 'Telegram', Icon: TelegramIcon },
 ];
 
-const BOT_USERNAME = 'Mangaweb_DT_bot';
+const BOT_ID = '8604912855';
 
 export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
   // Listen for postMessage from Telegram auth popup
@@ -59,12 +59,11 @@ export default function SocialButtons({ onGoogle, onSocial, onTelegram }) {
   }, [onTelegram]);
 
   const handleTelegramClick = useCallback(() => {
-    const botId = BOT_USERNAME;
     const origin = window.location.origin;
     const w = 550, h = 470;
     const left = Math.round(window.screenX + (window.outerWidth - w) / 2);
     const top = Math.round(window.screenY + (window.outerHeight - h) / 2);
-    const url = `https://oauth.telegram.org/auth?bot_id=${botId}&origin=${encodeURIComponent(origin)}&request_access=write&return_to=${encodeURIComponent(origin)}`;
+    const url = `https://oauth.telegram.org/auth?bot_id=${BOT_ID}&origin=${encodeURIComponent(origin)}&request_access=write&return_to=${encodeURIComponent(origin)}`;
     window.open(url, 'telegram_auth', `width=${w},height=${h},left=${left},top=${top}`);
   }, []);
 
