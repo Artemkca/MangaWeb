@@ -49,12 +49,8 @@ export default function AuthModal() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === 'Escape' && authOpen) closeAuth();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [authOpen, closeAuth]);
+    // Esc key closing removed as requested by user
+  }, []);
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -91,12 +87,12 @@ export default function AuthModal() {
 
   return (
     <div className={`auth-overlay${authOpen ? ' auth-overlay--open' : ''}`}>
-      <div className="auth-overlay__backdrop" onClick={closeAuth}>
+      <div className="auth-overlay__backdrop">
         {authOpen && <StarfieldCanvas />}
       </div>
       <div className={`auth-modal${authTab === 'register' ? ' auth-modal--register' : ''}`}>
         <button type="button" className="auth-modal__close" onClick={closeAuth}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6 6 18M6 6l12 12" /></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
         </button>
 
         <h2 className="auth-modal__title">{authTab === 'login' ? 'Вход' : 'Регистрация'}</h2>
@@ -137,9 +133,9 @@ export default function AuthModal() {
             <label htmlFor="reg-username">Логин</label>
             <div className="auth-input-wrap">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></svg>
-              <input id="reg-username" type="text" className="auth-input" name="username" placeholder="Придумайте уникальный логин" autoComplete="username" minLength={3} maxLength={20} required />
+              <input id="reg-username" type="text" className="auth-input" name="username" placeholder="Придумайте уникальный логин" autoComplete="username" minLength={5} maxLength={20} required />
             </div>
-            <span className="auth-hint">От 3 до 20 символов, только буквы и цифры</span>
+            <span className="auth-hint">От 5 до 20 символов, только буквы и цифры</span>
           </div>
           <div className="auth-field">
             <label htmlFor="reg-email">Почта</label>

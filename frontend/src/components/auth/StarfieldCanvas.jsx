@@ -12,7 +12,7 @@ export default function StarfieldCanvas() {
         // Pre-calculate lines for performance to avoid O(N^2) in the draw loop
         data.forEach(c => {
           c.lines = [];
-          const maxDist = 0.018; 
+          const maxDist = 0.012; 
           for(let i=0; i<c.points.length; i++) {
             for(let j=i+1; j<c.points.length; j++) {
               const dx = c.points[i][0] - c.points[j][0];
@@ -66,6 +66,12 @@ export default function StarfieldCanvas() {
     const constellationSpeed = 0.15; // Matches average background star speed
 
     const onMouseMove = (e) => {
+      // If hovering over the modal form itself, disperse the constellation
+      if (e.target.closest('.auth-modal')) {
+        isHovering = false;
+        return;
+      }
+
       const mouseX = e.clientX;
       const mouseY = e.clientY;
       const dataArr = constellationsRef.current;
@@ -74,17 +80,13 @@ export default function StarfieldCanvas() {
 
       if (!isHovering) {
         isHovering = true;
-        activeData = dataArr[targetIndex % dataArr.length];
-        targetIndex++;
+        // Pick a completely random character instead of sequential
+        activeData = dataArr[Math.floor(Math.random() * dataArr.length)];
         cx = mouseX;
         cy = mouseY;
         
-        // Magnetize: use only the stars that are physically closest to the mouse!
-        stars.sort((a, b) => {
-          const distA = (a.x - cx)**2 + (a.y - cy)**2;
-          const distB = (b.x - cx)**2 + (b.y - cy)**2;
-          return distA - distB;
-        });
+        // Randomly pick stars from the entire background to avoid creating a dark void
+        stars.sort(() => Math.random() - 0.5);
         
         // Ensure fluid vertical morphing by sorting the chosen stars by Y coordinate
         if (activeData && activeData.points) {
@@ -100,17 +102,14 @@ export default function StarfieldCanvas() {
         const dist = Math.hypot(mouseX - cx, mouseY - cy);
         if (dist > 350) {
           assemblyPhase = 0.1; // Drops phase to hide lines and make it morph smoothly
-          activeData = dataArr[targetIndex % dataArr.length];
-          targetIndex++;
+          // Pick a completely random character instead of sequential
+          activeData = dataArr[Math.floor(Math.random() * dataArr.length)];
           cx = mouseX;
           cy = mouseY;
           
-          // Re-magnetize for the new position
-          stars.sort((a, b) => {
-            const distA = (a.x - cx)**2 + (a.y - cy)**2;
-            const distB = (b.x - cx)**2 + (b.y - cy)**2;
-            return distA - distB;
-          });
+          // Randomly pick stars from the entire background so the old face scatters
+          // and the new face assembles from all over the screen
+          stars.sort(() => Math.random() - 0.5);
           
           // Ensure fluid vertical morphing
           if (activeData && activeData.points) {
@@ -160,6 +159,7 @@ export default function StarfieldCanvas() {
       // Drift the entire constellation to the left with the background
       if (activeData && isHovering) {
         cx -= constellationSpeed;
+        cx = (cx % width + width) % width; // Smoothly bound cx
         
         const size = Math.min(width, height) * 0.65;
         const aspect = activeData.aspect || 1;
@@ -171,8 +171,12 @@ export default function StarfieldCanvas() {
         // Dynamically update target coordinates so they move left
         for (let i = 0; i < stars.length; i++) {
           if (i < activeData.points.length) {
-            stars[i].tx = ox + activeData.points[i][0] * drawW;
-            stars[i].ty = oy + activeData.points[i][1] * drawH;
+            let tx = ox + activeData.points[i][0] * drawW;
+            let ty = oy + activeData.points[i][1] * drawH;
+            
+            // Seamless wrap for individual stars
+            stars[i].tx = (tx % width + width) % width;
+            stars[i].ty = ty;
           } else {
             stars[i].tx = stars[i].baseX;
             stars[i].ty = stars[i].baseY;
@@ -190,38 +194,56 @@ export default function StarfieldCanvas() {
         if (s.baseX < -5) {
           s.baseX = width + 5;
           s.baseY = Math.random() * height;
-          if (assemblyPhase < 0.01) s.x = s.baseX; 
         }
 
         // Interpolate position with fast, snappy spring physics
-        if (isHovering && activeData && i < activeData.points.length) {
-          const dx = s.tx - s.x;
-          const dy = s.ty - s.y;
+        const isFaceStar = isHovering && activeData && i < activeData.points.length;
+        
+        if (isFaceStar) {
+          let dx = s.tx - s.x;
+          let dy = s.ty - s.y;
           
-          const spring = 0.08; 
-          const friction = 0.75; 
+          // Shortest path interpolation to handle seamless wrapping
+          // Only do this when the face is mostly assembled, otherwise background stars
+          // will glitch and teleport across the screen when first flying in!
+          if (assemblyPhase > 0.8) {
+            if (dx > width * 0.5) {
+              s.x += width;
+              dx = s.tx - s.x;
+            } else if (dx < -width * 0.5) {
+              s.x -= width;
+              dx = s.tx - s.x;
+            }
+          }
           
-          s.vx += dx * spring;
-          s.vy += dy * spring;
-          
-          s.vx *= friction;
-          s.vy *= friction;
-          
-          s.x += s.vx;
-          s.y += s.vy;
+          // Maximally simple and smooth easing (no bounce, no twitching)
+          s.x += dx * 0.25;
+          s.y += dy * 0.25;
+          s.vx = 0;
+          s.vy = 0;
         } else {
-          s.x += (s.baseX - s.x) * 0.25; // Scatter back to background much faster
+          // If star wrapped around screen, snap immediately so it doesn't fly across
+          if (Math.abs(s.x - s.baseX) > width * 0.5) {
+            s.x = s.baseX;
+            s.y = s.baseY;
+          }
+          // Smoothly dissolve back to background
+          s.x += (s.baseX - s.x) * 0.25; 
           s.y += (s.baseY - s.y) * 0.25;
           s.vx = 0;
           s.vy = 0;
         }
 
         const tw = Math.sin(time * s.twinkle + s.offset) * 0.4 + 0.6;
-        const alpha = s.brightness * tw + (assemblyPhase * 0.1); // Glow up subtly when assembled
+        // Make the face stars significantly brighter
+        const faceGlow = isFaceStar ? assemblyPhase * 0.7 : 0;
+        const alpha = s.brightness * tw + faceGlow;
 
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.radius * (1 + assemblyPhase * 0.2), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200, 210, 255, ${Math.min(1, alpha)})`;
+        // Slightly enlarge the stars that make up the face
+        const radiusMult = 1 + (isFaceStar ? assemblyPhase * 1.0 : assemblyPhase * 0.2);
+        ctx.arc(s.x, s.y, s.radius * radiusMult, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220, 230, 255, ${Math.min(1, Math.max(0, alpha))})`;
         ctx.fill();
       }
 
@@ -239,12 +261,16 @@ export default function StarfieldCanvas() {
           const dist2 = Math.abs(s2.x - s2.tx) + Math.abs(s2.y - s2.ty);
           
           if (dist1 < 30 && dist2 < 30) {
-            ctx.beginPath();
-            ctx.moveTo(s1.x, s1.y);
-            ctx.lineTo(s2.x, s2.y);
-            ctx.strokeStyle = `rgba(180, 210, 255, ${assemblyPhase * 0.15})`; // Much more subtle lines
-            ctx.lineWidth = 0.4; // Thinner lines to match background better
-            ctx.stroke();
+            // Prevent drawing lines across the entire screen when wrapped
+            if (Math.abs(s1.x - s2.x) < width * 0.5) {
+              ctx.beginPath();
+              ctx.moveTo(s1.x, s1.y);
+              ctx.lineTo(s2.x, s2.y);
+              // Added a subtle magical blue/purple glow to the lines to make them look better
+              ctx.strokeStyle = `rgba(160, 190, 255, ${assemblyPhase * 0.25})`; 
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
         ctx.globalAlpha = 1.0;

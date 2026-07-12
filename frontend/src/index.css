@@ -2308,23 +2308,26 @@ img { max-width: 100%; display: block; }
   opacity: 0.6;
 }
 
-.auth-modal {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: rgba(22, 23, 26, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-xl);
-  padding: 32px 28px 28px;
-  box-shadow: 0 24px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transform: scale(0.95) translateY(10px);
-  transition: transform 0.25s;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
+  .auth-modal {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: rgba(22, 23, 26, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    padding: 32px 28px 28px;
+    /* Removed box-shadow to eliminate darkening behind the modal */
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.25s;
+    scrollbar-width: none;
+  }
+
+.auth-modal::-webkit-scrollbar {
+  display: none;
 }
 
 .auth-modal::before {
@@ -3305,4 +3308,31 @@ img { max-width: 100%; display: block; }
 .manga-credit-item__role {
   font-size: 12px;
   color: var(--text-secondary);
+}
+
+/* ===== ADAPTIVE AUTH MODAL ===== */
+@media (max-height: 850px) {
+  .auth-modal { padding: 24px 24px 20px; }
+  .auth-form { gap: 12px; }
+  .auth-input-wrap { height: 42px; }
+  .auth-submit { height: 42px; margin-top: 0; }
+  .auth-social-btn { height: 42px; }
+  .auth-field label { margin-bottom: 4px; }
+  .auth-modal__title { margin-bottom: 2px; }
+  .auth-modal__subtitle { margin-bottom: 12px; }
+  .auth-social { gap: 6px; }
+}
+
+@media (max-height: 750px) {
+  .auth-modal { padding: 16px 20px; }
+  .auth-form { gap: 8px; }
+  .auth-input-wrap { height: 38px; }
+  .auth-submit { height: 38px; }
+  .auth-social-btn { height: 38px; }
+  .auth-modal__title { font-size: 18px; }
+  .auth-modal__subtitle { display: none; }
+  .auth-field label { display: none; }
+  .auth-hint { margin-top: 2px; font-size: 10px; }
+  .auth-social__row { gap: 6px; }
+  .auth-divider { margin: 8px 0; }
 }
