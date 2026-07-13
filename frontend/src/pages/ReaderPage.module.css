@@ -1,0 +1,259 @@
+.readerContainer {
+  width: 100%;
+  height: 100vh;
+  background-color: #111;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Top Bar */
+.topBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: #151515;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 10;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 1px solid #222;
+}
+
+.readingProgress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.topLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+.topCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.mangaTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
+.chapterTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.iconBtn, .iconBtnSmall {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.iconBtn {
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.iconBtnSmall {
+  padding: 4px;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.iconBtn:hover {
+  color: #fff;
+  background: #222;
+}
+
+/* Right Floating Sidebar */
+.rightSidebar {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  z-index: 10;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pageCounter {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.sideBtn {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.sideBtn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sideBtnActive {
+  color: var(--accent) !important;
+  background: var(--bg-hover) !important;
+}
+
+.commentBadge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 10px;
+  line-height: 1;
+}
+
+/* Animations for UI Hide/Show */
+.uiVisible {
+  opacity: 1;
+}
+
+.topBar.uiVisible {
+  transform: translateY(0);
+}
+
+.rightSidebar.uiVisible {
+  transform: translateY(-50%) translateX(0);
+}
+
+.topBar.uiHidden {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.rightSidebar.uiHidden {
+  transform: translateY(-50%) translateX(calc(100% + 24px));
+}
+
+/* Semi-circular handle when hidden */
+.sidebarHandle {
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 100px;
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: none;
+  border-radius: 30px 0 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.3);
+}
+
+.rightSidebar.uiHidden .sidebarHandle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Manga Pages Container */
+.pagesScroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+/* Hide scrollbar completely in the reader for ultimate aesthetic */
+.pagesScroll::-webkit-scrollbar {
+  display: none;
+}
+.pagesScroll {
+  scrollbar-width: none;
+}
+
+.pagesWrapper {
+  width: 100%;
+  display: flex;
+  background: #000;
+  margin: 0 auto;
+}
+
+.pageImageWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pageImage {
+  display: block;
+}
+
+.pageNumberOverlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  pointer-events: none;
+}

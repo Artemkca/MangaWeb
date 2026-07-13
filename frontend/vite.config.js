@@ -8,7 +8,7 @@ export default defineConfig({
     allowedHosts: ['lvh.me'],
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://d6d198421cffb3fe-91-222-39-212.serveousercontent.com',
         changeOrigin: true,
         secure: false,
       },
