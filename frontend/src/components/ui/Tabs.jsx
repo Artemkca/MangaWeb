@@ -1,7 +1,16 @@
 import { useState } from 'react';
 
-export default function Tabs({ items, large = false, className = '' }) {
-  const [active, setActive] = useState(0);
+export default function Tabs({ items, activeTab, onTabChange, large = false, className = '' }) {
+  const [internalActive, setInternalActive] = useState(0);
+  
+  const active = activeTab !== undefined ? activeTab : internalActive;
+  const handleTabClick = (index) => {
+    if (onTabChange) {
+      onTabChange(index);
+    } else {
+      setInternalActive(index);
+    }
+  };
 
   return (
     <div className={`tabs${large ? ' tabs--large' : ''} ${className}`.trim()}>
@@ -10,7 +19,7 @@ export default function Tabs({ items, large = false, className = '' }) {
           key={item}
           type="button"
           className={`tab${active === index ? ' tab--active' : ''}`}
-          onClick={() => setActive(index)}
+          onClick={() => handleTabClick(index)}
         >
           {item}
         </button>
