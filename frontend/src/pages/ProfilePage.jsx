@@ -118,7 +118,7 @@ export default function ProfilePage() {
             position: 'fixed',
             inset: 0,
             zIndex: -1,
-            backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.95)), url(${selectedWallpaper})`,
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.85)), url(${selectedWallpaper})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center'
           }}
