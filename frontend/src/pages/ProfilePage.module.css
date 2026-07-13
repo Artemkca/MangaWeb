@@ -9,7 +9,7 @@
 .wallpaperOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.85); /* Dark overlay */
+  background: rgba(0, 0, 0, 0.85); /* Dark overlay */
   backdrop-filter: blur(8px);
   z-index: -1;
   pointer-events: none;
@@ -179,7 +179,7 @@
 }
 
 .mainBlock {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 24px;
@@ -507,7 +507,7 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(4px);
   color: #fff;
   font-size: 11px;

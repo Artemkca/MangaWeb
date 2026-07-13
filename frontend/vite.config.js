@@ -8,9 +8,12 @@ export default defineConfig({
     allowedHosts: ['lvh.me'],
     proxy: {
       '/api': {
-        target: 'https://d6d198421cffb3fe-91-222-39-212.serveousercontent.com',
+        target: 'https://amir-hyaloid-nonpessimistically.ngrok-free.dev',
         changeOrigin: true,
         secure: false,
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
       },
     },
   },
