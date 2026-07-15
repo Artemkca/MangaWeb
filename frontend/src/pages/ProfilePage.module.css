@@ -71,12 +71,12 @@
 }
 
 .frameImg {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  width: 180px !important;
-  height: 180px !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 180px;
   max-width: none !important;
   max-height: none !important;
   pointer-events: none;
