@@ -71,8 +71,8 @@ const DECORATIONS = {
   ],
   frames: [
     { id: 1, name: 'Без рамки', img: 'none', type: 'frame', price: 0 },
-    { id: 2, name: 'Кровавый Демон', img: '/frames/frame_oni.png?v=4', type: 'frame', price: 1000 },
-    { id: 3, name: 'Весенняя Кицунэ', img: '/frames/frame_kitsune.png?v=4', type: 'frame', price: 1000 }
+    { id: 2, name: 'Кровавый Демон', img: '/frames/frame_oni.png?v=5', type: 'frame', price: 1000 },
+    { id: 3, name: 'Весенняя Кицунэ', img: '/frames/frame_kitsune.png?v=5', type: 'frame', price: 1000 }
   ],
   banners: [
     { id: 1, name: 'City Night', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
@@ -650,7 +650,7 @@ export default function SettingsPage() {
                   <img src={currentAvatar} alt="Avatar" className={styles.cardAvatar} />
                   {currentFrame && currentFrame !== 'none' && (
                     <img 
-                      src={DECORATIONS.frames.find(f => f.styleId === currentFrame)?.img || currentFrame.split('?')[0] + '?v=4'} 
+                      src={DECORATIONS.frames.find(f => f.styleId === currentFrame)?.img || currentFrame.split('?')[0] + '?v=5'} 
                       alt="Frame" 
                       className={styles.frameImg} 
                     />
