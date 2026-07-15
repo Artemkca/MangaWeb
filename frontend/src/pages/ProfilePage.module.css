@@ -60,6 +60,7 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  flex-shrink: 0 !important;
 }
 
 .avatarImg {
@@ -76,6 +77,8 @@
   transform: translate(-50%, -50%) !important;
   width: 180px !important;
   height: 180px !important;
+  max-width: none !important;
+  max-height: none !important;
   pointer-events: none;
   z-index: 3;
 }
