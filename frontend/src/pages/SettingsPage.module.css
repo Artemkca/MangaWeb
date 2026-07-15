@@ -1456,39 +1456,19 @@ input:checked + .toggleSlider:before {
   to { opacity: 0; visibility: hidden; }
 }
 
-/* Animations for specific frames */
 .animFan {
-  width: 110px !important;
-  height: 110px !important;
-  top: auto !important;
-  bottom: -35px !important;
-  left: auto !important;
-  right: -35px !important;
-  transform: translate(0, 0);
-  transform-origin: 30% 70%;
-  animation: fanUnfold 1.2s ease-out forwards, fanWave 1.5s ease-in-out 1.2s infinite;
+  transform-origin: 77.5% 85%;
+  animation: fanOpen 0.6s ease-out forwards, fanWave 3s ease-in-out 0.6s infinite;
 }
 
-@keyframes fanUnfold {
-  0% { 
-    clip-path: polygon(30% 70%, 100% 0%, 100% 0%, 100% 0%, 100% 0%);
-    transform: translate(0, 0) rotate(15deg);
-    opacity: 0;
-  }
-  20% {
-    opacity: 1;
-  }
-  100% { 
-    clip-path: polygon(30% 70%, 150% 150%, 150% -50%, -50% -50%, -50% 150%);
-    transform: translate(0, 0) rotate(0deg);
-    opacity: 1;
-  }
+@keyframes fanOpen {
+  0% { clip-path: polygon(77.5% 85%, 100% 85%, 100% 100%, 77.5% 100%); }
+  100% { clip-path: polygon(77.5% 85%, 100% 40%, 50% 40%, 50% 100%, 77.5% 100%); }
 }
 
 @keyframes fanWave {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  40% { transform: translate(0, 0) rotate(-12deg); } /* A natural, subtle wave inwards */
-  100% { transform: translate(0, 0) rotate(0deg); }
+  0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+  50% { transform: translate(-50%, -50%) rotate(-15deg); }
 }
 
 .animHat {

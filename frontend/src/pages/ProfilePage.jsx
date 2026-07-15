@@ -132,7 +132,7 @@ export default function ProfilePage() {
             {selectedFrame && selectedFrame !== 'none' && (
               <>
                 <img 
-                  src={selectedFrame.split('?')[0] === '/frames/frame_4.png' ? '/frames/frame_4_base.png?v=5' : selectedFrame.split('?')[0] + '?v=12'} 
+                  src={selectedFrame.split('?')[0] === '/frames/frame_4.png' ? '/frames/frame_4_base.png?v=5' : selectedFrame.split('?')[0] + '?v=13'} 
                   alt="Frame Base" 
                   className={`${styles.frameImg} ${selectedFrame.includes('frame_3') ? styles.animFan : ''}`} 
                 />

@@ -658,7 +658,7 @@ export default function SettingsPage() {
                     return (
                       <>
                         <img 
-                          src={isFrame4 ? '/frames/frame_4_base.png?v=5' : (matchedFrame?.img || currentFrame.split('?')[0] + '?v=12')} 
+                          src={isFrame4 ? '/frames/frame_4_base.png?v=5' : (matchedFrame?.img || currentFrame.split('?')[0] + '?v=13')} 
                           alt="Frame Base" 
                           className={`${styles.frameImg} ${matchedFrame?.effectClass && !isFrame4 ? styles[matchedFrame.effectClass] : ''}`} 
                         />
