@@ -174,7 +174,16 @@ export default function AdminPanel() {
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             <label>Выбранные жанры *</label>
           </div>
-          <div className={styles.tagsWrapper}>
+          <div 
+            className={styles.tagsWrapper} 
+            onClick={(e) => {
+              if (e.target.closest('button')) return;
+              const input = e.currentTarget.querySelector('input[name="customGenreInput"]');
+              if (input) input.focus();
+              setIsGenrePanelOpen(true);
+            }}
+            style={{ cursor: 'text' }}
+          >
             {formData.genres.map(genre => (
               <span key={genre} className={styles.tag}>
                 {genre}
@@ -194,7 +203,24 @@ export default function AdminPanel() {
                 className={styles.tagInput}
               />
             </div>
-            <button type="button" onClick={handleAddCustomGenre} className={styles.tagAddBtn}>
+            <button 
+              type="button" 
+              onClick={(e) => {
+                e.preventDefault();
+                const trimmed = customGenreInput.trim();
+                if (trimmed && !formData.genres.includes(trimmed)) {
+                  setFormData(prev => ({ ...prev, genres: [...prev.genres, trimmed] }));
+                  setCustomGenreInput('');
+                } else if (!trimmed) {
+                  setIsGenrePanelOpen(!isGenrePanelOpen);
+                }
+              }} 
+              className={styles.tagAddBtn}
+              style={{
+                transform: isGenrePanelOpen && !customGenreInput.trim() ? 'rotate(45deg)' : 'none',
+                transition: 'transform 0.2s'
+              }}
+            >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
           </div>
