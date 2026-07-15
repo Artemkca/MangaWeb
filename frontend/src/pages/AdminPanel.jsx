@@ -143,12 +143,12 @@ export default function AdminPanel() {
     }]);
 
     try {
-      const searchRes = await fetch(`https://shikimori.one/api/mangas?search=${encodeURIComponent(currentInput)}&limit=1`);
+      const searchRes = await fetch(`/api/proxy/shikimori/search?query=${encodeURIComponent(currentInput)}`);
       const searchData = await searchRes.json();
 
       if (searchData && searchData.length > 0) {
         const mangaId = searchData[0].id;
-        const detailRes = await fetch(`https://shikimori.one/api/mangas/${mangaId}`);
+        const detailRes = await fetch(`/api/proxy/shikimori/mangas/${mangaId}`);
         const data = await detailRes.json();
 
         const title = data.russian || data.name;
