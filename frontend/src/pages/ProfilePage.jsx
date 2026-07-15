@@ -127,8 +127,11 @@ export default function ProfilePage() {
       <div className={styles.bannerWrapper}>
         <div className={styles.banner} style={{ backgroundImage: `url(${selectedBanner})` }}></div>
         <div className={styles.profileHeader}>
-          <div className={`${styles.phAvatar} ${styles[`frame_${selectedFrame}`]}`}>
-            <img src={selectedAvatar} alt="Avatar" />
+          <div className={styles.phAvatar}>
+            <img src={selectedAvatar} alt="Avatar" className={styles.avatarImg} />
+            {selectedFrame && selectedFrame !== 'none' && (
+              <img src={selectedFrame} alt="Frame" className={styles.frameImg} />
+            )}
           </div>
           <div className={styles.phInfo}>
             <h1>{session?.username || 'Tor1cks'}</h1>

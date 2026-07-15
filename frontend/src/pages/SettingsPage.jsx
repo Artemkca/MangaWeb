@@ -70,13 +70,13 @@ const DECORATIONS = {
     { id: 24, name: 'Kurisu Makise', img: '/avatars/char_34470.jpg', type: 'avatar' }
   ],
   frames: [
-    { id: 1, name: 'Без рамки', styleId: 'none', style: { border: 'none', boxShadow: '0 8px 30px rgba(0,0,0,0.5)' }, type: 'frame' },
-    { id: 2, name: 'Золотая рамка', styleId: 'gold', style: { border: '4px solid #fbbf24', boxShadow: '0 0 20px 5px rgba(251, 191, 36, 0.4)' }, type: 'frame' },
-    { id: 3, name: 'Неоновая рамка', styleId: 'neon', style: { border: '4px solid #06b6d4', boxShadow: '0 0 30px 10px rgba(6, 182, 212, 0.6)' }, type: 'frame' },
-    { id: 4, name: 'Лесная рамка', styleId: 'forest', style: { border: '4px solid #22c55e', boxShadow: '0 0 20px 5px rgba(34, 197, 94, 0.4)' }, type: 'frame' },
-    { id: 5, name: 'Кровавая луна', styleId: 'blood', style: { border: '4px solid #ef4444', boxShadow: '0 0 25px 8px rgba(239, 68, 68, 0.5)' }, type: 'frame' },
-    { id: 6, name: 'Киберпанк', styleId: 'cyber', style: { border: '4px dashed #f472b6', boxShadow: '0 0 15px 5px rgba(244, 114, 182, 0.6)' }, type: 'frame' },
-    { id: 7, name: 'Бездна', styleId: 'void', style: { border: '4px solid #111', boxShadow: '0 0 40px 15px rgba(139, 92, 246, 0.5)' }, type: 'frame' }
+    { id: 1, name: 'Без рамки', img: 'none', type: 'frame', price: 0 },
+    { id: 10, name: 'NEON PINK', img: '/frames/neon_pink.svg', type: 'frame', price: 1500 },
+    { id: 11, name: 'CYBER TECH', img: '/frames/cyber_tech.svg', type: 'frame', price: 1500 },
+    { id: 12, name: 'GOLD VINTAGE', img: '/frames/gold_vintage.svg', type: 'frame', price: 1500 },
+    { id: 13, name: 'HEARTS', img: '/frames/hearts.svg', type: 'frame', price: 1500 },
+    { id: 14, name: 'CHECKERED', img: '/frames/checkered.svg', type: 'frame', price: 1500 },
+    { id: 15, name: 'FOREST', img: '/frames/forest.svg', type: 'frame', price: 1500 }
   ],
   banners: [
     { id: 1, name: 'City Night', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
@@ -94,18 +94,30 @@ const DECORATIONS = {
   ],
   wallpapers: [
     { id: 1, name: 'Без обоев (Тёмный)', img: 'none', type: 'wallpaper' },
-    { id: 2, name: 'Space Stars', img: '/wallpaper_1_space_1783958212170.jpg', type: 'wallpaper' },
-    { id: 3, name: 'Anime Sky', img: '/wallpaper_2_sky_1783958218683.jpg', type: 'wallpaper' },
-    { id: 20, name: 'Fullmetal Alchemist', img: '/wallpapers/wallpaper_5114.jpg', type: 'wallpaper' },
-    { id: 21, name: 'Naruto', img: '/wallpapers/wallpaper_20.jpg', type: 'wallpaper' },
-    { id: 22, name: 'Sword Art Online', img: '/wallpapers/wallpaper_11757.jpg', type: 'wallpaper' },
-    { id: 23, name: 'Your Name.', img: '/wallpapers/wallpaper_21519.jpg', type: 'wallpaper' },
-    { id: 24, name: 'A Silent Voice', img: '/wallpapers/wallpaper_20954.jpg', type: 'wallpaper' },
-    { id: 25, name: 'Attack on Titan S3', img: '/wallpapers/wallpaper_99147.jpg', type: 'wallpaper' },
-    { id: 26, name: 'My Hero Academia S2', img: '/wallpapers/wallpaper_21856.jpg', type: 'wallpaper' },
-    { id: 27, name: 'Attack on Titan Final', img: '/wallpapers/wallpaper_110277.jpg', type: 'wallpaper' },
-    { id: 28, name: 'The Promised Neverland', img: '/wallpapers/wallpaper_101759.jpg', type: 'wallpaper' },
-    { id: 29, name: 'Assassination Classroom', img: '/wallpapers/wallpaper_20755.jpg', type: 'wallpaper' }
+    { id: 20, name: 'Wallpaper 1', img: '/wallpapers/wall_21oymx.jpg', type: 'wallpaper' },
+    { id: 21, name: 'Wallpaper 2', img: '/wallpapers/wall_yq2mll.jpg', type: 'wallpaper' },
+    { id: 22, name: 'Wallpaper 3', img: '/wallpapers/wall_rqjvl1.jpg', type: 'wallpaper' },
+    { id: 23, name: 'Wallpaper 4', img: '/wallpapers/wall_5ymdk5.jpg', type: 'wallpaper' },
+    { id: 24, name: 'Wallpaper 5', img: '/wallpapers/wall_d8o6rm.jpg', type: 'wallpaper' },
+    { id: 25, name: 'Wallpaper 6', img: '/wallpapers/wall_e86z6k.jpg', type: 'wallpaper' },
+    { id: 26, name: 'Wallpaper 7', img: '/wallpapers/wall_8g9kxk.jpg', type: 'wallpaper' },
+    { id: 27, name: 'Wallpaper 8', img: '/wallpapers/wall_jey9kq.jpg', type: 'wallpaper' },
+    { id: 28, name: 'Wallpaper 9', img: '/wallpapers/wall_qrmro7.jpg', type: 'wallpaper' },
+    { id: 29, name: "Wallpaper 10", img: "/wallpapers/wall_21ozq6.jpg", type: "wallpaper" },
+    { id: 30, name: "Wallpaper 11", img: "/wallpapers/wall_w5d11p.jpg", type: "wallpaper" },
+    { id: 31, name: "Wallpaper 12", img: "/wallpapers/wall_lyjqw2.jpg", type: "wallpaper" },
+    { id: 32, name: "Wallpaper 13", img: "/wallpapers/wall_d8oe73.jpg", type: "wallpaper" },
+    { id: 33, name: "Wallpaper 14", img: "/wallpapers/wall_po723m.jpg", type: "wallpaper" },
+    { id: 34, name: "Wallpaper 15", img: "/wallpapers/wall_po727e.jpg", type: "wallpaper" },
+    { id: 35, name: "Wallpaper 16", img: "/wallpapers/wall_3q6kgy.jpg", type: "wallpaper" },
+    { id: 36, name: "Wallpaper 17", img: "/wallpapers/wall_po7m99.jpg", type: "wallpaper" },
+    { id: 37, name: "Wallpaper 18", img: "/wallpapers/wall_rqp3zj.jpg", type: "wallpaper" },
+    { id: 38, name: "Wallpaper 19", img: "/wallpapers/wall_21ok29.jpg", type: "wallpaper" },
+    { id: 39, name: "Wallpaper 20", img: "/wallpapers/wall_qrm3dl.jpg", type: "wallpaper" },
+    { id: 40, name: "Wallpaper 21", img: "/wallpapers/wall_lyjm2r.jpg", type: "wallpaper" },
+    { id: 41, name: "Wallpaper 22", img: "/wallpapers/wall_jey5rp.jpg", type: "wallpaper" },
+    { id: 42, name: "Wallpaper 23", img: "/wallpapers/wall_og62w7.jpg", type: "wallpaper" },
+    { id: 43, name: "Wallpaper 24", img: "/wallpapers/wall_vpdo98.jpg", type: "wallpaper" }
   ]
 };
 
@@ -688,19 +700,19 @@ export default function SettingsPage() {
                   {DECORATIONS[activeDecorationTab].map((item, idx) => {
                     const isActive = (item.type === 'avatar' && item.img === currentAvatar) ||
                                      (item.type === 'banner' && item.img === currentBanner) ||
-                                     (item.type === 'frame' && item.styleId === currentFrame) ||
+                                     (item.type === 'frame' && item.img === currentFrame) ||
                                      (item.type === 'wallpaper' && item.img === currentWallpaper);
                     return (
                       <div 
                         key={item.id} 
                         className={`${styles.decCard} ${isActive ? styles.active : ''}`}
-                        onClick={() => updateProfileAsset(item.type, item.type === 'frame' ? item.styleId : item.img)}
+                        onClick={() => updateProfileAsset(item.type, item.img)}
                       >
-                        <div className={`${styles.decCardImg} ${activeDecorationTab === 'avatars' ? styles.avatar : ''} ${activeDecorationTab === 'frames' ? styles.frame : ''} ${item.img === 'none' ? styles.noImg : ''}`}>
+                        <div className={`${styles.decCardImg} ${activeDecorationTab === 'avatars' ? styles.avatar : ''} ${activeDecorationTab === 'frames' ? styles.frameContainer : ''} ${item.img === 'none' ? styles.noImg : ''}`}>
                           {activeDecorationTab === 'frames' ? (
                             <>
                               <img src={currentAvatar} alt="Avatar" className={styles.baseAvatar} />
-                              <div className={styles.frameOverlay} style={item.style}></div>
+                              {item.img !== 'none' && <img src={item.img} alt={item.name} className={styles.frameOverlayImg} />}
                             </>
                           ) : (
                             item.img !== 'none' ? <img src={item.img} alt={item.name} /> : <div className={styles.emptyWallpaper}></div>

@@ -1,0 +1,7 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="180" height="180" fill="none" stroke="#ffb6c1" stroke-width="20" rx="15" />
+      <!-- Top hearts -->
+      <path d="M 40,20 A 10,10 0 0,0 20,20 A 10,10 0 0,0 40,20 Z" fill="#ff1493" transform="translate(10, -10)" />
+      <path d="M 80,20 A 10,10 0 0,0 60,20 A 10,10 0 0,0 80,20 Z" fill="#ff1493" transform="translate(20, -10)" />
+      <path d="M 120,20 A 10,10 0 0,0 100,20 A 10,10 0 0,0 120,20 Z" fill="#ff1493" transform="translate(30, -10)" />
+    </svg>
