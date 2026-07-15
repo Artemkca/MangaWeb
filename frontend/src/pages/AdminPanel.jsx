@@ -18,7 +18,8 @@ export default function AdminPanel() {
     genres: []
   });
 
-  const [genreInput, setGenreInput] = useState('');
+  const [searchGenreInput, setSearchGenreInput] = useState('');
+  const [customGenreInput, setCustomGenreInput] = useState('');
   const [isGenrePanelOpen, setIsGenrePanelOpen] = useState(true);
   
   const [loading, setLoading] = useState(false);
@@ -43,12 +44,14 @@ export default function AdminPanel() {
     }));
   };
 
-  const handleAddGenre = (e) => {
-    e.preventDefault();
-    const trimmed = genreInput.trim();
+  const handleAddCustomGenre = (e) => {
+    if (e) e.preventDefault();
+    const trimmed = customGenreInput.trim();
     if (trimmed && !formData.genres.includes(trimmed)) {
       setFormData(prev => ({ ...prev, genres: [...prev.genres, trimmed] }));
-      setGenreInput('');
+      setCustomGenreInput('');
+    } else if (!trimmed) {
+      setIsGenrePanelOpen(true);
     }
   };
 
@@ -65,10 +68,10 @@ export default function AdminPanel() {
     }
   };
   
-  const handleGenreKeyDown = (e) => {
+  const handleCustomGenreKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handleAddGenre(e);
+      handleAddCustomGenre(e);
     }
   };
 
@@ -106,7 +109,8 @@ export default function AdminPanel() {
         chapters: 0,
         genres: []
       });
-      setGenreInput('');
+      setCustomGenreInput('');
+      setSearchGenreInput('');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -169,15 +173,6 @@ export default function AdminPanel() {
         <div className={styles.formGroup}>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             <label>Выбранные жанры *</label>
-            {!isGenrePanelOpen && (
-              <button 
-                type="button" 
-                className={styles.openPanelBtn}
-                onClick={() => setIsGenrePanelOpen(true)}
-              >
-                Открыть список всех жанров
-              </button>
-            )}
           </div>
           <div className={styles.tagsWrapper}>
             {formData.genres.map(genre => (
@@ -188,20 +183,18 @@ export default function AdminPanel() {
                 </button>
               </span>
             ))}
-            {formData.genres.length === 0 && <span style={{color: 'var(--text-muted)', fontSize: '14px', padding: '6px'}}>Выберите жанры из панели справа...</span>}
             <div style={{ flex: 1, minWidth: '150px' }}>
               <input 
                 type="text"
-                name="genreInput" 
-                value={genreInput} 
-                onChange={e => setGenreInput(e.target.value)} 
-                onKeyDown={handleGenreKeyDown}
-                placeholder="Свой жанр..."
+                name="customGenreInput" 
+                value={customGenreInput} 
+                onChange={e => setCustomGenreInput(e.target.value)} 
+                onKeyDown={handleCustomGenreKeyDown}
+                placeholder="Вписать свой жанр..."
                 className={styles.tagInput}
-                style={{display: formData.genres.length === 0 ? 'none' : 'block'}}
               />
             </div>
-            <button type="button" onClick={handleAddGenre} className={styles.tagAddBtn} style={{display: formData.genres.length === 0 ? 'none' : 'flex'}}>
+            <button type="button" onClick={handleAddCustomGenre} className={styles.tagAddBtn}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
           </div>
@@ -250,15 +243,15 @@ export default function AdminPanel() {
             <input 
               type="text" 
               placeholder="Поиск жанров..." 
-              value={genreInput}
-              onChange={(e) => setGenreInput(e.target.value)}
+              value={searchGenreInput}
+              onChange={(e) => setSearchGenreInput(e.target.value)}
               className={styles.genreSearchInput}
             />
           </div>
         </div>
         <div className={styles.genrePanelGrid}>
           {PREDEFINED_GENRES
-            .filter(g => g.toLowerCase().includes(genreInput.toLowerCase()))
+            .filter(g => g.toLowerCase().includes(searchGenreInput.toLowerCase()))
             .map(g => {
               const isSelected = formData.genres.includes(g);
               return (
@@ -277,7 +270,7 @@ export default function AdminPanel() {
                 </div>
               );
           })}
-          {PREDEFINED_GENRES.filter(g => g.toLowerCase().includes(genreInput.toLowerCase())).length === 0 && (
+          {PREDEFINED_GENRES.filter(g => g.toLowerCase().includes(searchGenreInput.toLowerCase())).length === 0 && (
             <div className={styles.genreOptionEmpty}>Ничего не найдено</div>
           )}
         </div>
