@@ -31,137 +31,93 @@ const InfoIcon = () => (
 const mockItems = [
   {
     id: 1,
-    title: 'Человек-паук Нуар',
+    title: 'Персонаж 1',
     price: 1000,
-    subPrice: 900,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=11',
+    image: '/avatars/char_127691.jpg',
   },
   {
     id: 2,
-    title: 'Ножки Давида',
+    title: 'Персонаж 2',
     price: 2200,
-    subPrice: 1980,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=12',
+    image: '/avatars/char_14.jpg',
   },
   {
     id: 3,
-    title: 'Резе',
+    title: 'Персонаж 3',
     price: 3200,
-    subPrice: 2880,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=13',
+    image: '/avatars/char_27.jpg',
   },
   {
     id: 4,
-    title: 'Сенкодору',
-    price: 0,
-    subPrice: null,
-    hasSubText: null,
-    image: 'https://i.pravatar.cc/150?img=14',
+    title: 'Персонаж 4',
+    price: 500,
+    image: '/avatars/char_34470.jpg',
   },
   {
     id: 5,
-    title: 'Безумие',
+    title: 'Персонаж 5',
     price: 2070,
-    oldPrice: 2300,
-    discount: '10%',
-    subPrice: null,
-    hasSubText: 'Только с подпиской',
-    badgeLeft: '10%',
-    badgeRight: '144 шт осталось',
-    image: 'https://i.pravatar.cc/150?img=15',
+    image: '/avatars/char_40.jpg',
   },
   {
     id: 6,
-    title: 'Вайс-чан',
+    title: 'Персонаж 6',
     price: 3000,
-    subPrice: 2700,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=16',
+    image: '/avatars/char_40881.jpg',
   },
   {
     id: 7,
-    title: 'Доктор Ливси',
+    title: 'Персонаж 7',
     price: 600,
-    subPrice: 540,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=17',
-    isSoldOut: true,
+    image: '/avatars/char_40882.jpg',
   },
   {
     id: 8,
-    title: 'Кита Икуё',
+    title: 'Персонаж 8',
     price: 2340,
-    oldPrice: 2600,
-    discount: '10%',
-    subPrice: null,
-    hasSubText: 'Только с подпиской',
-    badgeLeft: '10%',
-    badgeRight: '382 шт осталось',
-    image: 'https://i.pravatar.cc/150?img=18',
+    image: '/avatars/char_417.jpg',
   },
   {
     id: 9,
-    title: 'Смущённая Мита',
+    title: 'Персонаж 9',
     price: 2600,
-    subPrice: 2340,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=19',
+    image: '/avatars/char_422.jpg',
   },
   {
     id: 10,
-    title: 'Два хвоста',
+    title: 'Персонаж 10',
     price: 2400,
-    subPrice: 2160,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=20',
-    badgeLeft: '18+',
+    image: '/avatars/char_45627.jpg',
   },
   {
     id: 11,
-    title: 'EricaZehnt',
+    title: 'Персонаж 11',
     price: 1600,
-    subPrice: 1440,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=21',
+    image: '/avatars/char_62.jpg',
   },
   {
     id: 12,
-    title: 'Хорошее настроение',
+    title: 'Персонаж 12',
     price: 1200,
-    subPrice: 1080,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=22',
+    image: '/avatars/char_71.jpg',
   },
   {
     id: 13,
-    title: 'Голодная девушка-дракон',
+    title: 'Персонаж 13',
     price: 1980,
-    oldPrice: 2200,
-    discount: '10%',
-    subPrice: null,
-    hasSubText: 'Только с подпиской',
-    badgeLeft: '10% — до 19 июл.',
-    badgeRight: '848 шт осталось',
-    image: 'https://i.pravatar.cc/150?img=23',
+    image: '/avatars/char_87275.jpg',
   },
   {
     id: 14,
-    title: 'Коварная лисица',
+    title: 'Персонаж 14',
     price: 2200,
-    subPrice: 1980,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=24',
+    image: '/avatars/char_88572.jpg',
   },
   {
     id: 15,
-    title: 'Куда Изуна',
+    title: 'Персонаж 15',
     price: 1800,
-    subPrice: 1620,
-    hasSubText: 'с подпиской',
-    image: 'https://i.pravatar.cc/150?img=25',
+    image: '/avatars/char_89334.jpg',
   }
 ];
 
@@ -209,36 +165,16 @@ export default function StorePage() {
 
       <div className={styles.grid}>
         {mockItems.map((item) => (
-          <div key={item.id} className={styles.card} style={{ opacity: item.isSoldOut ? 0.5 : 1 }}>
+          <div key={item.id} className={styles.card}>
             <div className={styles.imageWrap}>
-              {item.badgeLeft && <span className={styles.badgeTopLeft}>{item.badgeLeft}</span>}
               <img src={item.image} alt={item.title} className={styles.avatar} />
-              {item.isSoldOut ? (
-                <span className={styles.badgeSoldOut}>Распродано</span>
-              ) : item.badgeRight ? (
-                <span className={styles.badgeBottomCenter}>{item.badgeRight}</span>
-              ) : null}
             </div>
             
             <h3 className={styles.cardTitle}>{item.title}</h3>
             
-            {item.price > 0 || item.oldPrice ? (
-              <div className={styles.priceRow}>
-                <StarIcon /> {item.price}
-                {item.oldPrice && (
-                  <span style={{ textDecoration: 'line-through', color: 'var(--text-muted)', fontSize: '12px', marginLeft: '4px' }}>
-                    {item.oldPrice}
-                  </span>
-                )}
-              </div>
-            ) : null}
-
-            {(item.subPrice || item.hasSubText) && (
-              <div className={`${styles.subPriceRow} ${item.hasSubText === 'Только с подпиской' ? styles.disabled : ''}`}>
-                <EyeIcon /> 
-                {item.subPrice ? `${item.subPrice} ${item.hasSubText}` : item.hasSubText}
-              </div>
-            )}
+            <div className={styles.priceRow}>
+              <StarIcon /> {item.price}
+            </div>
           </div>
         ))}
       </div>
