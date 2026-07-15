@@ -119,7 +119,7 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className={styles.pageLayout}>
+    <div className={styles.pageLayout} data-panel-open={isGenrePanelOpen}>
       <div className={styles.container}>
         <h1 className={styles.title}>Админ Панель</h1>
         <p className={styles.subtitle}>Добавление новой манги в каталог</p>
@@ -255,7 +255,7 @@ export default function AdminPanel() {
     </div>
 
     {/* Right Side Panel for Genres */}
-    {isGenrePanelOpen && (
+    <div className={`${styles.genrePanelWrapper} ${!isGenrePanelOpen ? styles.genrePanelWrapperHidden : ''}`}>
       <div className={styles.genrePanel}>
         <div className={styles.genrePanelHeader}>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
@@ -301,7 +301,7 @@ export default function AdminPanel() {
           )}
         </div>
       </div>
-    )}
+    </div>
   </div>
   );
 }

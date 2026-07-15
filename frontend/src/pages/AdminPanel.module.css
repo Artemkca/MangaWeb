@@ -1,10 +1,16 @@
 .pageLayout {
   display: flex;
+  justify-content: center;
   gap: 32px;
   max-width: 1400px;
   margin: 40px auto;
   padding: 0 24px;
   align-items: flex-start;
+  transition: gap 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pageLayout[data-panel-open="false"] {
+  gap: 0;
 }
 
 .container {
@@ -17,6 +23,7 @@
   border-radius: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   animation: fadeIn 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .title {
@@ -187,10 +194,24 @@
 }
 
 /* Side Panel */
-.genrePanel {
-  flex: 1;
-  min-width: 400px;
+.genrePanelWrapper {
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 500px;
   max-width: 500px;
+  flex-shrink: 0;
+  opacity: 1;
+}
+
+.genrePanelWrapperHidden {
+  width: 0;
+  max-width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.genrePanel {
+  width: 500px; /* Fixed width to prevent reflow during animation */
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -200,7 +221,6 @@
   height: 800px;
   display: flex;
   flex-direction: column;
-  animation: fadeIn 0.3s ease;
 }
 
 .genrePanelHeader {
@@ -314,6 +334,15 @@
 @media (max-width: 1024px) {
   .pageLayout {
     flex-direction: column;
+  }
+  .genrePanelWrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+  .genrePanelWrapperHidden {
+    width: 100%;
+    max-width: 100%;
+    height: 0;
   }
   .genrePanel {
     width: 100%;
