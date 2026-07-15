@@ -14,9 +14,10 @@ export default function AdminPanel() {
     cover: '',
     rating: 0,
     chapters: 0,
-    genres: ''
+    genres: []
   });
 
+  const [genreInput, setGenreInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -39,6 +40,29 @@ export default function AdminPanel() {
     }));
   };
 
+  const handleAddGenre = (e) => {
+    e.preventDefault();
+    const trimmed = genreInput.trim();
+    if (trimmed && !formData.genres.includes(trimmed)) {
+      setFormData(prev => ({ ...prev, genres: [...prev.genres, trimmed] }));
+      setGenreInput('');
+    }
+  };
+
+  const handleRemoveGenre = (genreToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      genres: prev.genres.filter(g => g !== genreToRemove)
+    }));
+  };
+  
+  const handleGenreKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddGenre(e);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -50,7 +74,7 @@ export default function AdminPanel() {
         ...formData,
         rating: parseFloat(formData.rating),
         chapters: parseInt(formData.chapters, 10),
-        genres: formData.genres.split(',').map(g => g.trim()).filter(Boolean)
+        genres: formData.genres
       };
 
       const response = await fetch('/api/manga', {
@@ -71,8 +95,9 @@ export default function AdminPanel() {
         cover: '',
         rating: 0,
         chapters: 0,
-        genres: ''
+        genres: []
       });
+      setGenreInput('');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -132,8 +157,29 @@ export default function AdminPanel() {
         </div>
 
         <div className={styles.formGroup}>
-          <label>Жанры (через запятую) *</label>
-          <input required name="genres" value={formData.genres} onChange={handleChange} placeholder="Сёнэн, Фэнтези, Приключения" />
+          <label>Жанры *</label>
+          <div className={styles.tagsWrapper}>
+            {formData.genres.map(genre => (
+              <span key={genre} className={styles.tag}>
+                {genre}
+                <button type="button" onClick={() => handleRemoveGenre(genre)}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </span>
+            ))}
+            <input 
+              type="text"
+              name="genreInput" 
+              value={genreInput} 
+              onChange={e => setGenreInput(e.target.value)} 
+              onKeyDown={handleGenreKeyDown}
+              placeholder={formData.genres.length === 0 ? "Сёнэн, Фэнтези, Приключения..." : "Добавить жанр..."}
+              className={styles.tagInput}
+            />
+            <button type="button" onClick={handleAddGenre} className={styles.tagAddBtn}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+          </div>
         </div>
 
         <div className={styles.formGroup}>
