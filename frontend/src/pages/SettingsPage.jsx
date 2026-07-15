@@ -70,9 +70,9 @@ const DECORATIONS = {
     { id: 24, name: 'Kurisu Makise', img: '/avatars/char_34470.jpg', type: 'avatar' }
   ],
   frames: [
-    { id: 1, name: 'Без рамки', img: 'none', type: 'frame', price: 0 }
-    // Добавь свои рамки сюда. Пример:
-    // { id: 2, name: 'Твоя рамка', img: '/frames/твоя_рамка.png', type: 'frame', price: 1000 }
+    { id: 1, name: 'Без рамки', img: 'none', type: 'frame', price: 0 },
+    { id: 2, name: 'Кровавый Демон', img: '/frames/frame_oni.png', type: 'frame', price: 1000 },
+    { id: 3, name: 'Весенняя Кицунэ', img: '/frames/frame_kitsune.png', type: 'frame', price: 1000 }
   ],
   banners: [
     { id: 1, name: 'City Night', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
