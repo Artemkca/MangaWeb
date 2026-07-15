@@ -7,11 +7,9 @@ const MAX_PAGES = 8;
 const BATCH_SIZE = 24;
 
 export default function CatalogPage() {
-  const [safeMode, setSafeMode] = useState(() => localStorage.getItem('site_safeMode') !== 'false');
   const [compactMode, setCompactMode] = useState(() => localStorage.getItem('site_compactMode') === 'true');
   
-  const filteredCatalogInitial = safeMode ? catalogInitial.filter(m => !m.is18) : catalogInitial;
-  const [items, setItems] = useState(filteredCatalogInitial);
+  const [items, setItems] = useState(catalogInitial);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -20,12 +18,8 @@ export default function CatalogPage() {
   // Listen for changes from other tabs
   useEffect(() => {
     const handleSettingsUpdate = () => {
-      const newSafeMode = localStorage.getItem('site_safeMode') !== 'false';
       const newCompactMode = localStorage.getItem('site_compactMode') === 'true';
-      setSafeMode(newSafeMode);
       setCompactMode(newCompactMode);
-      setItems(newSafeMode ? catalogInitial.filter(m => !m.is18) : catalogInitial);
-      setPage(1); // Reset page on settings change to keep it simple
     };
     window.addEventListener('site-settings-updated', handleSettingsUpdate);
     return () => window.removeEventListener('site-settings-updated', handleSettingsUpdate);
@@ -35,16 +29,15 @@ export default function CatalogPage() {
     if (loading || !hasMore) return;
     setLoading(true);
     setTimeout(() => {
-      const extraSource = safeMode ? extraManga.filter(m => !m.is18) : extraManga;
       const batch = Array.from({ length: BATCH_SIZE }, (_, i) => {
-        const source = extraSource[i % extraSource.length];
+        const source = extraManga[i % extraManga.length];
         return { ...source, cover: ((page * BATCH_SIZE + i) % 25) + 1 };
       });
       setItems(prev => [...prev, ...batch]);
       setPage(p => p + 1);
       setLoading(false);
     }, 600);
-  }, [loading, hasMore, page, safeMode]);
+  }, [loading, hasMore, page]);
 
   useEffect(() => {
     const onScroll = () => {

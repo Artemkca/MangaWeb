@@ -151,7 +151,6 @@ export default function SettingsPage() {
 
   const [compactMode, setCompactMode] = useState(() => localStorage.getItem('site_compactMode') === 'true');
   const [disableAnimations, setDisableAnimations] = useState(() => localStorage.getItem('site_disableAnimations') === 'true');
-  const [safeMode, setSafeMode] = useState(() => localStorage.getItem('site_safeMode') !== 'false');
 
   const [profileDescription, setProfileDescription] = useState(() => localStorage.getItem('profileDescription') || '');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState('');
@@ -160,7 +159,6 @@ export default function SettingsPage() {
     localStorage.setItem('profileDescription', profileDescription);
     localStorage.setItem('site_compactMode', compactMode);
     localStorage.setItem('site_disableAnimations', disableAnimations);
-    localStorage.setItem('site_safeMode', safeMode);
 
     if (disableAnimations) {
       document.body.classList.add('disable-animations');
@@ -867,19 +865,6 @@ export default function SettingsPage() {
               </div>
               <label className={styles.toggleSwitch}>
                 <input type="checkbox" checked={disableAnimations} onChange={(e) => setDisableAnimations(e.target.checked)} />
-                <span className={styles.toggleSlider}></span>
-              </label>
-            </div>
-
-            <div className={styles.settingsSectionLabel}>Контент</div>
-            
-            <div className={styles.toggleWrapper}>
-              <div className={styles.toggleInfo}>
-                <span className={styles.toggleTitle}>Безопасный режим</span>
-                <span className={styles.toggleDesc}>Скрывать контент 18+ и сцены жестокости (NSFW)</span>
-              </div>
-              <label className={styles.toggleSwitch}>
-                <input type="checkbox" checked={safeMode} onChange={(e) => setSafeMode(e.target.checked)} />
                 <span className={styles.toggleSlider}></span>
               </label>
             </div>
