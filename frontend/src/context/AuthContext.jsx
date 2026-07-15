@@ -77,7 +77,7 @@ export function AuthProvider({ children }) {
     
     // Временная заглушка: принимаем только код 123456
     if (code !== '123456') {
-      throw new Error('Неверный код верификации. Попробуйте 123456');
+      throw new Error('Неверный код верификации.');
     }
 
     // Simulate API verification call
