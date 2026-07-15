@@ -45,153 +45,37 @@ const CloseIcon = () => (
 
 // Expanded mock data with categories and filter attributes
 const mockItems = [
-  {
-    id: 1,
-    title: 'Персонаж 1',
-    category: 'Аватары',
-    price: 1000,
-    subPrice: 900,
-    image: '/avatars/char_127691.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 2,
-    title: 'Рамка "Огонь"',
-    category: 'Рамки аватара',
-    price: 2200,
-    subPrice: 1980,
-    image: '/avatars/char_14.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 3,
-    title: 'Баннер "Космос"',
-    category: 'Баннеры',
-    price: 3200,
-    subPrice: 2880,
-    image: '/avatars/char_27.jpg',
-    ageRating: '12+',
-  },
-  {
-    id: 4,
-    title: 'Персонаж 4',
-    category: 'Аватары',
-    price: 500,
-    image: '/avatars/char_34470.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 5,
-    title: 'Персонаж 5 (Скидка)',
-    category: 'Аватары',
-    price: 2070,
-    oldPrice: 2300,
-    discount: '10%',
-    isSubOnly: true,
-    limitedCount: 144,
-    image: '/avatars/char_40.jpg',
-    ageRating: '16+',
-  },
-  {
-    id: 6,
-    title: 'Рамка "Неон"',
-    category: 'Рамки аватара',
-    price: 3000,
-    subPrice: 2700,
-    image: '/avatars/char_40881.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 7,
-    title: 'Персонаж 7',
-    category: 'Аватары',
-    price: 600,
-    subPrice: 540,
-    image: '/avatars/char_40882.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 8,
-    title: 'Персонаж 8',
-    category: 'Аватары',
-    price: 2340,
-    oldPrice: 2600,
-    discount: '10%',
-    isSubOnly: true,
-    limitedCount: 382,
-    image: '/avatars/char_417.jpg',
-    ageRating: '12+',
-  },
-  {
-    id: 9,
-    title: 'Обои "Город"',
-    category: 'Обои',
-    price: 2600,
-    subPrice: 2340,
-    image: '/avatars/char_422.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 10,
-    title: 'Персонаж 10',
-    category: 'Аватары',
-    price: 2400,
-    subPrice: 2160,
-    ageRating: '18+',
-    image: '/avatars/char_45627.jpg',
-  },
-  {
-    id: 11,
-    title: 'Персонаж 11',
-    category: 'Аватары',
-    price: 1600,
-    subPrice: 1440,
-    image: '/avatars/char_62.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 12,
-    title: 'Стикеры "Мемы"',
-    category: 'Наборы стикеров',
-    price: 1200,
-    subPrice: 1080,
-    image: '/avatars/char_71.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 13,
-    title: 'Персонаж 13',
-    category: 'Аватары',
-    price: 1980,
-    oldPrice: 2200,
-    discount: '10%',
-    limitedCount: 848,
-    image: '/avatars/char_87275.jpg',
-    ageRating: '12+',
-  },
-  {
-    id: 14,
-    title: 'Эмодзи "Лисичка"',
-    category: 'Наборы эмодзи',
-    price: 2200,
-    subPrice: 1980,
-    image: '/avatars/char_88572.jpg',
-    ageRating: '0+',
-  },
-  {
-    id: 15,
-    title: 'Персонаж 15',
-    category: 'Аватары',
-    price: 0,
-    isFree: true,
-    image: '/avatars/char_89334.jpg',
-    ageRating: '0+',
-  }
+  // Avatars
+  { id: 1, title: 'Аватар 1', category: 'Аватары', price: 1000, image: '/avatars/char_127691.jpg', ageRating: '0+' },
+  { id: 2, title: 'Аватар 2', category: 'Аватары', price: 2200, image: '/avatars/char_14.jpg', ageRating: '0+' },
+  { id: 3, title: 'Аватар 3', category: 'Аватары', price: 3200, discount: '10%', oldPrice: 3500, image: '/avatars/char_27.jpg', ageRating: '12+' },
+  { id: 4, title: 'Аватар 4', category: 'Аватары', price: 500, isSubOnly: true, subPrice: 450, image: '/avatars/char_34470.jpg', ageRating: '16+' },
+  { id: 5, title: 'Аватар 5', category: 'Аватары', price: 2070, image: '/avatars/char_40.jpg', ageRating: '0+' },
+  { id: 6, title: 'Аватар 6', category: 'Аватары', price: 0, isFree: true, image: '/avatars/char_40881.jpg', ageRating: '0+' },
+
+  // Frames
+  { id: 20, title: 'Рамка 1', category: 'Рамки аватара', price: 1500, image: '/frames/frame_3.png', ageRating: '0+' },
+  { id: 21, title: 'Рамка Kitsune', category: 'Рамки аватара', price: 2500, subPrice: 2000, isSubOnly: true, image: '/frames/frame_kitsune.png', ageRating: '0+' },
+  { id: 22, title: 'Рамка Oni', category: 'Рамки аватара', price: 3000, image: '/frames/frame_oni.png', ageRating: '12+' },
+  { id: 23, title: 'Рамка 4', category: 'Рамки аватара', price: 1000, discount: '20%', oldPrice: 1250, limitedCount: 50, image: '/frames/frame_4.png', ageRating: '0+' },
+  { id: 24, title: 'Рамка Arena', category: 'Рамки аватара', price: 5000, image: '/frames/frame_coloque_um_nome_wmistic_arena.png', ageRating: '16+' },
+
+  // Banners
+  { id: 30, title: 'Баннер 1', category: 'Баннеры', price: 4000, image: '/banners/banner_101922.jpg', ageRating: '0+' },
+  { id: 31, title: 'Баннер 2', category: 'Баннеры', price: 3500, image: '/banners/banner_11061.jpg', ageRating: '0+' },
+  { id: 32, title: 'Баннер 3', category: 'Баннеры', price: 4500, isSubOnly: true, subPrice: 4000, image: '/banners/banner_113415.jpg', ageRating: '12+' },
+  { id: 33, title: 'Баннер 4', category: 'Баннеры', price: 2000, image: '/banners/banner_1535.jpg', ageRating: '0+' },
+
+  // Wallpapers
+  { id: 40, title: 'Обои 1', category: 'Обои', price: 10000, image: '/wallpapers/wall_21ok29.jpg', ageRating: '0+' },
+  { id: 41, title: 'Обои 2', category: 'Обои', price: 12000, discount: '15%', oldPrice: 14000, limitedCount: 10, image: '/wallpapers/wall_21oymx.jpg', ageRating: '18+' },
+  { id: 42, title: 'Обои 3', category: 'Обои', price: 8000, isSubOnly: true, subPrice: 7000, image: '/wallpapers/wall_3q6kgy.jpg', ageRating: '0+' },
+  { id: 43, title: 'Обои 4', category: 'Обои', price: 9500, image: '/wallpapers/wall_8g9kxk.jpg', ageRating: '0+' }
 ];
 
 export default function StorePage() {
   const [activeTab, setActiveTab] = useState('Аватары');
-  const tabs = ['Аватары', 'Рамки аватара', 'Баннеры', 'Обои', 'Наборы эмодзи', 'Наборы стикеров'];
+  const tabs = ['Аватары', 'Рамки аватара', 'Баннеры', 'Обои'];
 
   // Filter State
   const [isFilterOpen, setIsFilterOpen] = useState(false);
