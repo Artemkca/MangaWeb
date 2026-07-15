@@ -149,12 +149,27 @@ export default function SettingsPage() {
     return { days, firstDay };
   };
 
+  const [compactMode, setCompactMode] = useState(() => localStorage.getItem('site_compactMode') === 'true');
+  const [disableAnimations, setDisableAnimations] = useState(() => localStorage.getItem('site_disableAnimations') === 'true');
+  const [safeMode, setSafeMode] = useState(() => localStorage.getItem('site_safeMode') !== 'false');
+
   const [profileDescription, setProfileDescription] = useState(() => localStorage.getItem('profileDescription') || '');
   const [saveSuccessMsg, setSaveSuccessMsg] = useState('');
 
   const handleSaveProfile = () => {
     localStorage.setItem('profileDescription', profileDescription);
+    localStorage.setItem('site_compactMode', compactMode);
+    localStorage.setItem('site_disableAnimations', disableAnimations);
+    localStorage.setItem('site_safeMode', safeMode);
+
+    if (disableAnimations) {
+      document.body.classList.add('disable-animations');
+    } else {
+      document.body.classList.remove('disable-animations');
+    }
+
     window.dispatchEvent(new Event('profile-updated'));
+    window.dispatchEvent(new Event('site-settings-updated'));
     setSaveSuccessMsg('Изменения успешно сохранены!');
     setTimeout(() => setSaveSuccessMsg(''), 3000);
   };
@@ -840,7 +855,7 @@ export default function SettingsPage() {
                 <span className={styles.toggleDesc}>Отображать больше элементов на экране за счет уменьшения обложек</span>
               </div>
               <label className={styles.toggleSwitch}>
-                <input type="checkbox" />
+                <input type="checkbox" checked={compactMode} onChange={(e) => setCompactMode(e.target.checked)} />
                 <span className={styles.toggleSlider}></span>
               </label>
             </div>
@@ -851,7 +866,7 @@ export default function SettingsPage() {
                 <span className={styles.toggleDesc}>Убрать плавные переходы и анимации интерфейса для ускорения работы</span>
               </div>
               <label className={styles.toggleSwitch}>
-                <input type="checkbox" />
+                <input type="checkbox" checked={disableAnimations} onChange={(e) => setDisableAnimations(e.target.checked)} />
                 <span className={styles.toggleSlider}></span>
               </label>
             </div>
@@ -864,7 +879,7 @@ export default function SettingsPage() {
                 <span className={styles.toggleDesc}>Скрывать контент 18+ и сцены жестокости (NSFW)</span>
               </div>
               <label className={styles.toggleSwitch}>
-                <input type="checkbox" defaultChecked />
+                <input type="checkbox" checked={safeMode} onChange={(e) => setSafeMode(e.target.checked)} />
                 <span className={styles.toggleSlider}></span>
               </label>
             </div>

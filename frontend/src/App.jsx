@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import MobileNav from './components/layout/MobileNav';
@@ -23,6 +23,20 @@ function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const isReader = location.pathname.startsWith('/read');
+
+  useEffect(() => {
+    const handleSiteSettings = () => {
+      const disableAnimations = localStorage.getItem('site_disableAnimations') === 'true';
+      if (disableAnimations) {
+        document.body.classList.add('disable-animations');
+      } else {
+        document.body.classList.remove('disable-animations');
+      }
+    };
+    handleSiteSettings();
+    window.addEventListener('site-settings-updated', handleSiteSettings);
+    return () => window.removeEventListener('site-settings-updated', handleSiteSettings);
+  }, []);
 
   return (
     <>

@@ -7,25 +7,44 @@ const MAX_PAGES = 8;
 const BATCH_SIZE = 24;
 
 export default function CatalogPage() {
-  const [items, setItems] = useState(catalogInitial);
+  const [safeMode, setSafeMode] = useState(() => localStorage.getItem('site_safeMode') !== 'false');
+  const [compactMode, setCompactMode] = useState(() => localStorage.getItem('site_compactMode') === 'true');
+  
+  const filteredCatalogInitial = safeMode ? catalogInitial.filter(m => !m.is18) : catalogInitial;
+  const [items, setItems] = useState(filteredCatalogInitial);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const hasMore = page < MAX_PAGES;
 
+  // Listen for changes from other tabs
+  useEffect(() => {
+    const handleSettingsUpdate = () => {
+      const newSafeMode = localStorage.getItem('site_safeMode') !== 'false';
+      const newCompactMode = localStorage.getItem('site_compactMode') === 'true';
+      setSafeMode(newSafeMode);
+      setCompactMode(newCompactMode);
+      setItems(newSafeMode ? catalogInitial.filter(m => !m.is18) : catalogInitial);
+      setPage(1); // Reset page on settings change to keep it simple
+    };
+    window.addEventListener('site-settings-updated', handleSettingsUpdate);
+    return () => window.removeEventListener('site-settings-updated', handleSettingsUpdate);
+  }, []);
+
   const loadMore = useCallback(() => {
     if (loading || !hasMore) return;
     setLoading(true);
     setTimeout(() => {
+      const extraSource = safeMode ? extraManga.filter(m => !m.is18) : extraManga;
       const batch = Array.from({ length: BATCH_SIZE }, (_, i) => {
-        const source = extraManga[i % extraManga.length];
+        const source = extraSource[i % extraSource.length];
         return { ...source, cover: ((page * BATCH_SIZE + i) % 25) + 1 };
       });
       setItems(prev => [...prev, ...batch]);
       setPage(p => p + 1);
       setLoading(false);
     }, 600);
-  }, [loading, hasMore, page]);
+  }, [loading, hasMore, page, safeMode]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -56,7 +75,7 @@ export default function CatalogPage() {
                 Фильтры
               </button>
             </div>
-            <div className="manga-grid manga-grid--catalog">
+            <div className={`manga-grid manga-grid--catalog ${compactMode ? 'manga-grid--compact' : ''}`}>
               {items.map(item => (
                 <MangaCard key={`${item.title}-${item.cover}`} {...item} variant="catalog" />
               ))}
