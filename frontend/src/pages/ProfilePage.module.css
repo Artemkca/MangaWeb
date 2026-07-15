@@ -940,7 +940,7 @@
   right: -45px !important;
   transform: translate(0, 0);
   transform-origin: 30% 70%;
-  animation: fanUnfold 1.2s ease-out forwards, fanWave 3s ease-in-out 1.2s infinite;
+  animation: fanUnfold 1.2s ease-out forwards, fanWave 1.5s ease-in-out 1.2s infinite;
 }
 
 @keyframes fanUnfold {
@@ -961,7 +961,7 @@
 
 @keyframes fanWave {
   0% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(0, 0) rotate(-25deg); } /* Negative angle waves inwards (left/up) towards the avatar */
+  40% { transform: translate(0, 0) rotate(-12deg); } /* A natural, subtle wave inwards */
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
