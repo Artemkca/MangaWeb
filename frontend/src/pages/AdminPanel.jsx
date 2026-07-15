@@ -168,25 +168,38 @@ export default function AdminPanel() {
           desc = desc.replace(/\[\/?(i|b|spoiler|character|person|anime|manga|url)[^\]]*\]/gi, '');
         }
 
-        // Умный фоллбэк для отсутствующих описаний
-        const FALLBACK_DESCRIPTIONS = {
-          'Игрок скрывает прошлое': 'VR-игра «История континента Аркана» внезапно материализуется в реальном мире. Обычный офисный работник Ли Хо Ёль оказывается в теле своего игрового персонажа, которого создал в школе — высокопарного и пафосного Грандфелла Клауди Арфея Ромео. Теперь ему приходится отыгрывать эту нелепую роль сквозь жгучий стыд, ведь его персонаж — последний легендарный охотник на демонов!',
-          'Поднятие уровня в одиночку (Solo Leveling)': 'Слабейший охотник Е-ранга получает уникальную способность интерфейса Игрока, позволяющую ему бесконечно повышать свой уровень.'
+        // Умный фоллбэк для отсутствующих данных
+        const FALLBACK_DATA = {
+          'Игрок скрывает прошлое': {
+            description: 'VR-игра «История континента Аркана» внезапно материализуется в реальном мире. Обычный офисный работник Ли Хо Ёль оказывается в теле своего игрового персонажа, которого создал в школе — высокопарного и пафосного Грандфелла Клауди Арфея Ромео. Теперь ему приходится отыгрывать эту нелепую роль сквозь жгучий стыд, ведь его персонаж — последний легендарный охотник на демонов!',
+            genres: ['Сёнен', 'Экшен', 'Фэнтези', 'Исекай', 'Комедия']
+          },
+          'Поднятие уровня в одиночку': {
+            description: 'Слабейший охотник Е-ранга получает уникальную способность интерфейса Игрока, позволяющую ему бесконечно повышать свой уровень.',
+            genres: ['Сёнен', 'Экшен', 'Фэнтези', 'Сверхъестественное']
+          }
         };
 
         let finalDesc = desc && desc.trim().length > 0 ? desc : null;
+        let apiGenres = data.genres ? data.genres.map(g => g.russian || g.name) : [];
+        let finalGenres = [...apiGenres];
+        
+        const fallbackKey = Object.keys(FALLBACK_DATA).find(k => title.toLowerCase().includes(k.toLowerCase()) || currentInput.toLowerCase().includes(k.toLowerCase()));
+        
+        if (fallbackKey) {
+           const fallback = FALLBACK_DATA[fallbackKey];
+           if (!finalDesc) finalDesc = fallback.description;
+           
+           // Добавляем фоллбэк-жанры, которых нет в API
+           fallback.genres.forEach(g => {
+             if (!finalGenres.includes(g)) finalGenres.push(g);
+           });
+        }
         
         if (!finalDesc) {
-           // Ищем в фоллбэках по названию
-           const fallbackKey = Object.keys(FALLBACK_DESCRIPTIONS).find(k => title.toLowerCase().includes(k.toLowerCase()) || currentInput.toLowerCase().includes(k.toLowerCase()));
-           if (fallbackKey) {
-             finalDesc = FALLBACK_DESCRIPTIONS[fallbackKey];
-           } else {
-             finalDesc = 'К сожалению, на Шикимори пока нет описания для этой манги, но я собрал для вас все остальные данные (жанры, рейтинг, главы)!';
-           }
+           finalDesc = 'К сожалению, на Шикимори пока нет описания для этой манги, но я собрал для вас все остальные данные (жанры, рейтинг, главы)!';
         }
 
-        const genres = data.genres ? data.genres.map(g => g.russian) : [];
         const score = data.score ? (parseFloat(data.score) / 2).toFixed(1) : 0; // Shikimori 10-балльная шкала -> 5 балльная
         const chapters = data.chapters || data.volumes || 0;
         const coverUrl = data.image ? `https://shikimori.one${data.image.original}` : '';
@@ -195,7 +208,7 @@ export default function AdminPanel() {
           ...prev.slice(0, prev.length - 1),
           { 
             role: 'bot', 
-            text: `Манга "${title}" найдена!\n\nОписание: ${finalDesc.substring(0, 200)}...\nЖанры: ${genres.join(', ')}\n\nЯ заполнил форму. Проверьте данные и сохраните!`
+            text: `Манга "${title}" найдена!\n\nОписание: ${finalDesc.substring(0, 200)}...\nЖанры: ${finalGenres.join(', ')}\n\nЯ заполнил форму. Проверьте данные и сохраните!`
           }
         ]);
         
@@ -207,7 +220,7 @@ export default function AdminPanel() {
           rating: score,
           chapters: chapters,
           cover: coverUrl,
-          genres: Array.from(new Set([...prev.genres, ...genres]))
+          genres: Array.from(new Set([...prev.genres, ...finalGenres]))
         }));
       } else {
         setBotMessages(prev => [
