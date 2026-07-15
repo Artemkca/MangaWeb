@@ -1466,39 +1466,28 @@ input:checked + .toggleSlider:before {
   right: -35px !important;
   transform: translate(0, 0);
   transform-origin: 30% 70%;
-  animation: fanUnfoldSequence 1s ease-out forwards, fanWave 3s ease-in-out 1s infinite;
+  animation: fanUnfold 1.2s ease-out forwards, fanWave 3s ease-in-out 1.2s infinite;
 }
 
-@keyframes fanUnfoldSequence {
+@keyframes fanUnfold {
   0% { 
-    content: url('/frames/frame_3_folded.png');
+    clip-path: polygon(30% 70%, 100% 0%, 100% 0%, 100% 0%, 100% 0%);
     transform: translate(0, 0) rotate(15deg);
     opacity: 0;
   }
   20% {
-    content: url('/frames/frame_3_folded.png');
     opacity: 1;
-    transform: translate(0, 0) rotate(10deg);
-  }
-  39% {
-    content: url('/frames/frame_3_folded.png');
-    transform: translate(0, 0) rotate(-5deg);
-  }
-  40% {
-    content: none;
-    clip-path: polygon(30% 70%, 100% 30%, 100% 30%, 100% 30%, 100% 30%);
-    transform: translate(0, 0) rotate(-5deg);
   }
   100% { 
-    content: none;
-    clip-path: polygon(30% 70%, 120% 120%, 120% -20%, -20% -20%, -20% 120%);
+    clip-path: polygon(30% 70%, 150% 150%, 150% -50%, -50% -50%, -50% 150%);
     transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
   }
 }
 
 @keyframes fanWave {
   0% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(0, 0) rotate(20deg); } /* Waves inwards! */
+  50% { transform: translate(0, 0) rotate(-25deg); } /* Negative angle waves inwards (left/up) towards the avatar */
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
