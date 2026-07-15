@@ -54,6 +54,11 @@
   transition: all 0.2s ease;
 }
 
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
 .formGroup input::placeholder,
 .formGroup textarea::placeholder {
   color: rgba(255, 255, 255, 0.2);
