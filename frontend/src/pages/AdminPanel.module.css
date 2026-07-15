@@ -67,6 +67,64 @@
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
+/* Custom Number Input styling */
+.numberInputWrapper {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.numberInputWrapper:focus-within {
+  border-color: var(--accent, #6366f1);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.formGroup .numberInputWrapper input.numberInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  text-align: center;
+  padding: 14px 0;
+  -moz-appearance: textfield; /* Firefox */
+  box-shadow: none;
+}
+
+.formGroup .numberInputWrapper input.numberInput:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.formGroup .numberInputWrapper input.numberInput::-webkit-outer-spin-button,
+.formGroup .numberInputWrapper input.numberInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.numBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0 16px;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.numBtn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .row {
   display: flex;
   gap: 24px;
