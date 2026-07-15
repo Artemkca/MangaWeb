@@ -858,12 +858,13 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
+    </div>
 
-      {saveSuccessMsg && (
-        <div className={styles.toastMessage}>
-          {saveSuccessMsg}
-        </div>
-      )}
+    {saveSuccessMsg && (
+      <div className={styles.toastMessage}>
+        {saveSuccessMsg}
+      </div>
+    )}
     </>
   );
 }
