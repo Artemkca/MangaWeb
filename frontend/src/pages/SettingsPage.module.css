@@ -1455,3 +1455,25 @@ input:checked + .toggleSlider:before {
   from { opacity: 1; }
   to { opacity: 0; visibility: hidden; }
 }
+
+/* Animations for specific frames */
+.animFan {
+  animation: fanWave 4s ease-in-out infinite;
+}
+
+@keyframes fanWave {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  50% { transform: translate(-50%, -50%) rotate(-10deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+.animHat {
+  animation: hatTwitch 4s ease-in-out infinite;
+}
+
+@keyframes hatTwitch {
+  0%, 85%, 100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  88% { transform: translate(-50%, -50%) rotate(4deg) scale(1.03); }
+  92% { transform: translate(-50%, -50%) rotate(-4deg) scale(0.97); }
+  96% { transform: translate(-50%, -50%) rotate(2deg) scale(1.01); }
+}

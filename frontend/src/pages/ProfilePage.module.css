@@ -929,3 +929,25 @@
   background: rgba(100, 116, 139, 0.5);
   border-radius: 4px;
 }
+
+/* Animations for specific frames */
+.animFan {
+  animation: fanWave 4s ease-in-out infinite;
+}
+
+@keyframes fanWave {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  50% { transform: translate(-50%, -50%) rotate(-10deg); }
+  100% { transform: translate(-50%, -50%) rotate(0deg); }
+}
+
+.animHat {
+  animation: hatTwitch 4s ease-in-out infinite;
+}
+
+@keyframes hatTwitch {
+  0%, 85%, 100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  88% { transform: translate(-50%, -50%) rotate(4deg) scale(1.03); }
+  92% { transform: translate(-50%, -50%) rotate(-4deg) scale(0.97); }
+  96% { transform: translate(-50%, -50%) rotate(2deg) scale(1.01); }
+}

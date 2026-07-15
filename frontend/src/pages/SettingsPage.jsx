@@ -72,7 +72,11 @@ const DECORATIONS = {
   frames: [
     { id: 1, name: 'Без рамки', img: 'none', type: 'frame', price: 0 },
     { id: 2, name: 'Кровавый Демон', img: '/frames/frame_oni.png?v=5', type: 'frame', price: 1000 },
-    { id: 3, name: 'Весенняя Кицунэ', img: '/frames/frame_kitsune.png?v=5', type: 'frame', price: 1000 }
+    { id: 3, name: 'Весенняя Кицунэ', img: '/frames/frame_kitsune.png?v=5', type: 'frame', price: 1000 },
+    { id: 4, name: 'Веер Ветра', img: '/frames/frame_3.png?v=1', type: 'frame', price: 1000, effectClass: 'animFan' },
+    { id: 5, name: 'Живая Шапка', img: '/frames/frame_4.png?v=1', type: 'frame', price: 1000, effectClass: 'animHat' },
+    { id: 6, name: 'Арена Мистики', img: '/frames/frame_coloque_um_nome_wmistic_arena.png?v=1', type: 'frame', price: 1000 },
+    { id: 7, name: 'Магический Фон', img: '/frames/frame_bg_rw.png?v=1', type: 'frame', price: 1000 }
   ],
   banners: [
     { id: 1, name: 'City Night', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
@@ -648,13 +652,16 @@ export default function SettingsPage() {
               <div className={styles.cardProfileSection}>
                 <div className={styles.cardAvatarWrapper}>
                   <img src={currentAvatar} alt="Avatar" className={styles.cardAvatar} />
-                  {currentFrame && currentFrame !== 'none' && (
-                    <img 
-                      src={DECORATIONS.frames.find(f => f.styleId === currentFrame)?.img || currentFrame.split('?')[0] + '?v=5'} 
-                      alt="Frame" 
-                      className={styles.frameImg} 
-                    />
-                  )}
+                  {currentFrame && currentFrame !== 'none' && (() => {
+                    const matchedFrame = DECORATIONS.frames.find(f => f.img.split('?')[0] === currentFrame.split('?')[0]);
+                    return (
+                      <img 
+                        src={matchedFrame?.img || currentFrame.split('?')[0] + '?v=5'} 
+                        alt="Frame" 
+                        className={`${styles.frameImg} ${matchedFrame?.effectClass ? styles[matchedFrame.effectClass] : ''}`} 
+                      />
+                    );
+                  })()}
                   <button className={styles.avatarEditCircBtn}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                   </button>
