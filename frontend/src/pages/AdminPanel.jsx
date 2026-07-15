@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './AdminPanel.module.css';
+
+const PREDEFINED_GENRES = [
+  'Сёнэн', 'Сёдзё', 'Сэйнэн', 'Дзёсэй', 
+  'Фэнтези', 'Романтика', 'Приключения', 'Комедия', 
+  'Драма', 'Триллер', 'Ужасы', 'Повседневность',
+  'Исекай', 'Меха', 'Спорт', 'Детектив', 'Фантастика'
+];
 
 export default function AdminPanel() {
   const { session } = useAuth();
@@ -18,9 +25,22 @@ export default function AdminPanel() {
   });
 
   const [genreInput, setGenreInput] = useState('');
+  const [showGenresDropdown, setShowGenresDropdown] = useState(false);
+  const genreDropdownRef = useRef(null);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (genreDropdownRef.current && !genreDropdownRef.current.contains(e.target)) {
+        setShowGenresDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Protect route
   if (!session) {
@@ -54,6 +74,14 @@ export default function AdminPanel() {
       ...prev,
       genres: prev.genres.filter(g => g !== genreToRemove)
     }));
+  };
+
+  const handlePredefinedGenreAdd = (genre) => {
+    if (!formData.genres.includes(genre)) {
+      setFormData(prev => ({ ...prev, genres: [...prev.genres, genre] }));
+      setGenreInput('');
+      setShowGenresDropdown(false);
+    }
   };
   
   const handleGenreKeyDown = (e) => {
@@ -156,7 +184,7 @@ export default function AdminPanel() {
           </div>
         </div>
 
-        <div className={styles.formGroup}>
+        <div className={styles.formGroup} ref={genreDropdownRef}>
           <label>Жанры *</label>
           <div className={styles.tagsWrapper}>
             {formData.genres.map(genre => (
@@ -167,16 +195,40 @@ export default function AdminPanel() {
                 </button>
               </span>
             ))}
-            <input 
-              type="text"
-              name="genreInput" 
-              value={genreInput} 
-              onChange={e => setGenreInput(e.target.value)} 
-              onKeyDown={handleGenreKeyDown}
-              placeholder={formData.genres.length === 0 ? "Сёнэн, Фэнтези, Приключения..." : "Добавить жанр..."}
-              className={styles.tagInput}
-            />
-            <button type="button" onClick={handleAddGenre} className={styles.tagAddBtn}>
+            <div style={{ position: 'relative', flex: 1, minWidth: '150px' }}>
+              <input 
+                type="text"
+                name="genreInput" 
+                value={genreInput} 
+                onChange={e => {
+                  setGenreInput(e.target.value);
+                  setShowGenresDropdown(true);
+                }} 
+                onFocus={() => setShowGenresDropdown(true)}
+                onKeyDown={handleGenreKeyDown}
+                placeholder={formData.genres.length === 0 ? "Сёнэн, Фэнтези, Приключения..." : "Добавить жанр..."}
+                className={styles.tagInput}
+              />
+              {showGenresDropdown && (
+                <div className={styles.genreDropdown}>
+                  {PREDEFINED_GENRES
+                    .filter(g => !formData.genres.includes(g) && g.toLowerCase().includes(genreInput.toLowerCase()))
+                    .map(g => (
+                      <div 
+                        key={g} 
+                        className={styles.genreOption}
+                        onClick={() => handlePredefinedGenreAdd(g)}
+                      >
+                        {g}
+                      </div>
+                  ))}
+                  {PREDEFINED_GENRES.filter(g => !formData.genres.includes(g) && g.toLowerCase().includes(genreInput.toLowerCase())).length === 0 && (
+                    <div className={styles.genreOptionEmpty}>Нет совпадений</div>
+                  )}
+                </div>
+              )}
+            </div>
+            <button type="button" onClick={() => setShowGenresDropdown(!showGenresDropdown)} className={styles.tagAddBtn}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
           </div>
