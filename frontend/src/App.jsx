@@ -18,6 +18,7 @@ import LibraryPage from './pages/LibraryPage';
 import ReaderPage from './pages/ReaderPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import StorePage from './pages/StorePage';
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -55,6 +56,7 @@ function App() {
         <Route path="/library" element={<LibraryPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/store" element={<StorePage />} />
         <Route path="/read/:id" element={<ReaderPage />} />
       </Routes>
 
