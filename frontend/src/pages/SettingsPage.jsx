@@ -73,17 +73,39 @@ const DECORATIONS = {
     { id: 1, name: 'Без рамки', styleId: 'none', style: { border: 'none', boxShadow: '0 8px 30px rgba(0,0,0,0.5)' }, type: 'frame' },
     { id: 2, name: 'Золотая рамка', styleId: 'gold', style: { border: '4px solid #fbbf24', boxShadow: '0 0 20px 5px rgba(251, 191, 36, 0.4)' }, type: 'frame' },
     { id: 3, name: 'Неоновая рамка', styleId: 'neon', style: { border: '4px solid #06b6d4', boxShadow: '0 0 30px 10px rgba(6, 182, 212, 0.6)' }, type: 'frame' },
-    { id: 4, name: 'Тёмная аура', styleId: 'dark', style: { border: '4px solid #1e293b', boxShadow: '0 0 40px 15px rgba(0, 0, 0, 0.8)' }, type: 'frame' }
+    { id: 4, name: 'Лесная рамка', styleId: 'forest', style: { border: '4px solid #22c55e', boxShadow: '0 0 20px 5px rgba(34, 197, 94, 0.4)' }, type: 'frame' },
+    { id: 5, name: 'Кровавая луна', styleId: 'blood', style: { border: '4px solid #ef4444', boxShadow: '0 0 25px 8px rgba(239, 68, 68, 0.5)' }, type: 'frame' },
+    { id: 6, name: 'Киберпанк', styleId: 'cyber', style: { border: '4px dashed #f472b6', boxShadow: '0 0 15px 5px rgba(244, 114, 182, 0.6)' }, type: 'frame' },
+    { id: 7, name: 'Бездна', styleId: 'void', style: { border: '4px solid #111', boxShadow: '0 0 40px 15px rgba(139, 92, 246, 0.5)' }, type: 'frame' }
   ],
   banners: [
-    { id: 1, name: 'Cyber City', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
-    { id: 2, name: 'Epic Space', img: '/banner_2_space_1783958166998.jpg', type: 'banner' },
-    { id: 3, name: 'Mystic Forest', img: '/banner_3_nature_1783958177183.jpg', type: 'banner' }
+    { id: 1, name: 'City Night', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
+    { id: 2, name: 'Forest Temple', img: '/banner_2_forest_1783958169992.jpg', type: 'banner' },
+    { id: 10, name: 'Attack on Titan', img: '/banners/banner_16498.jpg', type: 'banner' },
+    { id: 11, name: 'Demon Slayer: Kimetsu no Yaiba', img: '/banners/banner_101922.jpg', type: 'banner' },
+    { id: 12, name: 'JUJUTSU KAISEN', img: '/banners/banner_113415.jpg', type: 'banner' },
+    { id: 13, name: 'Death Note', img: '/banners/banner_1535.jpg', type: 'banner' },
+    { id: 14, name: 'My Hero Academia', img: '/banners/banner_21459.jpg', type: 'banner' },
+    { id: 15, name: 'Hunter x Hunter', img: '/banners/banner_11061.jpg', type: 'banner' },
+    { id: 16, name: 'One-Punch Man', img: '/banners/banner_21087.jpg', type: 'banner' },
+    { id: 17, name: 'ONE PIECE', img: '/banners/banner_21.jpg', type: 'banner' },
+    { id: 18, name: 'Tokyo Ghoul', img: '/banners/banner_20605.jpg', type: 'banner' },
+    { id: 19, name: 'Attack on Titan Season 2', img: '/banners/banner_20958.jpg', type: 'banner' }
   ],
   wallpapers: [
-    { id: 1, name: 'Grey Theme (Default)', img: 'none', type: 'wallpaper' },
-    { id: 2, name: 'Tokyo Cyberpunk', img: '/wallpaper_1_street_1783959690033.jpg', type: 'wallpaper' },
-    { id: 3, name: 'Starry Sky', img: '/wallpaper_2_sky_1783959698388.jpg', type: 'wallpaper' }
+    { id: 1, name: 'Без обоев (Тёмный)', img: 'none', type: 'wallpaper' },
+    { id: 2, name: 'Space Stars', img: '/wallpaper_1_space_1783958212170.jpg', type: 'wallpaper' },
+    { id: 3, name: 'Anime Sky', img: '/wallpaper_2_sky_1783958218683.jpg', type: 'wallpaper' },
+    { id: 20, name: 'Fullmetal Alchemist', img: '/wallpapers/wallpaper_5114.jpg', type: 'wallpaper' },
+    { id: 21, name: 'Naruto', img: '/wallpapers/wallpaper_20.jpg', type: 'wallpaper' },
+    { id: 22, name: 'Sword Art Online', img: '/wallpapers/wallpaper_11757.jpg', type: 'wallpaper' },
+    { id: 23, name: 'Your Name.', img: '/wallpapers/wallpaper_21519.jpg', type: 'wallpaper' },
+    { id: 24, name: 'A Silent Voice', img: '/wallpapers/wallpaper_20954.jpg', type: 'wallpaper' },
+    { id: 25, name: 'Attack on Titan S3', img: '/wallpapers/wallpaper_99147.jpg', type: 'wallpaper' },
+    { id: 26, name: 'My Hero Academia S2', img: '/wallpapers/wallpaper_21856.jpg', type: 'wallpaper' },
+    { id: 27, name: 'Attack on Titan Final', img: '/wallpapers/wallpaper_110277.jpg', type: 'wallpaper' },
+    { id: 28, name: 'The Promised Neverland', img: '/wallpapers/wallpaper_101759.jpg', type: 'wallpaper' },
+    { id: 29, name: 'Assassination Classroom', img: '/wallpapers/wallpaper_20755.jpg', type: 'wallpaper' }
   ]
 };
 
