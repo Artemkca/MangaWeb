@@ -216,7 +216,7 @@ export default function ProfilePage() {
           </section>
 
           {/* Achievements */}
-          <section className={styles.section}>
+          <section className={`${styles.section} ${styles.mainBlock}`}>
             <div className={styles.sectionHeader}>
               <h2>Достижения <span className={styles.count}>4</span></h2>
               <a href="#" className={styles.linkAll}>Все достижения &gt;</a>
