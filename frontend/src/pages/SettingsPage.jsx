@@ -52,7 +52,22 @@ const DECORATIONS = {
     { id: 1, name: 'Reze (Chainsaw Man)', img: '/avatar_reze_1783959680874.jpg', type: 'avatar' },
     { id: 2, name: 'Dark Boy', img: '/avatar_1_boy_1783958087860.jpg', type: 'avatar' },
     { id: 3, name: 'Silver Girl', img: '/avatar_2_girl_1783958096727.jpg', type: 'avatar' },
-    { id: 4, name: 'Mysterious', img: '/avatar_3_mysterious_1783958104874.jpg', type: 'avatar' }
+    { id: 4, name: 'Mysterious', img: '/avatar_3_mysterious_1783958104874.jpg', type: 'avatar' },
+    { id: 10, name: 'Levi', img: '/avatars/char_45627.jpg', type: 'avatar' },
+    { id: 11, name: 'Satoru Gojou', img: '/avatars/char_127691.jpg', type: 'avatar' },
+    { id: 12, name: 'Killua Zoldyck', img: '/avatars/char_27.jpg', type: 'avatar' },
+    { id: 13, name: 'Luffy Monkey', img: '/avatars/char_40.jpg', type: 'avatar' },
+    { id: 14, name: 'Eren Yeager', img: '/avatars/char_40882.jpg', type: 'avatar' },
+    { id: 15, name: 'Zoro Roronoa', img: '/avatars/char_62.jpg', type: 'avatar' },
+    { id: 16, name: 'L Lawliet', img: '/avatars/char_71.jpg', type: 'avatar' },
+    { id: 17, name: 'Emilia', img: '/avatars/char_88572.jpg', type: 'avatar' },
+    { id: 18, name: 'Lelouch Lamperouge', img: '/avatars/char_417.jpg', type: 'avatar' },
+    { id: 19, name: 'Mikasa Ackerman', img: '/avatars/char_40881.jpg', type: 'avatar' },
+    { id: 20, name: 'Ken Kaneki', img: '/avatars/char_87275.jpg', type: 'avatar' },
+    { id: 21, name: 'Arataka Reigen', img: '/avatars/char_89334.jpg', type: 'avatar' },
+    { id: 22, name: 'Guts', img: '/avatars/char_422.jpg', type: 'avatar' },
+    { id: 23, name: 'Itachi Uchiha', img: '/avatars/char_14.jpg', type: 'avatar' },
+    { id: 24, name: 'Kurisu Makise', img: '/avatars/char_34470.jpg', type: 'avatar' }
   ],
   frames: [
     { id: 1, name: 'Без рамки', styleId: 'none', style: { border: 'none', boxShadow: '0 8px 30px rgba(0,0,0,0.5)' }, type: 'frame' },
