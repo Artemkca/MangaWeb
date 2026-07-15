@@ -12,13 +12,13 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
-  color: var(--accent, #00e5ff);
+  color: var(--accent); /* Uses the site's accent color (slate blue) */
   margin: 0;
 }
 
@@ -55,7 +55,7 @@
 .tabs {
   display: flex;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   overflow-x: auto;
   padding-bottom: 4px;
 }
@@ -66,7 +66,7 @@
 .tab {
   padding: 8px 16px;
   border-radius: 8px;
-  background: var(--bg-tertiary);
+  background: var(--bg-card);
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
@@ -76,42 +76,224 @@
   transition: all 0.2s ease;
 }
 .tab:hover {
-  background: var(--bg-secondary);
+  background: var(--bg-hover);
   color: var(--text-primary);
 }
 .tabActive {
   background: transparent;
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent);
   color: var(--text-primary);
 }
 
 .filtersBar {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 24px;
+  position: relative;
 }
+
 .filterBtn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
-  border-radius: 6px;
-  background: var(--bg-tertiary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: var(--bg-card);
   color: var(--text-secondary);
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
-.filterBtn:hover {
-  background: var(--bg-secondary);
+.filterBtn:hover, .filterBtnActive {
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
+
 .filterClear {
   background: transparent;
   color: var(--text-muted);
-  padding: 6px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+.filterClear:hover {
+  color: var(--text-secondary);
 }
 
+/* --- Filter Dropdown --- */
+.filterDropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 320px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 20px;
+  z-index: 100;
+  animation: dropIn 0.2s ease-out;
+}
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.dropdownTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+.dropdownActions {
+  display: flex;
+  gap: 8px;
+}
+.dropdownIconBtn {
+  background: var(--bg-hover);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dropdownIconBtn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.filterSection {
+  margin-bottom: 20px;
+}
+.filterSection:last-child {
+  margin-bottom: 0;
+}
+.filterSectionTitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+/* Custom Radios */
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.radioLabel:hover {
+  color: var(--text-primary);
+}
+.radioInput {
+  display: none;
+}
+.radioCustom {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.radioInput:checked + .radioCustom {
+  border-color: var(--accent);
+}
+.radioCustom::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: scale(0);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.radioInput:checked + .radioCustom::after {
+  transform: scale(1);
+}
+.radioInput:checked ~ span {
+  color: var(--text-primary);
+}
+
+/* Custom Toggles */
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: color 0.2s;
+}
+.toggleLabel:hover {
+  color: var(--text-primary);
+}
+.toggleInput {
+  display: none;
+}
+.toggleCustom {
+  width: 36px;
+  height: 20px;
+  background: var(--bg-hover);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.3s;
+}
+.toggleCustom::after {
+  content: '✕';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--bg-hover);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.toggleInput:checked + .toggleCustom {
+  background: var(--accent);
+}
+.toggleInput:checked + .toggleCustom::after {
+  content: '✓';
+  background: #fff;
+  color: var(--accent);
+  transform: translateX(16px);
+}
+.toggleInput:checked ~ span {
+  color: var(--text-primary);
+}
+
+/* --- Grid --- */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -119,19 +301,19 @@
 }
 
 .card {
-  background: var(--bg-tertiary);
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 16px;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
   cursor: pointer;
 }
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-lg);
+  background: var(--bg-hover);
 }
 
 .imageWrap {
@@ -147,18 +329,19 @@
   height: 110px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow);
   transition: transform 0.3s ease;
 }
 .card:hover .avatar {
   transform: scale(1.05);
 }
 
+/* Updated badges to match their screenshot */
 .badgeTopLeft {
   position: absolute;
   top: 0;
   left: 0;
-  background: #3b82f6;
+  background: #3b82f6; /* Blue tag */
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -171,27 +354,13 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  background: #ef4444;
+  background: #ef4444; /* Red tag */
   color: #fff;
   font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 10px;
   white-space: nowrap;
-}
-.badgeSoldOut {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-muted);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 10px;
-  white-space: nowrap;
-  backdrop-filter: blur(4px);
 }
 
 .cardTitle {
@@ -226,7 +395,6 @@
   color: #3b82f6; /* Blueish color for 'Только с подпиской' in screenshot */
 }
 
-/* Icons for cards */
 .eyeIcon {
   width: 14px;
   height: 14px;
