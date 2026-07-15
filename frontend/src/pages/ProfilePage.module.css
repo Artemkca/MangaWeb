@@ -966,21 +966,14 @@
 }
 
 .animHat {
-  width: 90px !important;
-  height: 90px !important;
-  top: -15px !important;
-  bottom: auto !important;
-  left: auto !important;
-  right: 0px !important;
-  transform: translate(0, 0);
-  transform-origin: 20% 90%;
+  transform-origin: 75% 25%;
   animation: hatTwitch 4s ease-in-out infinite;
 }
 
 @keyframes hatTwitch {
-  0%, 80%, 100% { transform: translate(0, 0) rotate(0deg); }
-  84% { transform: translate(0, 0) rotate(12deg); }
-  88% { transform: translate(0, 0) rotate(-6deg); }
-  92% { transform: translate(0, 0) rotate(8deg); }
-  96% { transform: translate(0, 0) rotate(-3deg); }
+  0%, 80%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+  84% { transform: translate(-50%, -50%) rotate(6deg); }
+  88% { transform: translate(-50%, -50%) rotate(-4deg); }
+  92% { transform: translate(-50%, -50%) rotate(4deg); }
+  96% { transform: translate(-50%, -50%) rotate(-2deg); }
 }

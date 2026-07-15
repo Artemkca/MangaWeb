@@ -130,11 +130,20 @@ export default function ProfilePage() {
           <div className={styles.phAvatar}>
             <img src={selectedAvatar} alt="Avatar" className={styles.avatarImg} />
             {selectedFrame && selectedFrame !== 'none' && (
-              <img 
-                src={selectedFrame.split('?')[0] + '?v=11'} 
-                alt="Frame" 
-                className={`${styles.frameImg} ${selectedFrame.includes('frame_3') ? styles.animFan : ''} ${selectedFrame.includes('frame_4') ? styles.animHat : ''}`} 
-              />
+              <>
+                <img 
+                  src={selectedFrame.split('?')[0] === '/frames/frame_4.png' ? '/frames/frame_4_base.png?v=2' : selectedFrame.split('?')[0] + '?v=12'} 
+                  alt="Frame Base" 
+                  className={`${styles.frameImg} ${selectedFrame.includes('frame_3') ? styles.animFan : ''}`} 
+                />
+                {selectedFrame.includes('frame_4') && (
+                  <img 
+                    src="/frames/frame_4_ear.png?v=2" 
+                    alt="Frame Ear" 
+                    className={`${styles.frameImg} ${styles.animHat}`} 
+                  />
+                )}
+              </>
             )}
           </div>
           <div className={styles.phInfo}>

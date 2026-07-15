@@ -654,12 +654,22 @@ export default function SettingsPage() {
                   <img src={currentAvatar} alt="Avatar" className={styles.cardAvatar} />
                   {currentFrame && currentFrame !== 'none' && (() => {
                     const matchedFrame = DECORATIONS.frames.find(f => f.img.split('?')[0] === currentFrame.split('?')[0]);
+                    const isFrame4 = currentFrame.includes('frame_4');
                     return (
-                      <img 
-                        src={matchedFrame?.img || currentFrame.split('?')[0] + '?v=11'} 
-                        alt="Frame" 
-                        className={`${styles.frameImg} ${matchedFrame?.effectClass ? styles[matchedFrame.effectClass] : ''}`} 
-                      />
+                      <>
+                        <img 
+                          src={isFrame4 ? '/frames/frame_4_base.png?v=2' : (matchedFrame?.img || currentFrame.split('?')[0] + '?v=12')} 
+                          alt="Frame Base" 
+                          className={`${styles.frameImg} ${matchedFrame?.effectClass && !isFrame4 ? styles[matchedFrame.effectClass] : ''}`} 
+                        />
+                        {isFrame4 && (
+                          <img 
+                            src="/frames/frame_4_ear.png?v=2" 
+                            alt="Frame Ear" 
+                            className={`${styles.frameImg} ${styles.animHat}`} 
+                          />
+                        )}
+                      </>
                     );
                   })()}
                   <button className={styles.avatarEditCircBtn}>
