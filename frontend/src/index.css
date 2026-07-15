@@ -2516,6 +2516,7 @@ img { max-width: 100%; display: block; }
   font-size: 14px;
   outline: none;
   height: 100%;
+  min-width: 0;
 }
 
 .auth-input::placeholder { color: var(--text-muted); }
