@@ -116,11 +116,11 @@ export default function AuthModal() {
         <h2 className="auth-modal__title">
           {authTab === 'login' ? 'Вход' : authTab === 'verify' ? 'Верификация аккаунта' : 'Регистрация'}
         </h2>
-        <p className="auth-modal__subtitle">
-          {authTab === 'verify' 
-            ? 'У вас не подтверждён email, проверьте почту, если вы не нашли письмо в почте, вы можете переотправить запрос для верификации'
-            : 'Создайте аккаунт, чтобы сохранять закладки, историю чтения и получать уведомления о новых главах.'}
-        </p>
+        {authTab !== 'verify' && (
+          <p className="auth-modal__subtitle">
+            Создайте аккаунт, чтобы сохранять закладки, историю чтения и получать уведомления о новых главах.
+          </p>
+        )}
 
         <form className={`auth-form${authTab === 'login' ? ' auth-form--active' : ''}`} onSubmit={onLogin}>
           <div className="auth-field">

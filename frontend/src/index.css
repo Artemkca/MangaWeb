@@ -2563,12 +2563,7 @@ img { max-width: 100%; display: block; }
 }
 
 .auth-submit--verify {
-  background: #3b4274;
   margin-top: 8px;
-}
-
-.auth-submit--verify:hover {
-  background: #474f8c;
 }
 
 .auth-verify-footer {
