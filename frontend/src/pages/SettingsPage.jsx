@@ -658,13 +658,13 @@ export default function SettingsPage() {
                     return (
                       <>
                         <img 
-                          src={isFrame4 ? '/frames/frame_4_base.png?v=2' : (matchedFrame?.img || currentFrame.split('?')[0] + '?v=12')} 
+                          src={isFrame4 ? '/frames/frame_4_base.png?v=3' : (matchedFrame?.img || currentFrame.split('?')[0] + '?v=12')} 
                           alt="Frame Base" 
                           className={`${styles.frameImg} ${matchedFrame?.effectClass && !isFrame4 ? styles[matchedFrame.effectClass] : ''}`} 
                         />
                         {isFrame4 && (
                           <img 
-                            src="/frames/frame_4_ear.png?v=2" 
+                            src="/frames/frame_4_ear.png?v=3" 
                             alt="Frame Ear" 
                             className={`${styles.frameImg} ${styles.animHat}`} 
                           />

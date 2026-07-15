@@ -132,13 +132,13 @@ export default function ProfilePage() {
             {selectedFrame && selectedFrame !== 'none' && (
               <>
                 <img 
-                  src={selectedFrame.split('?')[0] === '/frames/frame_4.png' ? '/frames/frame_4_base.png?v=2' : selectedFrame.split('?')[0] + '?v=12'} 
+                  src={selectedFrame.split('?')[0] === '/frames/frame_4.png' ? '/frames/frame_4_base.png?v=3' : selectedFrame.split('?')[0] + '?v=12'} 
                   alt="Frame Base" 
                   className={`${styles.frameImg} ${selectedFrame.includes('frame_3') ? styles.animFan : ''}`} 
                 />
                 {selectedFrame.includes('frame_4') && (
                   <img 
-                    src="/frames/frame_4_ear.png?v=2" 
+                    src="/frames/frame_4_ear.png?v=3" 
                     alt="Frame Ear" 
                     className={`${styles.frameImg} ${styles.animHat}`} 
                   />
