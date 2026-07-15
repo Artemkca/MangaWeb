@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import MobileNav from './components/layout/MobileNav';
@@ -16,11 +16,28 @@ import ProfilePage from './pages/ProfilePage';
 import FriendsPage from './pages/FriendsPage';
 import LibraryPage from './pages/LibraryPage';
 import ReaderPage from './pages/ReaderPage';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
+import StorePage from './pages/StorePage';
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const isReader = location.pathname.startsWith('/read');
+
+  useEffect(() => {
+    const handleSiteSettings = () => {
+      const disableAnimations = localStorage.getItem('site_disableAnimations') === 'true';
+      if (disableAnimations) {
+        document.body.classList.add('disable-animations');
+      } else {
+        document.body.classList.remove('disable-animations');
+      }
+    };
+    handleSiteSettings();
+    window.addEventListener('site-settings-updated', handleSiteSettings);
+    return () => window.removeEventListener('site-settings-updated', handleSiteSettings);
+  }, []);
 
   return (
     <>
@@ -37,6 +54,9 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/library" element={<LibraryPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/store" element={<StorePage />} />
         <Route path="/read/:id" element={<ReaderPage />} />
       </Routes>
 

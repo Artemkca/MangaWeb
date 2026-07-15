@@ -7,11 +7,23 @@ const MAX_PAGES = 8;
 const BATCH_SIZE = 24;
 
 export default function CatalogPage() {
+  const [compactMode, setCompactMode] = useState(() => localStorage.getItem('site_compactMode') === 'true');
+  
   const [items, setItems] = useState(catalogInitial);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const hasMore = page < MAX_PAGES;
+
+  // Listen for changes from other tabs
+  useEffect(() => {
+    const handleSettingsUpdate = () => {
+      const newCompactMode = localStorage.getItem('site_compactMode') === 'true';
+      setCompactMode(newCompactMode);
+    };
+    window.addEventListener('site-settings-updated', handleSettingsUpdate);
+    return () => window.removeEventListener('site-settings-updated', handleSettingsUpdate);
+  }, []);
 
   const loadMore = useCallback(() => {
     if (loading || !hasMore) return;
@@ -56,7 +68,7 @@ export default function CatalogPage() {
                 Фильтры
               </button>
             </div>
-            <div className="manga-grid manga-grid--catalog">
+            <div className={`manga-grid manga-grid--catalog ${compactMode ? 'manga-grid--compact' : ''}`}>
               {items.map(item => (
                 <MangaCard key={`${item.title}-${item.cover}`} {...item} variant="catalog" />
               ))}

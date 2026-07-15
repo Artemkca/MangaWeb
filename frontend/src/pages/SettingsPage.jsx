@@ -33,11 +33,18 @@ const BookmarksTabIcon = () => (
   </svg>
 );
 
+const SettingsTabIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+  </svg>
+);
+
 const TABS = [
   { id: 'personal', label: 'Личные данные', icon: <UserTabIcon /> },
   { id: 'appearance', label: 'Внешний вид', icon: <PaletteTabIcon /> },
   { id: 'notifications', label: 'Уведомления', icon: <BellTabIcon /> },
-  { id: 'filters', label: 'Фильтр контента', icon: <FilterTabIcon /> }
+  { id: 'filters', label: 'Фильтр контента', icon: <FilterTabIcon /> },
+  { id: 'site', label: 'Настройки сайта', icon: <SettingsTabIcon /> }
 ];
 
 const DECORATIONS = {
@@ -45,23 +52,72 @@ const DECORATIONS = {
     { id: 1, name: 'Reze (Chainsaw Man)', img: '/avatar_reze_1783959680874.jpg', type: 'avatar' },
     { id: 2, name: 'Dark Boy', img: '/avatar_1_boy_1783958087860.jpg', type: 'avatar' },
     { id: 3, name: 'Silver Girl', img: '/avatar_2_girl_1783958096727.jpg', type: 'avatar' },
-    { id: 4, name: 'Mysterious', img: '/avatar_3_mysterious_1783958104874.jpg', type: 'avatar' }
+    { id: 4, name: 'Mysterious', img: '/avatar_3_mysterious_1783958104874.jpg', type: 'avatar' },
+    { id: 10, name: 'Levi', img: '/avatars/char_45627.jpg', type: 'avatar' },
+    { id: 11, name: 'Satoru Gojou', img: '/avatars/char_127691.jpg', type: 'avatar' },
+    { id: 12, name: 'Killua Zoldyck', img: '/avatars/char_27.jpg', type: 'avatar' },
+    { id: 13, name: 'Luffy Monkey', img: '/avatars/char_40.jpg', type: 'avatar' },
+    { id: 14, name: 'Eren Yeager', img: '/avatars/char_40882.jpg', type: 'avatar' },
+    { id: 15, name: 'Zoro Roronoa', img: '/avatars/char_62.jpg', type: 'avatar' },
+    { id: 16, name: 'L Lawliet', img: '/avatars/char_71.jpg', type: 'avatar' },
+    { id: 17, name: 'Emilia', img: '/avatars/char_88572.jpg', type: 'avatar' },
+    { id: 18, name: 'Lelouch Lamperouge', img: '/avatars/char_417.jpg', type: 'avatar' },
+    { id: 19, name: 'Mikasa Ackerman', img: '/avatars/char_40881.jpg', type: 'avatar' },
+    { id: 20, name: 'Ken Kaneki', img: '/avatars/char_87275.jpg', type: 'avatar' },
+    { id: 21, name: 'Arataka Reigen', img: '/avatars/char_89334.jpg', type: 'avatar' },
+    { id: 22, name: 'Guts', img: '/avatars/char_422.jpg', type: 'avatar' },
+    { id: 23, name: 'Itachi Uchiha', img: '/avatars/char_14.jpg', type: 'avatar' },
+    { id: 24, name: 'Kurisu Makise', img: '/avatars/char_34470.jpg', type: 'avatar' }
   ],
   frames: [
-    { id: 1, name: 'Без рамки', styleId: 'none', style: { border: 'none', boxShadow: '0 8px 30px rgba(0,0,0,0.5)' }, type: 'frame' },
-    { id: 2, name: 'Золотая рамка', styleId: 'gold', style: { border: '4px solid #fbbf24', boxShadow: '0 0 20px 5px rgba(251, 191, 36, 0.4)' }, type: 'frame' },
-    { id: 3, name: 'Неоновая рамка', styleId: 'neon', style: { border: '4px solid #06b6d4', boxShadow: '0 0 30px 10px rgba(6, 182, 212, 0.6)' }, type: 'frame' },
-    { id: 4, name: 'Тёмная аура', styleId: 'dark', style: { border: '4px solid #1e293b', boxShadow: '0 0 40px 15px rgba(0, 0, 0, 0.8)' }, type: 'frame' }
+    { id: 1, name: 'Без рамки', img: 'none', type: 'frame', price: 0 },
+    { id: 2, name: 'Кровавый Демон', img: '/frames/frame_oni.png?v=6', type: 'frame', price: 1000 },
+    { id: 3, name: 'Весенняя Кицунэ', img: '/frames/frame_kitsune.png?v=6', type: 'frame', price: 1000 },
+    { id: 4, name: 'Веер Ветра', img: '/frames/frame_3.png?v=7', type: 'frame', price: 1000, effectClass: 'animFan' },
+    { id: 5, name: 'Живая Шапка', img: '/frames/frame_4.png?v=6', type: 'frame', price: 1000, effectClass: 'animHat' },
+    { id: 6, name: 'Арена Мистики', img: '/frames/frame_coloque_um_nome_wmistic_arena.png?v=6', type: 'frame', price: 1000 },
+    { id: 7, name: 'Магический Фон', img: '/frames/frame_bg_rw.png?v=6', type: 'frame', price: 1000 }
   ],
   banners: [
-    { id: 1, name: 'Cyber City', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
-    { id: 2, name: 'Epic Space', img: '/banner_2_space_1783958166998.jpg', type: 'banner' },
-    { id: 3, name: 'Mystic Forest', img: '/banner_3_nature_1783958177183.jpg', type: 'banner' }
+    { id: 1, name: 'City Night', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
+    { id: 2, name: 'Forest Temple', img: '/banner_2_forest_1783958169992.jpg', type: 'banner' },
+    { id: 10, name: 'Attack on Titan', img: '/banners/banner_16498.jpg', type: 'banner' },
+    { id: 11, name: 'Demon Slayer: Kimetsu no Yaiba', img: '/banners/banner_101922.jpg', type: 'banner' },
+    { id: 12, name: 'JUJUTSU KAISEN', img: '/banners/banner_113415.jpg', type: 'banner' },
+    { id: 13, name: 'Death Note', img: '/banners/banner_1535.jpg', type: 'banner' },
+    { id: 14, name: 'My Hero Academia', img: '/banners/banner_21459.jpg', type: 'banner' },
+    { id: 15, name: 'Hunter x Hunter', img: '/banners/banner_11061.jpg', type: 'banner' },
+    { id: 16, name: 'One-Punch Man', img: '/banners/banner_21087.jpg', type: 'banner' },
+    { id: 17, name: 'ONE PIECE', img: '/banners/banner_21.jpg', type: 'banner' },
+    { id: 18, name: 'Tokyo Ghoul', img: '/banners/banner_20605.jpg', type: 'banner' },
+    { id: 19, name: 'Attack on Titan Season 2', img: '/banners/banner_20958.jpg', type: 'banner' }
   ],
   wallpapers: [
-    { id: 1, name: 'Grey Theme (Default)', img: 'none', type: 'wallpaper' },
-    { id: 2, name: 'Tokyo Cyberpunk', img: '/wallpaper_1_street_1783959690033.jpg', type: 'wallpaper' },
-    { id: 3, name: 'Starry Sky', img: '/wallpaper_2_sky_1783959698388.jpg', type: 'wallpaper' }
+    { id: 1, name: 'Без обоев (Тёмный)', img: 'none', type: 'wallpaper' },
+    { id: 20, name: 'Wallpaper 1', img: '/wallpapers/wall_21oymx.jpg', type: 'wallpaper' },
+    { id: 21, name: 'Wallpaper 2', img: '/wallpapers/wall_yq2mll.jpg', type: 'wallpaper' },
+    { id: 22, name: 'Wallpaper 3', img: '/wallpapers/wall_rqjvl1.jpg', type: 'wallpaper' },
+    { id: 23, name: 'Wallpaper 4', img: '/wallpapers/wall_5ymdk5.jpg', type: 'wallpaper' },
+    { id: 24, name: 'Wallpaper 5', img: '/wallpapers/wall_d8o6rm.jpg', type: 'wallpaper' },
+    { id: 25, name: 'Wallpaper 6', img: '/wallpapers/wall_e86z6k.jpg', type: 'wallpaper' },
+    { id: 26, name: 'Wallpaper 7', img: '/wallpapers/wall_8g9kxk.jpg', type: 'wallpaper' },
+    { id: 27, name: 'Wallpaper 8', img: '/wallpapers/wall_jey9kq.jpg', type: 'wallpaper' },
+    { id: 28, name: 'Wallpaper 9', img: '/wallpapers/wall_qrmro7.jpg', type: 'wallpaper' },
+    { id: 29, name: "Wallpaper 10", img: "/wallpapers/wall_21ozq6.jpg", type: "wallpaper" },
+    { id: 30, name: "Wallpaper 11", img: "/wallpapers/wall_w5d11p.jpg", type: "wallpaper" },
+    { id: 31, name: "Wallpaper 12", img: "/wallpapers/wall_lyjqw2.jpg", type: "wallpaper" },
+    { id: 32, name: "Wallpaper 13", img: "/wallpapers/wall_d8oe73.jpg", type: "wallpaper" },
+    { id: 33, name: "Wallpaper 14", img: "/wallpapers/wall_po723m.jpg", type: "wallpaper" },
+    { id: 34, name: "Wallpaper 15", img: "/wallpapers/wall_po727e.jpg", type: "wallpaper" },
+    { id: 35, name: "Wallpaper 16", img: "/wallpapers/wall_3q6kgy.jpg", type: "wallpaper" },
+    { id: 36, name: "Wallpaper 17", img: "/wallpapers/wall_po7m99.jpg", type: "wallpaper" },
+    { id: 37, name: "Wallpaper 18", img: "/wallpapers/wall_rqp3zj.jpg", type: "wallpaper" },
+    { id: 38, name: "Wallpaper 19", img: "/wallpapers/wall_21ok29.jpg", type: "wallpaper" },
+    { id: 39, name: "Wallpaper 20", img: "/wallpapers/wall_qrm3dl.jpg", type: "wallpaper" },
+    { id: 40, name: "Wallpaper 21", img: "/wallpapers/wall_lyjm2r.jpg", type: "wallpaper" },
+    { id: 41, name: "Wallpaper 22", img: "/wallpapers/wall_jey5rp.jpg", type: "wallpaper" },
+    { id: 42, name: "Wallpaper 23", img: "/wallpapers/wall_og62w7.jpg", type: "wallpaper" },
+    { id: 43, name: "Wallpaper 24", img: "/wallpapers/wall_vpdo98.jpg", type: "wallpaper" }
   ]
 };
 
@@ -142,6 +198,29 @@ export default function SettingsPage() {
     return { days, firstDay };
   };
 
+  const [compactMode, setCompactMode] = useState(() => localStorage.getItem('site_compactMode') === 'true');
+  const [disableAnimations, setDisableAnimations] = useState(() => localStorage.getItem('site_disableAnimations') === 'true');
+
+  const [profileDescription, setProfileDescription] = useState(() => localStorage.getItem('profileDescription') || '');
+  const [saveSuccessMsg, setSaveSuccessMsg] = useState('');
+
+  const handleSaveProfile = () => {
+    localStorage.setItem('profileDescription', profileDescription);
+    localStorage.setItem('site_compactMode', compactMode);
+    localStorage.setItem('site_disableAnimations', disableAnimations);
+
+    if (disableAnimations) {
+      document.body.classList.add('disable-animations');
+    } else {
+      document.body.classList.remove('disable-animations');
+    }
+
+    window.dispatchEvent(new Event('profile-updated'));
+    window.dispatchEvent(new Event('site-settings-updated'));
+    setSaveSuccessMsg('Изменения успешно сохранены!');
+    setTimeout(() => setSaveSuccessMsg(''), 3000);
+  };
+
   const { days, firstDay } = getDaysInMonth(currentMonth);
   const calendarDays = [];
   for (let i = 0; i < firstDay; i++) calendarDays.push(null);
@@ -173,7 +252,8 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className={styles.settingsContainer}>
+    <>
+      <div className={styles.settingsContainer}>
       {/* Sidebar */}
       <div className={styles.sidebar}>
         <div className={styles.sidebarHeader} onClick={() => navigate(-1)}>
@@ -275,8 +355,10 @@ export default function SettingsPage() {
                       className={styles.formTextarea} 
                       placeholder="Напишите что-нибудь..."
                       maxLength={2048}
+                      value={profileDescription}
+                      onChange={(e) => setProfileDescription(e.target.value)}
                     ></textarea>
-                    <div className={styles.textareaFooter}>0/2048</div>
+                    <div className={styles.textareaFooter}>{profileDescription.length}/2048</div>
                   </div>
 
                   <div className={styles.formGroup}>
@@ -415,7 +497,9 @@ export default function SettingsPage() {
                   </button>
                 </div>
 
-                <button className={styles.saveBtn}>Сохранить изменения</button>
+                <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+                  <button className={styles.saveBtn} onClick={handleSaveProfile}>Сохранить изменения</button>
+                </div>
               </>
             )}
 
@@ -566,8 +650,28 @@ export default function SettingsPage() {
                 </div>
               </div>
               <div className={styles.cardProfileSection}>
-                <div className={styles.cardAvatarWrapper} style={DECORATIONS.frames.find(f => f.styleId === currentFrame)?.style || {}}>
+                <div className={styles.cardAvatarWrapper}>
                   <img src={currentAvatar} alt="Avatar" className={styles.cardAvatar} />
+                  {currentFrame && currentFrame !== 'none' && (() => {
+                    const matchedFrame = DECORATIONS.frames.find(f => f.img.split('?')[0] === currentFrame.split('?')[0]);
+                    const isFrame4 = currentFrame.includes('frame_4');
+                    return (
+                      <>
+                        <img 
+                          src={isFrame4 ? '/frames/frame_4_base.png?v=5' : (matchedFrame?.img || currentFrame.split('?')[0] + '?v=13')} 
+                          alt="Frame Base" 
+                          className={`${styles.frameImg} ${matchedFrame?.effectClass && !isFrame4 ? styles[matchedFrame.effectClass] : ''}`} 
+                        />
+                        {isFrame4 && (
+                          <img 
+                            src="/frames/frame_4_ear.png?v=5" 
+                            alt="Frame Ear" 
+                            className={`${styles.frameImg} ${styles.animHat}`} 
+                          />
+                        )}
+                      </>
+                    );
+                  })()}
                   <button className={styles.avatarEditCircBtn}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                   </button>
@@ -616,19 +720,19 @@ export default function SettingsPage() {
                   {DECORATIONS[activeDecorationTab].map((item, idx) => {
                     const isActive = (item.type === 'avatar' && item.img === currentAvatar) ||
                                      (item.type === 'banner' && item.img === currentBanner) ||
-                                     (item.type === 'frame' && item.styleId === currentFrame) ||
+                                     (item.type === 'frame' && item.img === currentFrame) ||
                                      (item.type === 'wallpaper' && item.img === currentWallpaper);
                     return (
                       <div 
                         key={item.id} 
                         className={`${styles.decCard} ${isActive ? styles.active : ''}`}
-                        onClick={() => updateProfileAsset(item.type, item.type === 'frame' ? item.styleId : item.img)}
+                        onClick={() => updateProfileAsset(item.type, item.img)}
                       >
-                        <div className={`${styles.decCardImg} ${activeDecorationTab === 'avatars' ? styles.avatar : ''} ${activeDecorationTab === 'frames' ? styles.frame : ''} ${item.img === 'none' ? styles.noImg : ''}`}>
+                        <div className={`${styles.decCardImg} ${activeDecorationTab === 'avatars' ? styles.avatar : ''} ${activeDecorationTab === 'frames' ? styles.frameContainer : ''} ${item.img === 'none' ? styles.noImg : ''}`}>
                           {activeDecorationTab === 'frames' ? (
                             <>
                               <img src={currentAvatar} alt="Avatar" className={styles.baseAvatar} />
-                              <div className={styles.frameOverlay} style={item.style}></div>
+                              {item.img !== 'none' && <img src={item.img} alt={item.name} className={styles.frameOverlayImg} />}
                             </>
                           ) : (
                             item.img !== 'none' ? <img src={item.img} alt={item.name} /> : <div className={styles.emptyWallpaper}></div>
@@ -657,7 +761,7 @@ export default function SettingsPage() {
         )}
 
         {/* Placeholder for other tabs */}
-        {activeTab !== 'personal' && activeTab !== 'appearance' && activeTab !== 'notifications' && activeTab !== 'filters' && (
+        {activeTab !== 'personal' && activeTab !== 'appearance' && activeTab !== 'notifications' && activeTab !== 'filters' && activeTab !== 'site' && (
           <div className={styles.placeholderTab}>
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <p>Раздел "{TABS.find(t => t.id === activeTab)?.label}" в разработке</p>
@@ -804,6 +908,41 @@ export default function SettingsPage() {
             )}
           </div>
         )}
+
+        {activeTab === 'site' && (
+          <div>
+            <h2 className={styles.sectionTitle}>Настройки сайта</h2>
+            <p className={styles.appearanceNote} style={{marginBottom: '24px'}}>Общие настройки отображения и поведения сайта</p>
+            
+            <div className={styles.settingsSectionLabel}>Интерфейс</div>
+            
+            <div className={styles.toggleWrapper}>
+              <div className={styles.toggleInfo}>
+                <span className={styles.toggleTitle}>Компактный вид каталога</span>
+                <span className={styles.toggleDesc}>Отображать больше элементов на экране за счет уменьшения обложек</span>
+              </div>
+              <label className={styles.toggleSwitch}>
+                <input type="checkbox" checked={compactMode} onChange={(e) => setCompactMode(e.target.checked)} />
+                <span className={styles.toggleSlider}></span>
+              </label>
+            </div>
+
+            <div className={styles.toggleWrapper}>
+              <div className={styles.toggleInfo}>
+                <span className={styles.toggleTitle}>Отключить анимации</span>
+                <span className={styles.toggleDesc}>Убрать плавные переходы и анимации интерфейса для ускорения работы</span>
+              </div>
+              <label className={styles.toggleSwitch}>
+                <input type="checkbox" checked={disableAnimations} onChange={(e) => setDisableAnimations(e.target.checked)} />
+                <span className={styles.toggleSlider}></span>
+              </label>
+            </div>
+            
+            <div style={{marginTop: '24px'}}>
+              <button className={styles.btnPrimary} onClick={handleSaveProfile}>Сохранить настройки</button>
+            </div>
+          </div>
+        )}
       </div>
 
       {showSessionsModal && (
@@ -844,5 +983,18 @@ export default function SettingsPage() {
         </div>
       )}
     </div>
+
+    {saveSuccessMsg && (
+      <div className={styles.toastMessage}>
+        <div className={styles.toastIcon}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div className={styles.toastContent}>
+          <h4>Успешно</h4>
+          <p>Настройки сохранены</p>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

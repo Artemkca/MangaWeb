@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import SocialButtons from './SocialButtons';
-import StarfieldCanvas from './StarfieldCanvas';
+import MangaBg from './MangaBg';
 
 function PasswordField({ id, name, placeholder, autoComplete, minLength, required }) {
   const [visible, setVisible] = useState(false);
@@ -36,10 +36,12 @@ export default function AuthModal() {
     authOpen,
     authTab,
     authMessage,
+    pendingUser,
     closeAuth,
     setAuthTab,
     setAuthMessage,
     handleRegister,
+    handleVerify,
     handleLogin,
     handleGoogleClick,
     handleTelegramStart,
@@ -85,20 +87,40 @@ export default function AuthModal() {
     }
   };
 
+  const onVerify = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    if (!form.reportValidity()) return;
+    const data = Object.fromEntries(new FormData(form));
+    try {
+      setLoading(true);
+      await handleVerify(data.code);
+      form.reset();
+    } catch (err) {
+      setAuthMessage({ text: err.message, type: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={`auth-overlay${authOpen ? ' auth-overlay--open' : ''}`}>
       <div className="auth-overlay__backdrop">
-        {authOpen && <StarfieldCanvas />}
+        {authOpen && <MangaBg />}
       </div>
       <div className={`auth-modal${authTab === 'register' ? ' auth-modal--register' : ''}`}>
         <button type="button" className="auth-modal__close" onClick={closeAuth}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
         </button>
 
-        <h2 className="auth-modal__title">{authTab === 'login' ? 'Вход' : 'Регистрация'}</h2>
-        <p className="auth-modal__subtitle">
-          Создайте аккаунт, чтобы сохранять закладки, историю чтения и получать уведомления о новых главах.
-        </p>
+        <h2 className="auth-modal__title">
+          {authTab === 'login' ? 'Вход' : authTab === 'verify' ? 'Верификация аккаунта' : 'Регистрация'}
+        </h2>
+        {authTab !== 'verify' && (
+          <p className="auth-modal__subtitle">
+            Создайте аккаунт, чтобы сохранять закладки, историю чтения и получать уведомления о новых главах.
+          </p>
+        )}
 
         <form className={`auth-form${authTab === 'login' ? ' auth-form--active' : ''}`} onSubmit={onLogin}>
           <div className="auth-field">
@@ -148,14 +170,10 @@ export default function AuthModal() {
             <label htmlFor="reg-password">Пароль</label>
             <PasswordField id="reg-password" name="password" placeholder="Минимум 8 символов" autoComplete="new-password" minLength={8} required />
           </div>
-          <div className="auth-field">
-            <label htmlFor="reg-password-confirm">Повторите пароль</label>
-            <PasswordField id="reg-password-confirm" name="passwordConfirm" placeholder="Введите пароль ещё раз" autoComplete="new-password" minLength={8} required />
-          </div>
           <label className="auth-terms">
             <input type="checkbox" name="terms" required />
             <span className="auth-check" />
-            <span>Я принимаю <a href="#" className="auth-link" onClick={e => e.preventDefault()}>правила сайта</a> и <a href="#" className="auth-link" onClick={e => e.preventDefault()}>политику конфиденциальности</a></span>
+            <span>Я принимаю <a href="/terms" target="_blank" rel="noopener noreferrer" className="auth-link">правила сайта</a> и <a href="/privacy" target="_blank" rel="noopener noreferrer" className="auth-link">политику конфиденциальности</a></span>
           </label>
           <button type="submit" className="auth-submit" disabled={loading}>{loading ? 'Проверяем...' : 'Создать аккаунт'}</button>
           <p className="auth-switch">
@@ -163,6 +181,36 @@ export default function AuthModal() {
           </p>
           <p className="auth-divider">Или через</p>
           <SocialButtons onGoogle={handleGoogleClick} onSocial={handleSocialStub} onTelegram={handleTelegramStart} />
+        </form>
+
+        <form className={`auth-form${authTab === 'verify' ? ' auth-form--active' : ''}`} onSubmit={onVerify}>
+          <div className="auth-verify-user">
+            <div className="auth-verify-avatar">
+              {pendingUser?.username ? pendingUser.username.charAt(0).toUpperCase() : 'U'}
+            </div>
+            <div className="auth-verify-info">
+              <div className="auth-verify-name">{pendingUser?.username || 'User'}</div>
+              <div className="auth-verify-email">{pendingUser?.email || 'user@example.com'}</div>
+            </div>
+          </div>
+          
+          <div className="auth-input-wrap auth-input-wrap--verify">
+            <input id="verify-code" type="text" className="auth-input" name="code" placeholder="6-значный код верификации" minLength={6} maxLength={6} required />
+          </div>
+          
+          <button type="submit" className="auth-submit auth-submit--verify" disabled={loading}>
+            {loading ? 'Проверяем...' : 'Подтвердить мой аккаунт'}
+          </button>
+          
+          <div className="auth-verify-footer">
+            <p>Следующая отправка через: 00:55</p>
+            <p>Не получили код? <span className="auth-link">Переотправить email</span></p>
+          </div>
+          
+          <button type="button" className="auth-verify-back" onClick={() => setAuthTab('register')}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Назад
+          </button>
         </form>
 
         {authMessage.text && (

@@ -18,6 +18,20 @@ function FilterOption({ label, withCheck, defaultChecked }) {
     </label>
   );
 }
+const getGroupIcon = (title) => {
+  switch(title.toLowerCase()) {
+    case 'тип':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>;
+    case 'статус':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>;
+    case 'жанры':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>;
+    case 'год выпуска':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
+    default:
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
+  }
+};
 
 export default function CatalogSidebar({ open, onClose }) {
   const defaultChecked = useMemo(() => {
@@ -68,7 +82,7 @@ export default function CatalogSidebar({ open, onClose }) {
     filterGroups.forEach(group => {
       if (!group.options) return;
       const groupEl = [...sidebar.querySelectorAll('.filters-group')].find(
-        el => el.querySelector('summary')?.textContent === group.title,
+        el => el.querySelector('summary')?.textContent.includes(group.title),
       );
       if (!groupEl) return;
       const boxes = groupEl.querySelectorAll('input[type="checkbox"]');
@@ -95,13 +109,19 @@ export default function CatalogSidebar({ open, onClose }) {
         </div>
 
         <div className="filters-search">
+          <svg className="filters-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input type="text" placeholder="Поиск по жанрам и тегам..." />
         </div>
 
         <div className="filters-scroll">
           {filterGroups.map(group => (
             <details key={group.title} className="filters-group" open={group.open}>
-              <summary>{group.title}</summary>
+              <summary>
+                <div className="summary-title">
+                  {getGroupIcon(group.title)}
+                  <span>{group.title}</span>
+                </div>
+              </summary>
               {group.isYearSelect ? (
                 <div className="filters-group__body filters-group__body--row">
                   <select className="filter-select filter-select--sm" defaultValue="От">

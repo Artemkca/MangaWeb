@@ -22,6 +22,8 @@ export function AuthProvider({ children }) {
   const [authMessage, setAuthMessage] = useState({ text: '', type: 'info' });
   const googleIdentityReady = useRef(false);
 
+  const [pendingUser, setPendingUser] = useState(null);
+
   const refreshSession = useCallback(() => {
     setSession(getSession());
   }, []);
@@ -30,12 +32,14 @@ export function AuthProvider({ children }) {
     if (getSession()) return;
     setAuthTab(tab);
     setAuthMessage({ text: '', type: 'info' });
+    setPendingUser(null);
     setAuthOpen(true);
   }, []);
 
   const closeAuth = useCallback(() => {
     setAuthOpen(false);
     setAuthMessage({ text: '', type: 'info' });
+    setPendingUser(null);
   }, []);
 
   const logout = useCallback(() => {
@@ -60,9 +64,26 @@ export function AuthProvider({ children }) {
   }, [closeAuth]);
 
   const handleRegister = useCallback(async (data) => {
-    const user = await registerUser(data);
-    finishAuth(user, 'Аккаунт создан. Добро пожаловать!');
-  }, [finishAuth]);
+    // Instead of finishing auth immediately, we go to verification step
+    // We can just simulate the user object for the verification UI
+    const user = { username: data.username || data.email.split('@')[0], email: data.email, ...data };
+    setPendingUser(user);
+    setAuthTab('verify');
+    setAuthMessage({ text: 'Код отправлен на почту.', type: 'info' });
+  }, []);
+
+  const handleVerify = useCallback(async (code) => {
+    if (code.length < 6) throw new Error('Код должен состоять из 6 цифр');
+    
+    // Временная заглушка: принимаем только код 123456
+    if (code !== '123456') {
+      throw new Error('Неверный код верификации.');
+    }
+
+    // Simulate API verification call
+    const user = await registerUser(pendingUser);
+    finishAuth(user, 'Аккаунт подтверждён и создан!');
+  }, [pendingUser, finishAuth]);
 
   const handleLogin = useCallback(async (data) => {
     const user = await loginUser(data);
@@ -202,6 +223,7 @@ export function AuthProvider({ children }) {
     authOpen,
     authTab,
     authMessage,
+    pendingUser,
     setAuthTab,
     setAuthMessage,
     openAuth,
@@ -209,14 +231,15 @@ export function AuthProvider({ children }) {
     logout,
     handleAuthButtonClick,
     handleRegister,
+    handleVerify,
     handleLogin,
     handleGoogleClick,
     handleTelegramStart,
     handleSocialStub,
     refreshSession,
   }), [
-    session, authOpen, authTab, authMessage, openAuth, closeAuth, logout,
-    handleAuthButtonClick, handleRegister, handleLogin, handleGoogleClick,
+    session, authOpen, authTab, authMessage, pendingUser, openAuth, closeAuth, logout,
+    handleAuthButtonClick, handleRegister, handleVerify, handleLogin, handleGoogleClick,
     handleTelegramStart, handleSocialStub, refreshSession,
   ]);
 

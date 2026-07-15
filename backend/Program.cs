@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 
 // Configure EF Core with MySQL Pomelo
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -40,6 +41,7 @@ try
     {
         var db = scope.ServiceProvider.GetRequiredService<MangaDbContext>();
         db.Database.EnsureCreated();
+        try { db.Database.ExecuteSqlRaw("ALTER TABLE Mangas ADD COLUMN MainCharacter longtext;"); } catch { }
         DbSeeder.Seed(db);
     }
 }

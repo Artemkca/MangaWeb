@@ -46,6 +46,8 @@ export default function ProfilePage() {
   const [userGender, setUserGender] = useState(() => localStorage.getItem('profileGender') || 'Мужской');
   const [selectedFavCharId, setSelectedFavCharId] = useState(() => localStorage.getItem('profileFavChar') || 'reze');
   
+  const [profileDescription, setProfileDescription] = useState(() => localStorage.getItem('profileDescription') || '');
+  
   useEffect(() => {
     const handleStorageChange = () => {
       setSelectedAvatar(localStorage.getItem('profileAvatar') || '/avatar_reze_1783959680874.jpg');
@@ -53,6 +55,7 @@ export default function ProfilePage() {
       setSelectedFrame(localStorage.getItem('profileFrame') || 'none');
       setSelectedWallpaper(localStorage.getItem('profileWallpaper') || 'none');
       setUserGender(localStorage.getItem('profileGender') || 'Мужской');
+      setProfileDescription(localStorage.getItem('profileDescription') || '');
     };
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('profile-updated', handleStorageChange);
@@ -89,15 +92,10 @@ export default function ProfilePage() {
 
   const history = [
     { id: 1, type: 'security', title: 'Новое достижение', desc: 'Первая кровь: Вы прочитали первую главу!', time: '15 минут назад', image: '/achievements/achiev_1_first_blood_1783959240829.jpg' },
-    { id: 2, type: 'bookmark', title: 'Обновление закладок : В планах', desc: 'Непобедимый гурман другого мира', time: '15 часов назад', image: 'https://mangalib.me/uploads/cover/berserk/cover/35t0y4w9DkUq_250x350.jpg' },
+    { id: 2, type: 'bookmark', title: 'Обновление закладок : В планах', desc: 'Непобедимый гурман другого мира', time: '15 часов назад', image: '/manga_collage_v17.jpg' },
   ];
 
-  const mangas = [
-    { id: 1, title: 'Стратегия выживания Сведиста в...', status: 'Читаю - 3гл', image: 'https://mangalib.me/uploads/cover/chainsaw-man/cover/gKEDzWcOq0zY_250x350.jpg' },
-    { id: 2, title: 'Я должен быть монстром', status: 'Читаю - 44гл', image: 'https://mangalib.me/uploads/cover/solo-leveling/cover/G9d7yL5qjP0V_250x350.jpg' },
-    { id: 3, title: 'Мой аватар превращается в финального...', status: 'Читаю - 22гл', image: 'https://mangalib.me/uploads/cover/solo-leveling/cover/G9d7yL5qjP0V_250x350.jpg' },
-    { id: 4, title: 'Легенда о городском мастере', status: 'Читаю - 14гл', image: 'https://mangalib.me/uploads/cover/berserk/cover/35t0y4w9DkUq_250x350.jpg' },
-  ];
+  const mangas = [];
 
   const mangaTabs = ['Читаю', 'В планах', 'Прочитано', 'Перечитываю', 'Отложено', 'Брошено'];
 
@@ -129,13 +127,36 @@ export default function ProfilePage() {
       <div className={styles.bannerWrapper}>
         <div className={styles.banner} style={{ backgroundImage: `url(${selectedBanner})` }}></div>
         <div className={styles.profileHeader}>
-          <div className={`${styles.phAvatar} ${styles[`frame_${selectedFrame}`]}`}>
-            <img src={selectedAvatar} alt="Avatar" />
+          <div className={styles.phAvatar}>
+            <img src={selectedAvatar} alt="Avatar" className={styles.avatarImg} />
+            {selectedFrame && selectedFrame !== 'none' && (
+              <>
+                <img 
+                  src={selectedFrame.split('?')[0] === '/frames/frame_4.png' ? '/frames/frame_4_base.png?v=5' : selectedFrame.split('?')[0] + '?v=13'} 
+                  alt="Frame Base" 
+                  className={`${styles.frameImg} ${selectedFrame.includes('frame_3') ? styles.animFan : ''}`} 
+                />
+                {selectedFrame.includes('frame_4') && (
+                  <img 
+                    src="/frames/frame_4_ear.png?v=5" 
+                    alt="Frame Ear" 
+                    className={`${styles.frameImg} ${styles.animHat}`} 
+                  />
+                )}
+              </>
+            )}
           </div>
           <div className={styles.phInfo}>
             <h1>{session?.username || 'Tor1cks'}</h1>
-            <div className={styles.levelBadge}>
-              <span className={styles.lvlNum}>1</span> Уровень
+            <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
+              <div className={styles.levelBadge}>
+                <span className={styles.lvlNum}>1</span> Уровень
+              </div>
+              {profileDescription && (
+                <div style={{ color: 'var(--text-secondary)', fontSize: '14px', maxWidth: '400px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {profileDescription}
+                </div>
+              )}
             </div>
           </div>
           {/* Edit button now navigates to settings appearance tab */}
@@ -166,13 +187,20 @@ export default function ProfilePage() {
               <span className={activeMangaTab === 'Брошено' ? styles.libTabActive : ''}>Брошено</span>
             </div>
             <div className={styles.mangaGrid}>
-              {mangas.map(m => (
-                <div key={m.id} className={styles.mCard}>
-                  <img src={m.image} alt={m.title} />
-                  <div className={styles.mStatus}>{m.status}</div>
-                  <div className={styles.mTitleOverlay}>{m.title}</div>
+              {mangas.length > 0 ? (
+                mangas.map(m => (
+                  <div key={m.id} className={styles.mCard}>
+                    <img src={m.image} alt={m.title} />
+                    <div className={styles.mStatus}>{m.status}</div>
+                    <div className={styles.mTitleOverlay}>{m.title}</div>
+                  </div>
+                ))
+              ) : (
+                <div className={styles.emptyState}>
+                  <SvgIcon name="book" />
+                  <p>Пока тут пусто</p>
                 </div>
-              ))}
+              )}
             </div>
           </section>
 
@@ -204,7 +232,7 @@ export default function ProfilePage() {
           </section>
 
           {/* Achievements */}
-          <section className={styles.section}>
+          <section className={`${styles.section} ${styles.mainBlock}`}>
             <div className={styles.sectionHeader}>
               <h2>Достижения <span className={styles.count}>4</span></h2>
               <a href="#" className={styles.linkAll}>Все достижения &gt;</a>
