@@ -480,6 +480,31 @@
   gap: 20px;
 }
 
+.emptyState {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  color: var(--text-muted);
+  gap: 16px;
+}
+
+.emptyState svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+}
+
+.emptyState p {
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .mCard {
   position: relative;
   aspect-ratio: 2/3;

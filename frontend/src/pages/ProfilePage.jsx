@@ -92,12 +92,7 @@ export default function ProfilePage() {
     { id: 2, type: 'bookmark', title: 'Обновление закладок : В планах', desc: 'Непобедимый гурман другого мира', time: '15 часов назад', image: '/manga_collage_v17.jpg' },
   ];
 
-  const mangas = [
-    { id: 1, title: 'Стратегия выживания Сведиста в...', status: 'Читаю - 3гл', image: '/manga_collage_v17.jpg' },
-    { id: 2, title: 'Я должен быть монстром', status: 'Читаю - 44гл', image: '/manga_collage_v17.jpg' },
-    { id: 3, title: 'Мой аватар превращается в финального...', status: 'Читаю - 22гл', image: '/manga_collage_v17.jpg' },
-    { id: 4, title: 'Легенда о городском мастере', status: 'Читаю - 14гл', image: '/manga_collage_v17.jpg' },
-  ];
+  const mangas = [];
 
   const mangaTabs = ['Читаю', 'В планах', 'Прочитано', 'Перечитываю', 'Отложено', 'Брошено'];
 
@@ -166,13 +161,20 @@ export default function ProfilePage() {
               <span className={activeMangaTab === 'Брошено' ? styles.libTabActive : ''}>Брошено</span>
             </div>
             <div className={styles.mangaGrid}>
-              {mangas.map(m => (
-                <div key={m.id} className={styles.mCard}>
-                  <img src={m.image} alt={m.title} />
-                  <div className={styles.mStatus}>{m.status}</div>
-                  <div className={styles.mTitleOverlay}>{m.title}</div>
+              {mangas.length > 0 ? (
+                mangas.map(m => (
+                  <div key={m.id} className={styles.mCard}>
+                    <img src={m.image} alt={m.title} />
+                    <div className={styles.mStatus}>{m.status}</div>
+                    <div className={styles.mTitleOverlay}>{m.title}</div>
+                  </div>
+                ))
+              ) : (
+                <div className={styles.emptyState}>
+                  <SvgIcon name="book" />
+                  <p>Пока тут пусто</p>
                 </div>
-              ))}
+              )}
             </div>
           </section>
 
