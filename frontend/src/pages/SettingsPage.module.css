@@ -1392,3 +1392,55 @@ input:checked + .toggleSlider:before {
   border-color: rgba(239, 68, 68, 0.3);
   color: #ef4444;
 }
+
+/* Toast Notification */
+.toastMessage {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  z-index: 9999;
+  animation: slideUpToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), fadeOutToast 0.3s ease 2.7s forwards;
+}
+
+.toastIcon {
+  width: 32px;
+  height: 32px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toastContent h4 {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+}
+
+.toastContent p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+@keyframes slideUpToast {
+  0% { transform: translate(-50%, 40px); opacity: 0; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes fadeOutToast {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
