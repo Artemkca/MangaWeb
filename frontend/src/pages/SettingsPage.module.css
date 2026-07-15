@@ -992,21 +992,28 @@ input:checked + .toggleSlider:before {
   position: relative;
 }
 
+.decCardImg.frameContainer img {
+  width: auto;
+  height: auto;
+  object-fit: unset;
+}
+
 .baseAvatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 24px;
-  object-fit: cover;
+  width: 90px !important;
+  height: 90px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
 }
 
 .frameOverlayImg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 130px;
-  height: 130px;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 120px !important;
+  height: 120px !important;
   pointer-events: none;
+  z-index: 10;
 }
 
 .decCardTitle {
