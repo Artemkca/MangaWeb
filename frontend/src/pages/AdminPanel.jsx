@@ -1,35 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './AdminPanel.module.css';
-
-const PREDEFINED_GENRES = [
-  'Сёнэн', 'Сёдзё', 'Сэйнэн', 'Дзёсэй', 
-  'Фэнтези', 'Романтика', 'Приключения', 'Комедия', 
-  'Драма', 'Триллер', 'Ужасы', 'Повседневность',
-  'Исекай', 'Меха', 'Спорт', 'Детектив', 'Фантастика',
-  'Боевик', 'Психология', 'Сверхъестественное', 'Мистика', 'Школа', 
-  'История', 'Вампиры', 'Демоны', 'Магия', 'Боевые искусства', 
-  'Гарем', 'Реверс-гарем', 'Музыка', 'Игры', 'Киберпанк', 
-  'Постапокалиптика', 'Трагедия', 'Этти', 'Юри', 'Яой', 
-  'Сёнен-ай', 'Сёдзё-ай', 'Омегаверс', 'Гендерная интрига',
-  'Полиция', 'Самураи', 'Космос', 'Зомби', 'Медицина', 
-  'Кулинария', 'Мафия', 'Супергерои', 'Боги', 'Ангелы', 
-  'Монстры', 'Инопланетяне', 'Ниндзя', 'Пираты', 'Военное', 
-  'Выживание', 'Путешествия во времени', 'Виртуальная реальность', 
-  'Реинкарнация', 'Система', 'Культивация', 'Уся', 'Сянься',
-  'Героическое фэнтези', 'Тёмное фэнтези', 'Историческое фэнтези', 
-  'Городское фэнтези', 'Магическая академия', 'Повседневность (Slice of life)', 
-  'Романтическая комедия', 'Школьная жизнь', 'Офисные работники', 'Студенты', 
-  'Геймеры', 'Отаку', 'Айдолы', 'Шоу-бизнес', 'Стримеры', 'Животные',
-  'Сказка', 'Мифология', 'Драконы', 'Эльфы', 'Гномы', 'Орки', 'Зверолюди', 
-  'Ведьмы', 'Волшебники', 'Призраки', 'Духи', 'Экшен', 'Насилие', 
-  'Гурман', 'Азартные игры', 'Интеллектуальные игры', 'Спорт (командный)', 
-  'Спорт (индивидуальный)', 'Сай-фай (Sci-Fi)', 'Биопанк', 'Стимпанк', 
-  'Альтернативная история', 'Подземелья (Dungeons)', 'Башни (Towers)', 
-  'Возвращение (Regression)', 'Месть', 'От врагов к возлюбленным', 
-  'Фальшивый брак', 'Любовный треугольник', 'Первая любовь'
-].sort();
+import { PREDEFINED_GENRES } from '../data/genres';
 
 export default function AdminPanel() {
   const { session } = useAuth();
@@ -46,22 +19,10 @@ export default function AdminPanel() {
   });
 
   const [genreInput, setGenreInput] = useState('');
-  const [showGenresDropdown, setShowGenresDropdown] = useState(false);
-  const genreDropdownRef = useRef(null);
-
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (genreDropdownRef.current && !genreDropdownRef.current.contains(e.target)) {
-        setShowGenresDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   // Protect route
   if (!session) {
@@ -100,8 +61,6 @@ export default function AdminPanel() {
   const handlePredefinedGenreAdd = (genre) => {
     if (!formData.genres.includes(genre)) {
       setFormData(prev => ({ ...prev, genres: [...prev.genres, genre] }));
-      setGenreInput('');
-      setShowGenresDropdown(false);
     }
   };
   
@@ -155,9 +114,10 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Админ Панель</h1>
-      <p className={styles.subtitle}>Добавление новой манги в каталог</p>
+    <div className={styles.pageLayout}>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Админ Панель</h1>
+        <p className={styles.subtitle}>Добавление новой манги в каталог</p>
 
       {error && <div className={styles.error}>{error}</div>}
       {success && <div className={styles.success}>{success}</div>}
@@ -205,8 +165,8 @@ export default function AdminPanel() {
           </div>
         </div>
 
-        <div className={styles.formGroup} ref={genreDropdownRef}>
-          <label>Жанры *</label>
+        <div className={styles.formGroup}>
+          <label>Выбранные жанры *</label>
           <div className={styles.tagsWrapper}>
             {formData.genres.map(genre => (
               <span key={genre} className={styles.tag}>
@@ -216,40 +176,20 @@ export default function AdminPanel() {
                 </button>
               </span>
             ))}
+            {formData.genres.length === 0 && <span style={{color: 'var(--text-muted)', fontSize: '14px', padding: '6px'}}>Выберите жанры из панели справа...</span>}
             <div style={{ flex: 1, minWidth: '150px' }}>
               <input 
                 type="text"
                 name="genreInput" 
                 value={genreInput} 
-                onChange={e => {
-                  setGenreInput(e.target.value);
-                  setShowGenresDropdown(true);
-                }} 
-                onFocus={() => setShowGenresDropdown(true)}
+                onChange={e => setGenreInput(e.target.value)} 
                 onKeyDown={handleGenreKeyDown}
-                placeholder={formData.genres.length === 0 ? "Сёнэн, Фэнтези, Приключения..." : "Добавить жанр..."}
+                placeholder="Свой жанр..."
                 className={styles.tagInput}
+                style={{display: formData.genres.length === 0 ? 'none' : 'block'}}
               />
-              {showGenresDropdown && (
-                <div className={styles.genreDropdown}>
-                  {PREDEFINED_GENRES
-                    .filter(g => !formData.genres.includes(g) && g.toLowerCase().includes(genreInput.toLowerCase()))
-                    .map(g => (
-                      <div 
-                        key={g} 
-                        className={styles.genreOption}
-                        onClick={() => handlePredefinedGenreAdd(g)}
-                      >
-                        {g}
-                      </div>
-                  ))}
-                  {PREDEFINED_GENRES.filter(g => !formData.genres.includes(g) && g.toLowerCase().includes(genreInput.toLowerCase())).length === 0 && (
-                    <div className={styles.genreOptionEmpty}>Нет совпадений</div>
-                  )}
-                </div>
-              )}
             </div>
-            <button type="button" onClick={() => setShowGenresDropdown(!showGenresDropdown)} className={styles.tagAddBtn}>
+            <button type="button" onClick={handleAddGenre} className={styles.tagAddBtn} style={{display: formData.genres.length === 0 ? 'none' : 'flex'}}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
           </div>
@@ -281,6 +221,49 @@ export default function AdminPanel() {
           {loading ? 'Добавление...' : 'Добавить мангу'}
         </button>
       </form>
+    </div>
+
+    {/* Right Side Panel for Genres */}
+      <div className={styles.genrePanel}>
+        <div className={styles.genrePanelHeader}>
+          <h2 className={styles.genrePanelTitle}>Все жанры</h2>
+          <div className={styles.genreSearchWrapper}>
+            <svg className={styles.genreSearchIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input 
+              type="text" 
+              placeholder="Поиск жанров..." 
+              value={genreInput}
+              onChange={(e) => setGenreInput(e.target.value)}
+              className={styles.genreSearchInput}
+            />
+          </div>
+        </div>
+        <div className={styles.genrePanelGrid}>
+          {PREDEFINED_GENRES
+            .filter(g => g.toLowerCase().includes(genreInput.toLowerCase()))
+            .map(g => {
+              const isSelected = formData.genres.includes(g);
+              return (
+                <div 
+                  key={g} 
+                  className={`${styles.genrePanelOption} ${isSelected ? styles.genrePanelOptionSelected : ''}`}
+                  onClick={() => {
+                    if (isSelected) {
+                      handleRemoveGenre(g);
+                    } else {
+                      handlePredefinedGenreAdd(g);
+                    }
+                  }}
+                >
+                  {g}
+                </div>
+              );
+          })}
+          {PREDEFINED_GENRES.filter(g => g.toLowerCase().includes(genreInput.toLowerCase())).length === 0 && (
+            <div className={styles.genreOptionEmpty}>Ничего не найдено</div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

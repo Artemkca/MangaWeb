@@ -1,6 +1,15 @@
-.container {
-  max-width: 800px;
+.pageLayout {
+  display: flex;
+  gap: 32px;
+  max-width: 1400px;
   margin: 40px auto;
+  padding: 0 24px;
+  align-items: flex-start;
+}
+
+.container {
+  flex: 1;
+  max-width: 800px;
   padding: 40px;
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(12px);
@@ -141,42 +150,93 @@
   color: var(--accent, #818cf8);
 }
 
-.genreDropdown {
-  position: absolute;
-  top: calc(100% + 12px);
-  left: 0;
-  right: 0;
-  max-height: 280px;
-  overflow-y: auto;
-  background: rgba(30, 30, 30, 0.85);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-  z-index: 50;
-  padding: 12px;
-  animation: fadeInDropdown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 8px;
+/* Side Panel */
+.genrePanel {
+  flex: 1;
+  min-width: 400px;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 32px;
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease;
 }
 
-.genreDropdown::-webkit-scrollbar {
+.genrePanelHeader {
+  margin-bottom: 24px;
+}
+
+.genrePanelTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.genreSearchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.genreSearchIcon {
+  position: absolute;
+  left: 16px;
+  color: var(--text-muted);
+}
+
+.genreSearchInput {
+  width: 100%;
+  padding: 14px 16px 14px 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  font-size: 15px;
+  transition: all 0.2s;
+}
+
+.genreSearchInput:focus {
+  outline: none;
+  border-color: var(--accent, #6366f1);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.genrePanelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+  overflow-y: auto;
+  padding-right: 8px;
+  flex: 1;
+}
+
+.genrePanelGrid::-webkit-scrollbar {
   width: 6px;
 }
 
-.genreDropdown::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+.genrePanelGrid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 6px;
 }
 
-.genreOption {
+.genrePanelGrid::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.genrePanelOption {
   padding: 10px 14px;
   cursor: pointer;
   color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -184,28 +244,49 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
+  min-height: 48px;
 }
 
-.genreOption:hover {
-  background: rgba(99, 102, 241, 0.2);
+.genrePanelOption:hover {
+  background: rgba(99, 102, 241, 0.15);
   color: var(--accent, #818cf8);
   border-color: rgba(99, 102, 241, 0.3);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.genreOptionEmpty {
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 14px;
-  text-align: center;
-  grid-column: 1 / -1;
+.genrePanelOptionSelected {
+  background: var(--accent, #6366f1);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
 }
 
-@keyframes fadeInDropdown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+.genrePanelOptionSelected:hover {
+  background: var(--accent-hover, #4f46e5);
+  color: white;
+}
+
+.genreOptionEmpty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+  .pageLayout {
+    flex-direction: column;
+  }
+  .genrePanel {
+    width: 100%;
+    max-width: 100%;
+    height: 500px;
+  }
+  .container {
+    max-width: 100%;
+  }
 }
 
 .formGroup input::placeholder,
