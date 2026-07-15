@@ -89,14 +89,14 @@ export default function ProfilePage() {
 
   const history = [
     { id: 1, type: 'security', title: 'Новое достижение', desc: 'Первая кровь: Вы прочитали первую главу!', time: '15 минут назад', image: '/achievements/achiev_1_first_blood_1783959240829.jpg' },
-    { id: 2, type: 'bookmark', title: 'Обновление закладок : В планах', desc: 'Непобедимый гурман другого мира', time: '15 часов назад', image: 'https://mangalib.me/uploads/cover/berserk/cover/35t0y4w9DkUq_250x350.jpg' },
+    { id: 2, type: 'bookmark', title: 'Обновление закладок : В планах', desc: 'Непобедимый гурман другого мира', time: '15 часов назад', image: '/manga_collage_v17.jpg' },
   ];
 
   const mangas = [
-    { id: 1, title: 'Стратегия выживания Сведиста в...', status: 'Читаю - 3гл', image: 'https://mangalib.me/uploads/cover/chainsaw-man/cover/gKEDzWcOq0zY_250x350.jpg' },
-    { id: 2, title: 'Я должен быть монстром', status: 'Читаю - 44гл', image: 'https://mangalib.me/uploads/cover/solo-leveling/cover/G9d7yL5qjP0V_250x350.jpg' },
-    { id: 3, title: 'Мой аватар превращается в финального...', status: 'Читаю - 22гл', image: 'https://mangalib.me/uploads/cover/solo-leveling/cover/G9d7yL5qjP0V_250x350.jpg' },
-    { id: 4, title: 'Легенда о городском мастере', status: 'Читаю - 14гл', image: 'https://mangalib.me/uploads/cover/berserk/cover/35t0y4w9DkUq_250x350.jpg' },
+    { id: 1, title: 'Стратегия выживания Сведиста в...', status: 'Читаю - 3гл', image: '/manga_collage_v17.jpg' },
+    { id: 2, title: 'Я должен быть монстром', status: 'Читаю - 44гл', image: '/manga_collage_v17.jpg' },
+    { id: 3, title: 'Мой аватар превращается в финального...', status: 'Читаю - 22гл', image: '/manga_collage_v17.jpg' },
+    { id: 4, title: 'Легенда о городском мастере', status: 'Читаю - 14гл', image: '/manga_collage_v17.jpg' },
   ];
 
   const mangaTabs = ['Читаю', 'В планах', 'Прочитано', 'Перечитываю', 'Отложено', 'Брошено'];
