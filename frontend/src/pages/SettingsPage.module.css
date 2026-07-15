@@ -1466,28 +1466,39 @@ input:checked + .toggleSlider:before {
   right: -35px !important;
   transform: translate(0, 0);
   transform-origin: 30% 70%;
-  animation: fanOpen 1.2s ease-out forwards, fanWave 3s ease-in-out 1.2s infinite;
+  animation: fanUnfoldSequence 1s ease-out forwards, fanWave 3s ease-in-out 1s infinite;
 }
 
-@keyframes fanOpen {
+@keyframes fanUnfoldSequence {
   0% { 
-    clip-path: polygon(30% 70%, 100% 30%, 100% 30%, 100% 30%, 100% 30%);
+    content: url('/frames/frame_3_folded.png');
     transform: translate(0, 0) rotate(15deg);
     opacity: 0;
   }
   20% {
+    content: url('/frames/frame_3_folded.png');
     opacity: 1;
+    transform: translate(0, 0) rotate(10deg);
+  }
+  39% {
+    content: url('/frames/frame_3_folded.png');
+    transform: translate(0, 0) rotate(-5deg);
+  }
+  40% {
+    content: none;
+    clip-path: polygon(30% 70%, 100% 30%, 100% 30%, 100% 30%, 100% 30%);
+    transform: translate(0, 0) rotate(-5deg);
   }
   100% { 
+    content: none;
     clip-path: polygon(30% 70%, 120% 120%, 120% -20%, -20% -20%, -20% 120%);
     transform: translate(0, 0) rotate(0deg);
-    opacity: 1;
   }
 }
 
 @keyframes fanWave {
   0% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(0, 0) rotate(-20deg); }
+  50% { transform: translate(0, 0) rotate(20deg); } /* Waves inwards! */
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
