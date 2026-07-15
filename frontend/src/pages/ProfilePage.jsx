@@ -130,7 +130,7 @@ export default function ProfilePage() {
           <div className={styles.phAvatar}>
             <img src={selectedAvatar} alt="Avatar" className={styles.avatarImg} />
             {selectedFrame && selectedFrame !== 'none' && (
-              <img src={selectedFrame} alt="Frame" className={styles.frameImg} />
+              <img src={selectedFrame.includes('?v=3') ? selectedFrame : `${selectedFrame}?v=3`} alt="Frame" className={styles.frameImg} />
             )}
           </div>
           <div className={styles.phInfo}>
