@@ -173,7 +173,7 @@ export default function AuthModal() {
           <label className="auth-terms">
             <input type="checkbox" name="terms" required />
             <span className="auth-check" />
-            <span>Я принимаю <a href="#" className="auth-link" onClick={e => e.preventDefault()}>правила сайта</a> и <a href="#" className="auth-link" onClick={e => e.preventDefault()}>политику конфиденциальности</a></span>
+            <span>Я принимаю <a href="/terms" target="_blank" rel="noopener noreferrer" className="auth-link">правила сайта</a> и <a href="/privacy" target="_blank" rel="noopener noreferrer" className="auth-link">политику конфиденциальности</a></span>
           </label>
           <button type="submit" className="auth-submit" disabled={loading}>{loading ? 'Проверяем...' : 'Создать аккаунт'}</button>
           <p className="auth-switch">

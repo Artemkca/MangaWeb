@@ -16,6 +16,8 @@ import ProfilePage from './pages/ProfilePage';
 import FriendsPage from './pages/FriendsPage';
 import LibraryPage from './pages/LibraryPage';
 import ReaderPage from './pages/ReaderPage';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -37,6 +39,8 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/friends" element={<FriendsPage />} />
         <Route path="/library" element={<LibraryPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/read/:id" element={<ReaderPage />} />
       </Routes>
 
