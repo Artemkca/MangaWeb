@@ -656,7 +656,7 @@ export default function SettingsPage() {
                     const matchedFrame = DECORATIONS.frames.find(f => f.img.split('?')[0] === currentFrame.split('?')[0]);
                     return (
                       <img 
-                        src={matchedFrame?.img || currentFrame.split('?')[0] + '?v=9'} 
+                        src={matchedFrame?.img || currentFrame.split('?')[0] + '?v=10'} 
                         alt="Frame" 
                         className={`${styles.frameImg} ${matchedFrame?.effectClass ? styles[matchedFrame.effectClass] : ''}`} 
                       />
