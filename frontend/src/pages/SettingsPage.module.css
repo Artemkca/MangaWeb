@@ -1477,3 +1477,16 @@ input:checked + .toggleSlider:before {
   92% { transform: translate(-50%, -50%) rotate(-4deg) scale(0.97); }
   96% { transform: translate(-50%, -50%) rotate(2deg) scale(1.01); }
 }
+
+.frameImg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 130px;
+  height: 130px;
+  max-width: none !important;
+  max-height: none !important;
+  pointer-events: none;
+  z-index: 3;
+}

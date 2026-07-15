@@ -71,12 +71,12 @@ const DECORATIONS = {
   ],
   frames: [
     { id: 1, name: 'Без рамки', img: 'none', type: 'frame', price: 0 },
-    { id: 2, name: 'Кровавый Демон', img: '/frames/frame_oni.png?v=5', type: 'frame', price: 1000 },
-    { id: 3, name: 'Весенняя Кицунэ', img: '/frames/frame_kitsune.png?v=5', type: 'frame', price: 1000 },
-    { id: 4, name: 'Веер Ветра', img: '/frames/frame_3.png?v=1', type: 'frame', price: 1000, effectClass: 'animFan' },
-    { id: 5, name: 'Живая Шапка', img: '/frames/frame_4.png?v=1', type: 'frame', price: 1000, effectClass: 'animHat' },
-    { id: 6, name: 'Арена Мистики', img: '/frames/frame_coloque_um_nome_wmistic_arena.png?v=1', type: 'frame', price: 1000 },
-    { id: 7, name: 'Магический Фон', img: '/frames/frame_bg_rw.png?v=1', type: 'frame', price: 1000 }
+    { id: 2, name: 'Кровавый Демон', img: '/frames/frame_oni.png?v=6', type: 'frame', price: 1000 },
+    { id: 3, name: 'Весенняя Кицунэ', img: '/frames/frame_kitsune.png?v=6', type: 'frame', price: 1000 },
+    { id: 4, name: 'Веер Ветра', img: '/frames/frame_3.png?v=6', type: 'frame', price: 1000, effectClass: 'animFan' },
+    { id: 5, name: 'Живая Шапка', img: '/frames/frame_4.png?v=6', type: 'frame', price: 1000, effectClass: 'animHat' },
+    { id: 6, name: 'Арена Мистики', img: '/frames/frame_coloque_um_nome_wmistic_arena.png?v=6', type: 'frame', price: 1000 },
+    { id: 7, name: 'Магический Фон', img: '/frames/frame_bg_rw.png?v=6', type: 'frame', price: 1000 }
   ],
   banners: [
     { id: 1, name: 'City Night', img: '/banner_1_city_1783958158072.jpg', type: 'banner' },
@@ -656,7 +656,7 @@ export default function SettingsPage() {
                     const matchedFrame = DECORATIONS.frames.find(f => f.img.split('?')[0] === currentFrame.split('?')[0]);
                     return (
                       <img 
-                        src={matchedFrame?.img || currentFrame.split('?')[0] + '?v=5'} 
+                        src={matchedFrame?.img || currentFrame.split('?')[0] + '?v=6'} 
                         alt="Frame" 
                         className={`${styles.frameImg} ${matchedFrame?.effectClass ? styles[matchedFrame.effectClass] : ''}`} 
                       />
