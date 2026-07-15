@@ -2463,7 +2463,7 @@ img { max-width: 100%; display: block; }
 .auth-form {
   display: none;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .auth-form--active { display: flex; }
@@ -2476,11 +2476,21 @@ img { max-width: 100%; display: block; }
   margin-bottom: 8px;
 }
 
+.auth-row-fields {
+  display: flex;
+  gap: 12px;
+}
+
+.auth-row-fields .auth-field {
+  flex: 1;
+  min-width: 0;
+}
+
 .auth-input-wrap {
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 48px;
+  height: 44px;
   padding: 0 14px;
   background: var(--bg-input);
   border: 1.5px solid var(--border);
@@ -3364,15 +3374,16 @@ img { max-width: 100%; display: block; }
   inset: 0;
   background: url('/manga_collage_v17.jpg') repeat;
   /* Использование vw привязывает размер фона к ширине окна при отдалении, 
-     но max() не даёт картинкам стать слишком мелкими на телефонах */
-  background-size: max(120vw, 2400px) max(140vw, 2800px);
+     но max() не даёт картинкам стать слишком мелкими на телефонах. 
+     Уменьшили порог до 1200px, чтобы на обычных мониторах (1080p) не было скачка при 90% */
+  background-size: max(120vw, 1200px) max(140vw, 1400px);
   animation: mangaScroll 120s linear infinite;
   z-index: 1;
 }
 
 @keyframes mangaScroll {
   from { background-position: 0 0; }
-  to   { background-position: min(-120vw, -2400px) min(-140vw, -2800px); }
+  to   { background-position: min(-120vw, -1200px) min(-140vw, -1400px); }
 }
 
 .manga-bg-overlay {

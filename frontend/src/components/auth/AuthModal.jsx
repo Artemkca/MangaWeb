@@ -144,13 +144,15 @@ export default function AuthModal() {
               <input id="reg-email" type="email" className="auth-input" name="email" placeholder="example@mail.com" autoComplete="email" required />
             </div>
           </div>
-          <div className="auth-field">
-            <label htmlFor="reg-password">Пароль</label>
-            <PasswordField id="reg-password" name="password" placeholder="Минимум 8 символов" autoComplete="new-password" minLength={8} required />
-          </div>
-          <div className="auth-field">
-            <label htmlFor="reg-password-confirm">Повторите пароль</label>
-            <PasswordField id="reg-password-confirm" name="passwordConfirm" placeholder="Введите пароль ещё раз" autoComplete="new-password" minLength={8} required />
+          <div className="auth-row-fields">
+            <div className="auth-field">
+              <label htmlFor="reg-password">Пароль</label>
+              <PasswordField id="reg-password" name="password" placeholder="Мин. 8 символов" autoComplete="new-password" minLength={8} required />
+            </div>
+            <div className="auth-field">
+              <label htmlFor="reg-password-confirm">Повтор пароля</label>
+              <PasswordField id="reg-password-confirm" name="passwordConfirm" placeholder="Ещё раз" autoComplete="new-password" minLength={8} required />
+            </div>
           </div>
           <label className="auth-terms">
             <input type="checkbox" name="terms" required />
