@@ -19,6 +19,12 @@
 .bannerWrapper {
   position: relative;
   margin-bottom: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
 .banner {
@@ -26,25 +32,18 @@
   height: 320px;
   background-size: cover;
   background-position: center;
-  border-radius: 0 0 32px 32px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
   position: relative;
   transition: background-image 0.4s ease;
-}
-
-.banner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--bg-primary) 0%, transparent 40%);
 }
 
 .profileHeader {
   display: flex;
   align-items: flex-end;
   gap: 24px;
-  padding: 0 40px;
-  margin-top: -80px;
+  padding: 0 24px;
+  margin-top: -60px;
+  padding-bottom: 16px;
   position: relative;
   z-index: 10;
 }
