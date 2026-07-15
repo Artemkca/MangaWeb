@@ -2839,9 +2839,9 @@ img { max-width: 100%; display: block; }
 }
 
 .auth-message--info {
-  color: var(--text-secondary);
-  background: var(--bg-input);
-  border-color: var(--border);
+  color: #8c9eff;
+  background: rgba(140, 158, 255, 0.1);
+  border-color: rgba(140, 158, 255, 0.24);
 }
 
 /* ===== RESPONSIVE ===== */
