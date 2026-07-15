@@ -183,7 +183,8 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className={styles.settingsContainer}>
+    <>
+      <div className={styles.settingsContainer}>
       {/* Sidebar */}
       <div className={styles.sidebar}>
         <div className={styles.sidebarHeader} onClick={() => navigate(-1)}>
@@ -429,7 +430,6 @@ export default function SettingsPage() {
 
                 <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
                   <button className={styles.saveBtn} onClick={handleSaveProfile}>Сохранить изменения</button>
-                  {saveSuccessMsg && <span style={{color: '#4ade80', fontSize: '14px', fontWeight: '500', animation: 'fadeIn 0.3s'}}>{saveSuccessMsg}</span>}
                 </div>
               </>
             )}
@@ -858,6 +858,12 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
-    </div>
+
+      {saveSuccessMsg && (
+        <div className={styles.toastMessage}>
+          {saveSuccessMsg}
+        </div>
+      )}
+    </>
   );
 }
