@@ -19,6 +19,7 @@ export default function AdminPanel() {
   });
 
   const [genreInput, setGenreInput] = useState('');
+  const [isGenrePanelOpen, setIsGenrePanelOpen] = useState(true);
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -166,7 +167,18 @@ export default function AdminPanel() {
         </div>
 
         <div className={styles.formGroup}>
-          <label>Выбранные жанры *</label>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <label>Выбранные жанры *</label>
+            {!isGenrePanelOpen && (
+              <button 
+                type="button" 
+                className={styles.openPanelBtn}
+                onClick={() => setIsGenrePanelOpen(true)}
+              >
+                Открыть список всех жанров
+              </button>
+            )}
+          </div>
           <div className={styles.tagsWrapper}>
             {formData.genres.map(genre => (
               <span key={genre} className={styles.tag}>
@@ -224,9 +236,15 @@ export default function AdminPanel() {
     </div>
 
     {/* Right Side Panel for Genres */}
+    {isGenrePanelOpen && (
       <div className={styles.genrePanel}>
         <div className={styles.genrePanelHeader}>
-          <h2 className={styles.genrePanelTitle}>Все жанры</h2>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'}}>
+            <h2 className={styles.genrePanelTitle} style={{margin: 0}}>Все жанры</h2>
+            <button type="button" className={styles.closePanelBtn} onClick={() => setIsGenrePanelOpen(false)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
           <div className={styles.genreSearchWrapper}>
             <svg className={styles.genreSearchIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <input 
@@ -264,6 +282,7 @@ export default function AdminPanel() {
           )}
         </div>
       </div>
-    </div>
+    )}
+  </div>
   );
 }
