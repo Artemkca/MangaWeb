@@ -1027,6 +1027,20 @@
   .libraryTabs span {
     flex-shrink: 0;
   }
+  .questsGrid {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+  }
+  .questsGrid::-webkit-scrollbar {
+    display: none;
+  }
+  .questsGrid .questCard {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+  }
   .allQuestsGrid {
     grid-template-columns: 1fr;
   }
