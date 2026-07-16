@@ -33,16 +33,21 @@ export default function MobileNav({ onOpenSearch }) {
         </div>
         <span>Уведы</span>
       </button>
-      <button type="button" className="mobile-nav__item" onClick={handleAuthButtonClick}>
-        <div className="mobile-nav__icon-wrapper">
-          {session ? (
+      {session ? (
+        <Link to="/profile" className={`mobile-nav__item${isActive('/profile') ? ' mobile-nav__item--active' : ''}`}>
+          <div className="mobile-nav__icon-wrapper">
             <img src={session.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${session.username}`} alt="Profile" style={{ width: 24, height: 24, borderRadius: '50%' }} />
-          ) : (
+          </div>
+          <span>Профиль</span>
+        </Link>
+      ) : (
+        <button type="button" className="mobile-nav__item" onClick={handleAuthButtonClick}>
+          <div className="mobile-nav__icon-wrapper">
             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" alt="Guest" style={{ width: 24, height: 24, borderRadius: '50%' }} />
-          )}
-        </div>
-        <span>Профиль</span>
-      </button>
+          </div>
+          <span>Войти</span>
+        </button>
+      )}
     </nav>
   );
 }
