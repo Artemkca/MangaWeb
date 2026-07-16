@@ -93,8 +93,11 @@ public class SmartSearchService
         
         result.Description = System.Net.WebUtility.HtmlDecode(descriptions.FirstOrDefault() ?? string.Empty);
 
-        result.Author = dexData?.Author ?? shikiData?.Author ?? remangaData?.Author ?? string.Empty;
-        result.MainCharacter = remangaData?.MainCharacter ?? shikiData?.MainCharacter ?? string.Empty;
+        result.Author = new[] { dexData?.Author, shikiData?.Author, remangaData?.Author }
+            .FirstOrDefault(a => !string.IsNullOrWhiteSpace(a)) ?? string.Empty;
+        
+        result.MainCharacter = new[] { remangaData?.MainCharacter, shikiData?.MainCharacter, dexData?.MainCharacter }
+            .FirstOrDefault(a => !string.IsNullOrWhiteSpace(a)) ?? string.Empty;
 
         result.CoverUrl = shikiData?.CoverUrl ?? remangaData?.CoverUrl ?? string.Empty;
         result.Rating = shikiData?.Rating > 0 ? shikiData.Rating : (remangaData?.Rating ?? 0);
@@ -306,11 +309,6 @@ public class SmartSearchService
                         result.Genres.Add(cName.GetString()!);
             }
 
-            if (dContent.TryGetProperty("publishers", out var pubs) && pubs.GetArrayLength() > 0)
-            {
-                if(pubs[0].TryGetProperty("name", out var pName))
-                    result.Author = pName.GetString() ?? "";
-            }
 
             if (dContent.TryGetProperty("count_chapters", out var chaps))
             {
