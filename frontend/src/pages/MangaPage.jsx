@@ -17,16 +17,46 @@ export default function MangaPage() {
 
   const getRatingInfo = (rating) => {
     switch(rating) {
-      case 1: return { text: 'Катастрофа 🤮', color: '#ef4444' };
-      case 2: return { text: 'Ужасно 🤢', color: '#f87171' };
-      case 3: return { text: 'Очень плохо 🤬', color: '#fb923c' };
-      case 4: return { text: 'Плохо 😞', color: '#fbbf24' };
-      case 5: return { text: 'Средне 😐', color: '#facc15' };
-      case 6: return { text: 'Нормально 🤔', color: '#a3e635' };
-      case 7: return { text: 'Хорошо 🙂', color: '#4ade80' };
-      case 8: return { text: 'Отлично 🤩', color: '#2dd4bf' };
-      case 9: return { text: 'Великолепно 🔥', color: '#60a5fa' };
-      case 10: return { text: 'Шедевр 💎', color: '#c084fc' };
+      case 1: return { 
+        text: 'Катастрофа', color: '#ef4444',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 9 2 2m-2 0 2-2m4 0 2 2m-2 0 2-2m-8 6 2-2 2 2 2-2 2 2"/></svg>
+      };
+      case 2: return { 
+        text: 'Ужасно', color: '#f87171',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M15 11v3"/></svg>
+      };
+      case 3: return { 
+        text: 'Очень плохо', color: '#fb923c',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M7 8l2 2m8-2-2 2"/><line x1="9" y1="10" x2="9.01" y2="10"/><line x1="15" y1="10" x2="15.01" y2="10"/></svg>
+      };
+      case 4: return { 
+        text: 'Плохо', color: '#fbbf24',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 15s-1.5-1-4-1-4 1-4 1"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      };
+      case 5: return { 
+        text: 'Средне', color: '#facc15',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      };
+      case 6: return { 
+        text: 'Нормально', color: '#a3e635',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 1 4 1 4-1 4-1"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      };
+      case 7: return { 
+        text: 'Хорошо', color: '#4ade80',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      };
+      case 8: return { 
+        text: 'Отлично', color: '#2dd4bf',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9a2 2 0 0 0 2-2M15 9a2 2 0 0 0-2-2"/></svg>
+      };
+      case 9: return { 
+        text: 'Великолепно', color: '#60a5fa',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><path d="M6 9a2 2 0 0 0 4 0h4a2 2 0 0 0 4 0"/><path d="M4 9h16"/></svg>
+      };
+      case 10: return { 
+        text: 'Шедевр', color: '#c084fc',
+        icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 22h20M4 22V6l4 4 4-6 4 6 4-4v16"/></svg>
+      };
       default: return null;
     }
   };
@@ -71,8 +101,8 @@ export default function MangaPage() {
               <div style={{ fontSize: '32px', fontWeight: '700', color: ratingInfo ? ratingInfo.color : 'var(--text-primary)' }}>
                 {currentRating ? `${currentRating} / 10` : ' '}
               </div>
-              <div style={{ fontSize: '16px', fontWeight: '500', color: ratingInfo ? ratingInfo.color : 'var(--text-secondary)' }}>
-                {ratingInfo ? ratingInfo.text : ' '}
+              <div style={{ fontSize: '16px', fontWeight: '500', color: ratingInfo ? ratingInfo.color : 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                {ratingInfo ? <>{ratingInfo.icon} {ratingInfo.text}</> : ' '}
               </div>
             </div>
           </div>
