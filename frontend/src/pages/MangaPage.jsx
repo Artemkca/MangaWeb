@@ -92,11 +92,11 @@ export default function MangaPage() {
                     boxShadow: '0 8px 24px rgba(0,0,0,0.5)'
                   }}>
                     {[
-                      { name: 'Читаю', icon: <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/> },
-                      { name: 'В планах', icon: <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/> },
+                      { name: 'Читаю', icon: <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></> },
+                      { name: 'В планах', icon: <><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></> },
                       { name: 'Прочитано', icon: <path d="M20 6L9 17l-5-5"/> },
                       { name: 'Любимое', icon: <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/> },
-                      { name: 'Брошено', icon: <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/> }
+                      { name: 'Брошено', icon: <><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></> }
                     ].map(status => (
                       <div 
                         key={status.name}
