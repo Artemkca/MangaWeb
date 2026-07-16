@@ -957,3 +957,53 @@
   92% { transform: translate(-50%, -50%) skewX(8deg); }
   96% { transform: translate(-50%, -50%) skewX(-3deg); }
 }
+
+@media (max-width: 768px) {
+  .bannerWrapper {
+    margin-bottom: 16px;
+    padding: 12px;
+    border-radius: 16px;
+  }
+  .banner {
+    height: 180px;
+  }
+  .profileHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: -50px;
+    padding: 0 16px 16px;
+    gap: 12px;
+  }
+  .phAvatar {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  .phInfo {
+    align-items: center;
+  }
+  .username {
+    font-size: 24px;
+    text-align: center;
+  }
+  .phLevel {
+    justify-content: center;
+  }
+  .phStatus {
+    margin: 8px auto 0;
+  }
+  .phActions {
+    width: 100%;
+    margin-top: 16px;
+  }
+  .phActions .btn {
+    flex: 1;
+  }
+  .editProfileBtn {
+    width: 100%;
+    margin-top: 16px;
+  }
+  .activityGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
