@@ -1032,15 +1032,22 @@
     grid-template-columns: repeat(2, 1fr);
   }
   .layoutGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
     margin-top: 16px;
+  }
+  .mainCol, .sideCol {
+    min-width: 0;
   }
   .mainBlock {
     padding: 16px;
     border-radius: 16px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
   .libraryTabs {
+    width: 100%;
     overflow-x: auto;
     white-space: nowrap;
     padding-bottom: 8px;
