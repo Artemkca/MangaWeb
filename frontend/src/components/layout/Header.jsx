@@ -32,7 +32,7 @@ export default function Header({ onOpenSearch }) {
           background: 'var(--bg-secondary)', border: '1px solid var(--border)',
           borderRadius: '100px', padding: '6px 12px 6px 24px',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)',
-          width: '95%', maxWidth: '1000px'
+          width: '100%', maxWidth: '1100px'
         }}>
           
           {/* LEFT: Logo */}
