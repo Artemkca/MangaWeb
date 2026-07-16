@@ -28,11 +28,11 @@ export default function Header({ onOpenSearch }) {
         
         {/* The single unified pill */}
         <div className="header__pill" style={{
-          display: 'flex', alignItems: 'center', gap: '48px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           background: 'var(--bg-secondary)', border: '1px solid var(--border)',
           borderRadius: '100px', padding: '6px 12px 6px 24px',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)',
-          width: 'max-content'
+          width: '95%', maxWidth: '1000px'
         }}>
           
           {/* LEFT: Logo */}
