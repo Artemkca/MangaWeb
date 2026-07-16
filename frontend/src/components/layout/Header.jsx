@@ -18,35 +18,33 @@ export default function Header({ onOpenSearch }) {
 
   return (
     <header className="header" style={{
-      position: 'fixed', top: '16px', left: 0, right: 0, zIndex: 100,
+      position: 'fixed', top: '20px', left: 0, right: 0, zIndex: 100,
       pointerEvents: 'none'
     }}>
       <div className="header__inner" style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '0 24px',
-        pointerEvents: 'auto'
+        width: '100%', height: '100%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto'
       }}>
         
         {/* The single unified pill */}
         <div className="header__pill" style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          display: 'flex', alignItems: 'center', gap: '48px',
           background: 'var(--bg-secondary)', border: '1px solid var(--border)',
-          borderRadius: '100px', padding: '8px 24px',
+          borderRadius: '100px', padding: '6px 12px 6px 24px',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)',
-          width: '100%'
+          width: 'max-content'
         }}>
           
           {/* LEFT: Logo */}
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
-            <Link to="/" className="logo" style={{ 
-              textTransform: 'uppercase', letterSpacing: '1px', fontSize: '18px', fontWeight: '800',
-              color: 'var(--text-primary)' 
-            }}>
-              MANGAFLOW
-            </Link>
-          </div>
+          <Link to="/" className="logo" style={{ 
+            textTransform: 'uppercase', letterSpacing: '1px', fontSize: '18px', fontWeight: '800',
+            color: 'var(--text-primary)' 
+          }}>
+            MANGAFLOW
+          </Link>
 
           {/* CENTER: Nav */}
-          <nav className="nav nav--desktop" style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+          <nav className="nav nav--desktop" style={{ display: 'flex', gap: '4px' }}>
             <button type="button" className="nav__btn" onClick={onOpenSearch}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
               Поиск
@@ -69,7 +67,7 @@ export default function Header({ onOpenSearch }) {
 
           {/* RIGHT: User Actions */}
           <div className="header__actions" style={{
-            flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center'
+            display: 'flex', alignItems: 'center'
           }}>
             {session ? (
               <UserMenu />
