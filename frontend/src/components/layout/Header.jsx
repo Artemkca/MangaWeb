@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import UserMenu from './UserMenu';
@@ -13,13 +14,37 @@ const LoginIcon = () => (
 export default function Header({ onOpenSearch }) {
   const location = useLocation();
   const { session, handleAuthButtonClick } = useAuth();
+  
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Hide if scrolling down and past the top, show if scrolling up
+      if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY.current) {
+        setIsVisible(true);
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const isActive = (path) => location.pathname === path;
 
   return (
     <header className="header" style={{
       position: 'fixed', top: '20px', left: 0, right: 0, zIndex: 100,
-      pointerEvents: 'none'
+      pointerEvents: 'none',
+      transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      transform: isVisible ? 'translateY(0)' : 'translateY(-150%)',
+      opacity: isVisible ? 1 : 0
     }}>
       <div className="header__inner" style={{
         maxWidth: '1300px', margin: '0 auto', padding: '0 24px',
