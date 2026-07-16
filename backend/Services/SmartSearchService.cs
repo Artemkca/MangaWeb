@@ -18,16 +18,55 @@ public class SmartSearchService
 {
     private readonly HttpClient _http;
 
+    private static readonly Dictionary<string, string> TagTranslations = new(StringComparer.OrdinalIgnoreCase)
+    {
+        {"Action", "Экшен"}, {"Adventure", "Приключения"}, {"Comedy", "Комедия"},
+        {"Drama", "Драма"}, {"Fantasy", "Фэнтези"}, {"Horror", "Ужасы"},
+        {"Mecha", "Меха"}, {"Mystery", "Мистика"}, {"Psychological", "Психология"},
+        {"Romance", "Романтика"}, {"Sci-Fi", "Фантастика"}, {"Slice of Life", "Повседневность"},
+        {"Sports", "Спорт"}, {"Supernatural", "Сверхъестественное"}, {"Tragedy", "Трагедия"},
+        {"Martial Arts", "Боевые искусства"}, {"Long Strip", "Веб-комикс"}, {"Harem", "Гарем"},
+        {"Wuxia", "Уся"}, {"School Life", "Школа"}, {"Magic", "Магия"},
+        {"Isekai", "Исекай"}, {"Reincarnation", "Перерождение"}, {"Time Travel", "Путешествие во времени"},
+        {"Demons", "Демоны"}, {"Vampires", "Вампиры"}, {"Monsters", "Монстры"},
+        {"Survival", "Выживание"}, {"System", "Система"}, {"Adaptation", "Адаптация"},
+        {"Full Color", "В цвете"}, {"Web Comic", "Веб-комикс"}
+    };
+
     public SmartSearchService(HttpClient http)
     {
         _http = http;
+    }
+
+    private bool IsMatch(string query, string titleRu, string titleEn, JsonElement? altTitles = null)
+    {
+        var q = query.ToLower();
+        if (!string.IsNullOrEmpty(titleRu) && titleRu.ToLower().Contains(q)) return true;
+        if (!string.IsNullOrEmpty(titleEn) && titleEn.ToLower().Contains(q)) return true;
+        if (altTitles.HasValue && altTitles.Value.ValueKind == JsonValueKind.Array)
+        {
+            foreach (var alt in altTitles.Value.EnumerateArray())
+            {
+                if (alt.ValueKind == JsonValueKind.Object)
+                {
+                    foreach (var prop in alt.EnumerateObject())
+                    {
+                        if (prop.Value.GetString()?.ToLower().Contains(q) == true) return true;
+                    }
+                }
+                else if (alt.ValueKind == JsonValueKind.String)
+                {
+                    if (alt.GetString()?.ToLower().Contains(q) == true) return true;
+                }
+            }
+        }
+        return false;
     }
 
     public async Task<SmartSearchResult> SearchAsync(string query)
     {
         var result = new SmartSearchResult { Title = query };
 
-        // Запускаем запросы параллельно
         var shikiTask = SearchShikimori(query);
         var dexTask = SearchMangaDex(query);
         var remangaTask = SearchRemanga(query);
@@ -38,14 +77,15 @@ public class SmartSearchService
         var dexData = await dexTask;
         var remangaData = await remangaTask;
 
-        // Агрегация жанров (убираем дубли)
         var allGenres = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         if (shikiData?.Genres != null) foreach(var g in shikiData.Genres) allGenres.Add(g);
         if (dexData?.Genres != null) foreach(var g in dexData.Genres) allGenres.Add(g);
         if (remangaData?.Genres != null) foreach(var g in remangaData.Genres) allGenres.Add(g);
-        result.Genres = allGenres.ToList();
+        
+        result.Genres = allGenres
+            .Where(g => !string.IsNullOrWhiteSpace(g) && g != "Sexual Violence")
+            .ToList();
 
-        // Выбираем самое длинное описание
         var descriptions = new[] { shikiData?.Description, dexData?.Description, remangaData?.Description }
             .Where(d => !string.IsNullOrWhiteSpace(d))
             .OrderByDescending(d => d!.Length)
@@ -53,11 +93,9 @@ public class SmartSearchService
         
         result.Description = descriptions.FirstOrDefault() ?? string.Empty;
 
-        // Автор и ГГ
         result.Author = remangaData?.Author ?? dexData?.Author ?? shikiData?.Author ?? string.Empty;
         result.MainCharacter = remangaData?.MainCharacter ?? shikiData?.MainCharacter ?? string.Empty;
 
-        // Обложка, рейтинг, главы (приоритет Шикимори/Реманге для обложек, так как ссылки прямее)
         result.CoverUrl = shikiData?.CoverUrl ?? remangaData?.CoverUrl ?? string.Empty;
         result.Rating = shikiData?.Rating > 0 ? shikiData.Rating : (remangaData?.Rating ?? 0);
         result.Chapters = shikiData?.Chapters > 0 ? shikiData.Chapters : (remangaData?.Chapters ?? 0);
@@ -83,6 +121,11 @@ public class SmartSearchService
             if (doc.RootElement.GetArrayLength() == 0) return null;
 
             var manga = doc.RootElement[0];
+            var titleRu = manga.GetProperty("russian").GetString();
+            var titleEn = manga.GetProperty("name").GetString();
+            
+            if (!IsMatch(query, titleRu ?? "", titleEn ?? "")) return null;
+
             var id = manga.GetProperty("id").GetInt32();
             
             var detailReq = new HttpRequestMessage(HttpMethod.Get, $"https://shikimori.one/api/mangas/{id}");
@@ -94,10 +137,7 @@ public class SmartSearchService
             var root = detailDoc.RootElement;
 
             var result = new SmartSearchResult();
-            if (root.TryGetProperty("russian", out var titleRu) && !string.IsNullOrEmpty(titleRu.GetString()))
-                result.Title = titleRu.GetString()!;
-            else if (root.TryGetProperty("name", out var titleEn))
-                result.Title = titleEn.GetString()!;
+            result.Title = !string.IsNullOrEmpty(titleRu) ? titleRu : titleEn!;
 
             if (root.TryGetProperty("description", out var desc))
                 result.Description = desc.GetString()?.Replace("[i]", "").Replace("[/i]", "").Replace("[b]", "").Replace("[/b]", "") ?? "";
@@ -124,7 +164,6 @@ public class SmartSearchService
                         result.Genres.Add(gn.GetString()!);
                 }
             }
-
             return result;
         }
         catch { return null; }
@@ -145,7 +184,13 @@ public class SmartSearchService
             var manga = data[0];
             var attrs = manga.GetProperty("attributes");
             
+            var titleEn = attrs.TryGetProperty("title", out var t) && t.TryGetProperty("en", out var enT) ? enT.GetString() : "";
+            var altTitles = attrs.TryGetProperty("altTitles", out var alt) ? alt : (JsonElement?)null;
+            
+            if (!IsMatch(query, "", titleEn ?? "", altTitles)) return null;
+
             var result = new SmartSearchResult();
+            result.Title = titleEn ?? "";
 
             if (attrs.TryGetProperty("description", out var descObj))
             {
@@ -155,14 +200,18 @@ public class SmartSearchService
 
             if (attrs.TryGetProperty("tags", out var tags))
             {
-                foreach (var t in tags.EnumerateArray())
+                foreach (var tg in tags.EnumerateArray())
                 {
-                    if (t.TryGetProperty("attributes", out var tAttr) && tAttr.TryGetProperty("name", out var tName))
+                    if (tg.TryGetProperty("attributes", out var tAttr) && tAttr.TryGetProperty("name", out var tName))
                     {
                         if (tName.TryGetProperty("en", out var enTag))
                         {
                             var tagStr = enTag.GetString();
-                            if (!string.IsNullOrEmpty(tagStr)) result.Genres.Add(tagStr);
+                            if (!string.IsNullOrEmpty(tagStr))
+                            {
+                                if (TagTranslations.TryGetValue(tagStr, out var ruTag)) result.Genres.Add(ruTag);
+                                else result.Genres.Add(tagStr);
+                            }
                         }
                     }
                 }
@@ -193,7 +242,7 @@ public class SmartSearchService
         try
         {
             var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.remanga.org/api/search/catalog/?query={Uri.EscapeDataString(query)}&count=1");
-            req.Headers.Add("User-Agent", "Mozilla/5.0"); // Remanga likes standard UAs
+            req.Headers.Add("User-Agent", "Mozilla/5.0");
             var res = await _http.SendAsync(req);
             if (!res.IsSuccessStatusCode) return null;
 
@@ -201,6 +250,11 @@ public class SmartSearchService
             if (!doc.RootElement.TryGetProperty("content", out var content) || content.GetArrayLength() == 0) return null;
 
             var manga = content[0];
+            var titleRu = manga.GetProperty("rus_name").GetString();
+            var titleEn = manga.GetProperty("en_name").GetString();
+
+            if (!IsMatch(query, titleRu ?? "", titleEn ?? "")) return null;
+
             var dir = manga.GetProperty("dir").GetString();
             
             var detailReq = new HttpRequestMessage(HttpMethod.Get, $"https://api.remanga.org/api/titles/{dir}/");
@@ -212,16 +266,12 @@ public class SmartSearchService
             if (!detailDoc.RootElement.TryGetProperty("content", out var dContent)) return null;
 
             var result = new SmartSearchResult();
-            
-            if (dContent.TryGetProperty("rus_name", out var rusName) && !string.IsNullOrEmpty(rusName.GetString()))
-                result.Title = rusName.GetString()!;
-            else if (dContent.TryGetProperty("en_name", out var enName))
-                result.Title = enName.GetString()!;
+            result.Title = !string.IsNullOrEmpty(titleRu) ? titleRu : titleEn!;
 
             if (dContent.TryGetProperty("description", out var desc))
             {
                 var dStr = desc.GetString() ?? "";
-                dStr = System.Text.RegularExpressions.Regex.Replace(dStr, "<.*?>", ""); // Strip HTML
+                dStr = System.Text.RegularExpressions.Regex.Replace(dStr, "<.*?>", "");
                 result.Description = dStr;
             }
 
@@ -251,7 +301,7 @@ public class SmartSearchService
             if (dContent.TryGetProperty("avg_rating", out var rating))
             {
                 if (double.TryParse(rating.GetString(), out var rat))
-                     result.Rating = Math.Round(rat / 2.0, 1); // 10 point to 5 point
+                     result.Rating = Math.Round(rat / 2.0, 1);
             }
             
             if (dContent.TryGetProperty("img", out var img) && img.TryGetProperty("high", out var highImg))
