@@ -3036,34 +3036,35 @@ img { max-width: 100%; display: block; }
   }
   
   .mobile-nav {
-    bottom: 12px !important;
-    left: 12px !important;
-    right: 12px !important;
-    border-radius: 24px !important;
+    bottom: 16px !important;
+    left: 16px !important;
+    right: 16px !important;
+    border-radius: 20px !important;
     height: 60px !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
-    background: rgba(20, 20, 20, 0.95) !important;
-    box-shadow: 0 16px 32px rgba(0,0,0,0.8) !important;
+    border: 1px solid var(--border) !important;
+    background: var(--bg-secondary) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important;
   }
   
   .mobile-nav__icon-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 28px;
-    border-radius: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
     transition: background 0.2s, color 0.2s;
   }
   .mobile-nav__item--active .mobile-nav__icon-wrapper {
-    background: rgba(93, 122, 255, 0.2);
-    color: #5d7aff;
+    background: rgba(93, 122, 255, 0.15);
+    color: var(--accent);
   }
   .mobile-nav__item {
-    gap: 4px;
+    gap: 2px;
   }
   .mobile-nav__item span {
     font-size: 10px;
+    font-weight: 500;
   }
   
   .activity-grid {
