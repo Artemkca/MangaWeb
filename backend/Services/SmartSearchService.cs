@@ -209,6 +209,9 @@ public class SmartSearchService
                             var tagStr = enTag.GetString();
                             if (!string.IsNullOrEmpty(tagStr))
                             {
+                                // Игнорируем технические теги формата
+                                if (tagStr == "Long Strip" || tagStr == "Full Color" || tagStr == "Web Comic" || tagStr == "Adaptation") continue;
+
                                 if (TagTranslations.TryGetValue(tagStr, out var ruTag)) result.Genres.Add(ruTag);
                                 else result.Genres.Add(tagStr);
                             }
@@ -241,7 +244,7 @@ public class SmartSearchService
     {
         try
         {
-            var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.remanga.org/api/search/catalog/?query={Uri.EscapeDataString(query)}&count=1");
+            var req = new HttpRequestMessage(HttpMethod.Get, $"https://api.remanga.org/api/search/?query={Uri.EscapeDataString(query)}&count=5");
             req.Headers.Add("User-Agent", "Mozilla/5.0");
             var res = await _http.SendAsync(req);
             if (!res.IsSuccessStatusCode) return null;
@@ -249,15 +252,29 @@ public class SmartSearchService
             using var doc = JsonDocument.Parse(await res.Content.ReadAsStringAsync());
             if (!doc.RootElement.TryGetProperty("content", out var content) || content.GetArrayLength() == 0) return null;
 
-            var manga = content[0];
-            var titleRu = manga.GetProperty("rus_name").GetString();
-            var titleEn = manga.GetProperty("en_name").GetString();
+            JsonElement? matchedManga = null;
+            string? matchedDir = null;
+            string? matchedTitleRu = null;
+            string? matchedTitleEn = null;
 
-            if (!IsMatch(query, titleRu ?? "", titleEn ?? "")) return null;
+            foreach (var manga in content.EnumerateArray())
+            {
+                var titleRu = manga.GetProperty("rus_name").GetString();
+                var titleEn = manga.GetProperty("en_name").GetString();
+                
+                if (IsMatch(query, titleRu ?? "", titleEn ?? ""))
+                {
+                    matchedManga = manga;
+                    matchedDir = manga.GetProperty("dir").GetString();
+                    matchedTitleRu = titleRu;
+                    matchedTitleEn = titleEn;
+                    break;
+                }
+            }
 
-            var dir = manga.GetProperty("dir").GetString();
+            if (matchedDir == null) return null;
             
-            var detailReq = new HttpRequestMessage(HttpMethod.Get, $"https://api.remanga.org/api/titles/{dir}/");
+            var detailReq = new HttpRequestMessage(HttpMethod.Get, $"https://api.remanga.org/api/titles/{matchedDir}/");
             detailReq.Headers.Add("User-Agent", "Mozilla/5.0");
             var detailRes = await _http.SendAsync(detailReq);
             if (!detailRes.IsSuccessStatusCode) return null;
@@ -266,7 +283,7 @@ public class SmartSearchService
             if (!detailDoc.RootElement.TryGetProperty("content", out var dContent)) return null;
 
             var result = new SmartSearchResult();
-            result.Title = !string.IsNullOrEmpty(titleRu) ? titleRu : titleEn!;
+            result.Title = !string.IsNullOrEmpty(matchedTitleRu) ? matchedTitleRu : matchedTitleEn!;
 
             if (dContent.TryGetProperty("description", out var desc))
             {
@@ -308,6 +325,9 @@ public class SmartSearchService
             {
                 result.CoverUrl = "https://remanga.org" + highImg.GetString();
             }
+
+            // Remanga sometimes stores MC in a separate characters array, but it requires a different endpoint.
+            // Let's leave MainCharacter empty if not found, user can fill it.
 
             return result;
         }
