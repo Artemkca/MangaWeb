@@ -2443,7 +2443,7 @@ img { max-width: 100%; display: block; }
   .auth-modal {
     position: relative;
     z-index: 10;
-    width: 100%;
+    width: calc(100% - 32px);
     max-width: 420px;
     max-height: 90vh;
     overflow-y: auto;
@@ -3693,6 +3693,12 @@ img { max-width: 100%; display: block; }
   .auth-submit { height: 38px; }
   .auth-social-btn { height: 38px; }
   .auth-modal__title { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+  .auth-modal { padding: 24px 16px; }
+  .auth-social__row { gap: 6px; }
+  .auth-social__row--triple .auth-social-btn { padding: 0 4px; font-size: 11px; }
 }
 
 /* ===== MANGA BACKGROUND ===== */

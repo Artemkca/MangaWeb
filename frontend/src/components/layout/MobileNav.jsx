@@ -41,7 +41,7 @@ export default function MobileNav({ onOpenSearch }) {
             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" alt="Guest" style={{ width: 24, height: 24, borderRadius: '50%' }} />
           )}
         </div>
-        <span>Ещё</span>
+        <span>Профиль</span>
       </button>
     </nav>
   );
