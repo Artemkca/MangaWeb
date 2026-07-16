@@ -17,52 +17,36 @@ export default function Header({ onOpenSearch }) {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <header className="header" style={{ pointerEvents: 'none' }}>
+    <header className="header" style={{
+      position: 'fixed', top: '16px', left: 0, right: 0, zIndex: 100,
+      pointerEvents: 'none'
+    }}>
       <div className="header__inner" style={{
-        width: '100%', height: '100%',
-        display: 'flex', alignItems: 'center', pointerEvents: 'auto'
+        maxWidth: '1200px', margin: '0 auto', padding: '0 24px',
+        pointerEvents: 'auto'
       }}>
         
-        {/* LEFT SIDE: User Actions */}
-        <div className="header__actions" style={{
-          display: 'flex', alignItems: 'center', zIndex: 10
-        }}>
-          {session ? (
-            <UserMenu />
-          ) : (
-            <button
-              type="button"
-              className="btn btn--login"
-              title="Войти"
-              onClick={handleAuthButtonClick}
-              style={{
-                background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-full)',
-                padding: '10px 20px', display: 'flex', gap: '8px', alignItems: 'center'
-              }}
-            >
-              <LoginIcon />
-              Войти
-            </button>
-          )}
-        </div>
-
-        {/* RIGHT SIDE: Pill with Logo and Nav */}
+        {/* The single unified pill */}
         <div className="header__pill" style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           background: 'var(--bg-secondary)', border: '1px solid var(--border)',
-          borderRadius: '100px', padding: '8px 24px', paddingLeft: session ? '32px' : '24px',
-          marginLeft: session ? '-20px' : '16px', /* Overlap with avatar if logged in */
-          flex: 1, boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-          backdropFilter: 'blur(8px)', zIndex: 5
+          borderRadius: '100px', padding: '8px 24px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)',
+          width: '100%'
         }}>
-          <Link to="/" className="logo" style={{ 
-            textTransform: 'uppercase', letterSpacing: '1px', fontSize: '18px', fontWeight: '800',
-            color: 'var(--text-primary)' 
-          }}>
-            MANGAFLOW
-          </Link>
+          
+          {/* LEFT: Logo */}
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>
+            <Link to="/" className="logo" style={{ 
+              textTransform: 'uppercase', letterSpacing: '1px', fontSize: '18px', fontWeight: '800',
+              color: 'var(--text-primary)' 
+            }}>
+              MANGAFLOW
+            </Link>
+          </div>
 
-          <nav className="nav nav--desktop" style={{ display: 'flex', gap: '8px' }}>
+          {/* CENTER: Nav */}
+          <nav className="nav nav--desktop" style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
             <button type="button" className="nav__btn" onClick={onOpenSearch}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
               Поиск
@@ -82,8 +66,31 @@ export default function Header({ onOpenSearch }) {
               </Link>
             )}
           </nav>
-        </div>
 
+          {/* RIGHT: User Actions */}
+          <div className="header__actions" style={{
+            flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center'
+          }}>
+            {session ? (
+              <UserMenu />
+            ) : (
+              <button
+                type="button"
+                className="btn btn--login"
+                title="Войти"
+                onClick={handleAuthButtonClick}
+                style={{
+                  background: 'var(--bg-tertiary)', borderRadius: 'var(--radius-full)',
+                  padding: '8px 20px', display: 'flex', gap: '8px', alignItems: 'center'
+                }}
+              >
+                <LoginIcon />
+                Войти
+              </button>
+            )}
+          </div>
+
+        </div>
       </div>
     </header>
   );
