@@ -15,6 +15,25 @@ export default function MangaPage() {
   const [userRating, setUserRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
 
+  const getRatingInfo = (rating) => {
+    switch(rating) {
+      case 1: return { text: 'Катастрофа', color: '#ef4444' };
+      case 2: return { text: 'Ужасно', color: '#f87171' };
+      case 3: return { text: 'Очень плохо', color: '#fb923c' };
+      case 4: return { text: 'Плохо', color: '#fbbf24' };
+      case 5: return { text: 'Средне', color: '#facc15' };
+      case 6: return { text: 'Нормально', color: '#a3e635' };
+      case 7: return { text: 'Хорошо', color: '#4ade80' };
+      case 8: return { text: 'Отлично', color: '#2dd4bf' };
+      case 9: return { text: 'Великолепно', color: '#60a5fa' };
+      case 10: return { text: 'Шедевр', color: '#c084fc' };
+      default: return null;
+    }
+  };
+
+  const currentRating = hoverRating || userRating;
+  const ratingInfo = currentRating ? getRatingInfo(currentRating) : null;
+
   return (
     <main className="page page--active manga-page">
       {/* Rating Modal */}
@@ -33,8 +52,8 @@ export default function MangaPage() {
               {[1,2,3,4,5,6,7,8,9,10].map(star => (
                 <svg 
                   key={star} width="32" height="32" viewBox="0 0 24 24" 
-                  fill={(hoverRating || userRating) >= star ? 'var(--accent)' : 'var(--bg-hover)'} 
-                  stroke={(hoverRating || userRating) >= star ? 'var(--accent)' : 'var(--border-light)'} 
+                  fill={currentRating >= star ? (ratingInfo ? ratingInfo.color : 'var(--accent)') : 'var(--bg-hover)'} 
+                  stroke={currentRating >= star ? (ratingInfo ? ratingInfo.color : 'var(--accent)') : 'var(--border-light)'} 
                   strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
                   style={{ 
                     cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -48,8 +67,13 @@ export default function MangaPage() {
                 </svg>
               ))}
             </div>
-            <div style={{ fontSize: '28px', fontWeight: '700', color: 'var(--text-primary)', height: '32px' }}>
-              {hoverRating || userRating ? `${hoverRating || userRating} / 10` : ''}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', height: '64px', justifyContent: 'center' }}>
+              <div style={{ fontSize: '32px', fontWeight: '700', color: ratingInfo ? ratingInfo.color : 'var(--text-primary)' }}>
+                {currentRating ? `${currentRating} / 10` : ' '}
+              </div>
+              <div style={{ fontSize: '16px', fontWeight: '500', color: ratingInfo ? ratingInfo.color : 'var(--text-secondary)' }}>
+                {ratingInfo ? ratingInfo.text : ' '}
+              </div>
             </div>
           </div>
         </div>
