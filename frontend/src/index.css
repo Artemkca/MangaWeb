@@ -34,7 +34,7 @@
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
 
-  --header-height: 52px;
+  --header-height: 88px;
   --mobile-nav-height: 64px;
   --sidebar-width: 300px;
 
@@ -171,29 +171,33 @@ img { max-width: 100%; display: block; }
 /* ===== HEADER ===== */
 .header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--header-height);
-  background: var(--bg-primary);
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 1100px;
+  height: 56px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 28px;
   z-index: 100;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
 }
 
 .header__inner {
-  max-width: 1400px;
-  margin: 0 auto;
   padding: 0 24px;
   height: 100%;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
+  flex: 1;
   font-weight: 800;
   font-size: 17px;
   letter-spacing: 0.8px;
@@ -221,26 +225,32 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.5px;
 }
 
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .nav__btn {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 12px;
+  gap: 6px;
+  padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
-  transition: color 0.15s;
+  transition: all 0.2s;
+  border-radius: 20px;
 }
 
 .nav__btn:hover {
   color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .nav__btn--active {
   color: var(--text-primary);
   background: var(--bg-hover);
-  border-radius: var(--radius-full);
-  padding: 6px 12px;
 }
 
 .nav__btn svg {
@@ -358,8 +368,9 @@ img { max-width: 100%; display: block; }
 .header__actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 4px;
-  flex-shrink: 0;
+  flex: 1;
 }
 
 .btn-icon {
