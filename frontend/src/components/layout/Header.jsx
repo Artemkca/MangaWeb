@@ -60,6 +60,12 @@ export default function Header({ onOpenSearch }) {
           width: '100%', maxWidth: '1300px'
         }}>
           
+          {/* Mobile Search Bar (Only visible on max-width 768px) */}
+          <div className="mobile-header-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+            <input type="text" placeholder="Поиск" onClick={onOpenSearch} readOnly />
+          </div>
+
           {/* LEFT: Logo */}
           <Link to="/" className="logo" style={{ 
             textTransform: 'uppercase', letterSpacing: '1px', fontSize: '18px', fontWeight: '800',

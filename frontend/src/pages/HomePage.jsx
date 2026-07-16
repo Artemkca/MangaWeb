@@ -26,9 +26,12 @@ export default function HomePage() {
       <div className="container container--wide">
         <section className="section">
           <div className="section__header">
-            <div className="section__title-row">
-              <h2 className="section__title">Самое читаемое</h2>
-              <span className="section__badge">TOP</span>
+            <div className="section__title-row" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h2 className="section__title" style={{ margin: 0 }}>Самое читаемое</h2>
+              <span className="section__badge" style={{ background: '#5d7aff', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20v-2H2v2zm7-9l-5 5V5c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v13l-5-5-4 4-4-4z"/></svg>
+                TOP
+              </span>
             </div>
             <Tabs items={['За день', 'За неделю', 'За месяц']} />
           </div>
