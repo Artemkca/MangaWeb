@@ -172,20 +172,16 @@ img { max-width: 100%; display: block; }
 .header {
   position: fixed;
   top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 95%;
-  max-width: 1100px;
+  left: 0;
+  right: 0;
   height: 56px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 28px;
   z-index: 100;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  backdrop-filter: blur(8px);
+  pointer-events: none;
 }
 
 .header__inner {
+  max-width: 1100px;
+  margin: 0 auto;
   padding: 0 24px;
   height: 100%;
   display: flex;

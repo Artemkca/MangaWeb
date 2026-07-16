@@ -17,12 +17,9 @@ export default function Header({ onOpenSearch }) {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <header className="header" style={{
-      position: 'fixed', top: '16px', left: 0, right: 0, zIndex: 100,
-      pointerEvents: 'none' /* Let clicks pass through empty areas */
-    }}>
+    <header className="header" style={{ pointerEvents: 'none' }}>
       <div className="header__inner" style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '0 24px',
+        width: '100%', height: '100%',
         display: 'flex', alignItems: 'center', pointerEvents: 'auto'
       }}>
         
