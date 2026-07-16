@@ -20,31 +20,48 @@ export default function MangaPage() {
       {/* Rating Modal */}
       {showRatingModal && (
         <div style={{
-          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', zIndex: 9999,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)'
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)',
+          animation: 'fadeIn 0.2s ease'
         }} onClick={() => setShowRatingModal(false)}>
           <div style={{
-            background: 'var(--bg-secondary)', padding: '32px', borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--border)', textAlign: 'center', minWidth: '320px'
+            background: 'rgba(20, 20, 25, 0.7)', padding: '40px', borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.1)', textAlign: 'center', minWidth: '360px',
+            boxShadow: '0 24px 48px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.05)',
+            backdropFilter: 'blur(16px)'
           }} onClick={e => e.stopPropagation()}>
-            <h2 style={{ margin: '0 0 24px 0', color: 'var(--text-primary)' }}>Оцените тайтл</h2>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', marginBottom: '24px' }}>
+            <h2 style={{ 
+              margin: '0 0 32px 0', 
+              fontSize: '28px',
+              fontWeight: '700',
+              background: 'linear-gradient(90deg, #fff, #a5b4fc)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>Оцените тайтл</h2>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '32px' }}>
               {[1,2,3,4,5,6,7,8,9,10].map(star => (
                 <svg 
-                  key={star} width="28" height="28" viewBox="0 0 24 24" 
-                  fill={(hoverRating || userRating) >= star ? 'var(--accent)' : 'none'} 
-                  stroke={(hoverRating || userRating) >= star ? 'var(--accent)' : 'var(--text-muted)'} 
-                  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                  style={{ cursor: 'pointer', transition: 'all 0.1s' }}
+                  key={star} width="32" height="32" viewBox="0 0 24 24" 
+                  fill={(hoverRating || userRating) >= star ? '#6366f1' : 'rgba(255,255,255,0.05)'} 
+                  stroke={(hoverRating || userRating) >= star ? '#818cf8' : 'rgba(255,255,255,0.1)'} 
+                  strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                  style={{ 
+                    cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transform: hoverRating === star ? 'scale(1.2)' : 'scale(1)',
+                    filter: (hoverRating || userRating) >= star ? 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.6))' : 'none'
+                  }}
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
-                  onClick={() => { setUserRating(star); setTimeout(() => setShowRatingModal(false), 500); }}
+                  onClick={() => { setUserRating(star); setTimeout(() => setShowRatingModal(false), 400); }}
                 >
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                 </svg>
               ))}
             </div>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--accent)', height: '28px' }}>
+            <div style={{ 
+              fontSize: '28px', fontWeight: '800', color: '#818cf8', height: '32px',
+              textShadow: '0 0 16px rgba(129, 140, 248, 0.4)'
+            }}>
               {hoverRating || userRating ? `${hoverRating || userRating} / 10` : ''}
             </div>
           </div>
@@ -81,31 +98,45 @@ export default function MangaPage() {
                 </button>
                 {showBookmarkMenu && (
                   <div style={{
-                    position: 'absolute', top: '100%', left: 0, right: 0, marginTop: '8px',
-                    background: 'var(--bg-tertiary)', border: '1px solid var(--border)',
-                    borderRadius: 'var(--radius-md)', padding: '8px', zIndex: 10,
-                    display: 'flex', flexDirection: 'column', gap: '4px'
+                    position: 'absolute', top: '100%', left: 0, right: 0, marginTop: '12px',
+                    background: 'rgba(20, 20, 25, 0.85)', border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '16px', padding: '8px', zIndex: 10,
+                    display: 'flex', flexDirection: 'column', gap: '4px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)', backdropFilter: 'blur(16px)'
                   }}>
-                    {['Читаю', 'В планах', 'Прочитано', 'Любимое', 'Брошено'].map(status => (
+                    {[
+                      { name: 'Читаю', color: '#34d399' }, 
+                      { name: 'В планах', color: '#60a5fa' }, 
+                      { name: 'Прочитано', color: '#a78bfa' }, 
+                      { name: 'Любимое', color: '#f472b6' }, 
+                      { name: 'Брошено', color: '#9ca3af' }
+                    ].map(status => (
                       <div 
-                        key={status}
-                        onClick={() => { setBookmarkStatus(status); setShowBookmarkMenu(false); }}
+                        key={status.name}
+                        onClick={() => { setBookmarkStatus(status.name); setShowBookmarkMenu(false); }}
                         style={{
-                          padding: '8px 12px', borderRadius: '4px', cursor: 'pointer',
-                          background: bookmarkStatus === status ? 'var(--bg-hover)' : 'transparent',
-                          color: bookmarkStatus === status ? 'var(--text-primary)' : 'var(--text-secondary)'
+                          padding: '10px 16px', borderRadius: '10px', cursor: 'pointer',
+                          background: bookmarkStatus === status.name ? `rgba(255, 255, 255, 0.08)` : 'transparent',
+                          color: bookmarkStatus === status.name ? '#fff' : 'var(--text-secondary)',
+                          fontSize: '14px', fontWeight: '500', transition: 'all 0.2s',
+                          display: 'flex', alignItems: 'center', gap: '10px'
                         }}
-                        onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-hover)'}
-                        onMouseLeave={e => e.currentTarget.style.background = bookmarkStatus === status ? 'var(--bg-hover)' : 'transparent'}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; e.currentTarget.style.color = '#fff'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = bookmarkStatus === status.name ? `rgba(255, 255, 255, 0.08)` : 'transparent'; e.currentTarget.style.color = bookmarkStatus === status.name ? '#fff' : 'var(--text-secondary)'; }}
                       >
-                        {status}
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: status.color, boxShadow: `0 0 8px ${status.color}` }} />
+                        {status.name}
                       </div>
                     ))}
                     {bookmarkStatus && (
                       <div 
                         onClick={() => { setBookmarkStatus(null); setShowBookmarkMenu(false); }}
-                        style={{ padding: '8px 12px', borderRadius: '4px', cursor: 'pointer', color: '#e74c3c', marginTop: '4px', borderTop: '1px solid var(--border-light)' }}
-                        onMouseEnter={e => e.currentTarget.style.background = 'rgba(231, 76, 60, 0.1)'}
+                        style={{ 
+                          padding: '10px 16px', borderRadius: '10px', cursor: 'pointer', color: '#f87171', 
+                          marginTop: '4px', borderTop: '1px solid rgba(255,255,255,0.05)',
+                          fontSize: '14px', fontWeight: '500', transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = 'rgba(248, 113, 113, 0.1)'}
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                       >
                         Удалить из закладок
