@@ -22,7 +22,7 @@ export default function Header({ onOpenSearch }) {
       pointerEvents: 'none'
     }}>
       <div className="header__inner" style={{
-        maxWidth: '1400px', margin: '0 auto', padding: '0 24px',
+        maxWidth: '1300px', margin: '0 auto', padding: '0 24px',
         pointerEvents: 'auto'
       }}>
         
@@ -32,7 +32,7 @@ export default function Header({ onOpenSearch }) {
           background: 'var(--bg-secondary)', border: '1px solid var(--border)',
           borderRadius: '100px', padding: '6px 12px 6px 24px',
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)',
-          width: '100%', maxWidth: '1400px'
+          width: '100%', maxWidth: '1300px'
         }}>
           
           {/* LEFT: Logo */}
