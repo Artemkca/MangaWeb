@@ -17,16 +17,16 @@ export default function MangaPage() {
 
   const getRatingInfo = (rating) => {
     switch(rating) {
-      case 1: return { text: 'Катастрофа', color: '#ef4444' };
-      case 2: return { text: 'Ужасно', color: '#f87171' };
-      case 3: return { text: 'Очень плохо', color: '#fb923c' };
-      case 4: return { text: 'Плохо', color: '#fbbf24' };
-      case 5: return { text: 'Средне', color: '#facc15' };
-      case 6: return { text: 'Нормально', color: '#a3e635' };
-      case 7: return { text: 'Хорошо', color: '#4ade80' };
-      case 8: return { text: 'Отлично', color: '#2dd4bf' };
-      case 9: return { text: 'Великолепно', color: '#60a5fa' };
-      case 10: return { text: 'Шедевр', color: '#c084fc' };
+      case 1: return { text: 'Катастрофа 🤮', color: '#ef4444' };
+      case 2: return { text: 'Ужасно 🤢', color: '#f87171' };
+      case 3: return { text: 'Очень плохо 🤬', color: '#fb923c' };
+      case 4: return { text: 'Плохо 😞', color: '#fbbf24' };
+      case 5: return { text: 'Средне 😐', color: '#facc15' };
+      case 6: return { text: 'Нормально 🤔', color: '#a3e635' };
+      case 7: return { text: 'Хорошо 🙂', color: '#4ade80' };
+      case 8: return { text: 'Отлично 🤩', color: '#2dd4bf' };
+      case 9: return { text: 'Великолепно 🔥', color: '#60a5fa' };
+      case 10: return { text: 'Шедевр 💎', color: '#c084fc' };
       default: return null;
     }
   };
