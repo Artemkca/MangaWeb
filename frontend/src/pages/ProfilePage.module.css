@@ -959,6 +959,9 @@
 }
 
 @media (max-width: 768px) {
+  .profileContainer {
+    padding: 70px 12px 100px 12px;
+  }
   .bannerWrapper {
     margin-bottom: 16px;
     padding: 12px;
@@ -978,6 +981,10 @@
   .phAvatar {
     width: 100px !important;
     height: 100px !important;
+  }
+  .frameImg {
+    width: 128px !important;
+    height: 128px !important;
   }
   .phInfo {
     align-items: center;
