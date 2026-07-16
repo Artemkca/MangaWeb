@@ -1,9 +1,24 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useState, useEffect } from 'react';
 
 export default function MobileNav({ onOpenSearch }) {
   const location = useLocation();
   const { session, handleAuthButtonClick } = useAuth();
+
+  const [avatarSrc, setAvatarSrc] = useState(() => localStorage.getItem('profileAvatar') || session?.avatar || '/default_avatar.jpg');
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setAvatarSrc(localStorage.getItem('profileAvatar') || session?.avatar || '/default_avatar.jpg');
+    };
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('profile-updated', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('profile-updated', handleStorageChange);
+    };
+  }, [session]);
 
   const isActive = (path) => location.pathname === path;
 
@@ -36,7 +51,7 @@ export default function MobileNav({ onOpenSearch }) {
       {session ? (
         <Link to="/profile" className={`mobile-nav__item${isActive('/profile') ? ' mobile-nav__item--active' : ''}`}>
           <div className="mobile-nav__icon-wrapper">
-            <img src={session.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${session.username}`} alt="Profile" style={{ width: 24, height: 24, borderRadius: '50%' }} />
+            <img src={avatarSrc} alt="Profile" style={{ width: 24, height: 24, borderRadius: '50%', objectFit: 'cover' }} />
           </div>
           <span>Профиль</span>
         </Link>
