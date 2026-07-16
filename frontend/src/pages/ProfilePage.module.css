@@ -1006,4 +1006,28 @@
   .activityGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .layoutGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .mainBlock {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  .libraryTabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px;
+    gap: 16px;
+  }
+  .libraryTabs::-webkit-scrollbar {
+    display: none;
+  }
+  .libraryTabs span {
+    flex-shrink: 0;
+  }
+  .allQuestsGrid {
+    grid-template-columns: 1fr;
+  }
 }
