@@ -99,25 +99,19 @@
   padding: 0 32px 32px 32px;
 }
 
-.slideManual {
+.slideActive {
   transform: translateX(0);
   opacity: 1;
   pointer-events: auto;
 }
 
-.slideManualHidden {
+.slideHiddenLeft {
   transform: translateX(-50px);
   opacity: 0;
   pointer-events: none;
 }
 
-.slideBot {
-  transform: translateX(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.slideBotHidden {
+.slideHiddenRight {
   transform: translateX(50px);
   opacity: 0;
   pointer-events: none;

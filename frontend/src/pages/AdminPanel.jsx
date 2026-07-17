@@ -203,13 +203,31 @@ export default function AdminPanel() {
     }
   };
 
+  const modes = ['manual', 'bot', 'downloader'];
+  const titles = {
+    'manual': 'Ручное добавление в каталог',
+    'bot': 'Помощник для написания',
+    'downloader': 'Скачать по ссылке (Скрапер)'
+  };
+
+  const getSlideClass = (slideName) => {
+    const currentIdx = modes.indexOf(viewMode);
+    const targetIdx = modes.indexOf(slideName);
+    if (currentIdx === targetIdx) return styles.slideActive;
+    if (targetIdx < currentIdx) return styles.slideHiddenLeft;
+    return styles.slideHiddenRight;
+  };
+
+  const nextMode = () => setViewMode(modes[(modes.indexOf(viewMode) + 1) % modes.length]);
+  const prevMode = () => setViewMode(modes[(modes.indexOf(viewMode) - 1 + modes.length) % modes.length]);
+
   return (
     <div className={styles.pageLayout}>
       
       <div className={styles.container}>
         
         <div className={styles.headerRow}>
-          <button className={styles.arrowBtn} onClick={() => setViewMode(viewMode === 'manual' ? 'bot' : 'manual')} title="Помощник">
+          <button className={styles.arrowBtn} onClick={prevMode} title="Назад">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
@@ -219,11 +237,11 @@ export default function AdminPanel() {
           <div className={styles.titleContainer}>
             <h1 className={styles.title}>Панель для манги</h1>
             <p className={styles.subtitle}>
-              {viewMode === 'manual' ? 'Ручное добавление в каталог' : 'Помощник для написания'}
+              {titles[viewMode]}
             </p>
           </div>
 
-          <button className={styles.arrowBtn} onClick={() => setViewMode(viewMode === 'manual' ? 'bot' : 'manual')} title="Помощник">
+          <button className={styles.arrowBtn} onClick={nextMode} title="Вперед">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -234,7 +252,7 @@ export default function AdminPanel() {
         <div className={styles.sliderWrapper}>
           
           {/* Slide 1: Manual Form */}
-          <div className={`${styles.slide} ${viewMode === 'manual' ? styles.slideManual : styles.slideManualHidden}`}>
+          <div className={`${styles.slide} ${getSlideClass('manual')}`}>
             {error && <div className={styles.error}>{error}</div>}
             {success && <div className={styles.success}>{success}</div>}
 
@@ -378,7 +396,7 @@ export default function AdminPanel() {
           </div>
 
           {/* Slide 2: Bot Interface */}
-          <div className={`${styles.slide} ${viewMode === 'bot' ? styles.slideBot : styles.slideBotHidden}`}>
+          <div className={`${styles.slide} ${getSlideClass('bot')}`}>
             <div className={styles.botChat}>
               <div className={styles.botMessages}>
                 {botMessages.map((msg, i) => (
@@ -397,6 +415,31 @@ export default function AdminPanel() {
                 />
                 <button type="submit" className={styles.botSendBtn}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Slide 3: Downloader Interface */}
+          <div className={`${styles.slide} ${getSlideClass('downloader')}`}>
+            <div className={styles.botChat} style={{justifyContent: 'center', alignItems: 'center'}}>
+              <h3 style={{fontSize: '20px', color: '#fff', marginBottom: '16px'}}>Скачать мангу по ссылке</h3>
+              <p style={{color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '32px', maxWidth: '400px'}}>
+                Укажите ссылку на мангу (например, с MangaDex), и система автоматически скачает все главы и упакует их в ZIP-архив.
+              </p>
+              
+              <form style={{display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', maxWidth: '400px'}}>
+                <div className={styles.formGroup}>
+                  <input 
+                    type="url" 
+                    placeholder="https://..." 
+                    className={styles.botInput}
+                    style={{width: '100%'}}
+                    required
+                  />
+                </div>
+                <button type="button" className={styles.submitBtn} onClick={() => alert('Эта функция требует бэкенд-парсера (C#), он будет добавлен в следующем обновлении!')}>
+                  Начать скачивание
                 </button>
               </form>
             </div>
