@@ -99,25 +99,19 @@
   padding: 0 32px 32px 32px;
 }
 
-.slideManual {
+.slideActive {
   transform: translateX(0);
   opacity: 1;
   pointer-events: auto;
 }
 
-.slideManualHidden {
+.slideHiddenLeft {
   transform: translateX(-50px);
   opacity: 0;
   pointer-events: none;
 }
 
-.slideBot {
-  transform: translateX(0);
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.slideBotHidden {
+.slideHiddenRight {
   transform: translateX(50px);
   opacity: 0;
   pointer-events: none;
@@ -198,12 +192,13 @@
 .formGroup textarea {
   padding: 14px 16px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
   font-size: 15px;
   font-family: inherit;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .formGroup textarea {
@@ -214,14 +209,16 @@
 .formGroup input:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: var(--accent, #6366f1);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  border-color: rgba(168, 85, 247, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.1), inset 0 2px 6px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
 }
 
 .formGroup input::placeholder,
 .formGroup textarea::placeholder {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 400;
 }
 
 /* Tags UI */

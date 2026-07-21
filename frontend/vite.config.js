@@ -8,7 +8,7 @@ export default defineConfig({
     allowedHosts: ['lvh.me'],
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://amir-hyaloid-nonpessimistically.ngrok-free.dev',
         changeOrigin: true,
         secure: false,
       },

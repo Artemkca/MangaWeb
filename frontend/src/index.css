@@ -34,7 +34,7 @@
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
 
-  --header-height: 52px;
+  --header-height: 88px;
   --mobile-nav-height: 64px;
   --sidebar-width: 300px;
 
@@ -171,29 +171,29 @@ img { max-width: 100%; display: block; }
 /* ===== HEADER ===== */
 .header {
   position: fixed;
-  top: 0;
+  top: 16px;
   left: 0;
   right: 0;
-  height: var(--header-height);
-  background: var(--bg-primary);
+  height: 56px;
   z-index: 100;
+  pointer-events: none;
 }
 
 .header__inner {
-  max-width: 1400px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 24px;
   height: 100%;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  flex-shrink: 0;
+  flex: 1;
   font-weight: 800;
   font-size: 17px;
   letter-spacing: 0.8px;
@@ -221,26 +221,32 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.5px;
 }
 
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .nav__btn {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 12px;
+  gap: 6px;
+  padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
-  transition: color 0.15s;
+  transition: all 0.2s;
+  border-radius: 20px;
 }
 
 .nav__btn:hover {
   color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .nav__btn--active {
   color: var(--text-primary);
   background: var(--bg-hover);
-  border-radius: var(--radius-full);
-  padding: 6px 12px;
 }
 
 .nav__btn svg {
@@ -358,8 +364,13 @@ img { max-width: 100%; display: block; }
 .header__actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 4px;
-  flex-shrink: 0;
+  flex: 1;
+}
+
+.mobile-header-search {
+  display: none;
 }
 
 .btn-icon {
@@ -827,12 +838,15 @@ img { max-width: 100%; display: block; }
 .tabs--large .tab { padding: 10px 18px; }
 
 .tab {
-  padding: 6px 14px;
+  padding: 8px 18px;
   border-radius: var(--radius-full);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
   transition: all 0.2s;
+  cursor: pointer;
+  background: transparent;
+  border: none;
 }
 
 .tab:hover { color: var(--text-primary); }
@@ -2429,7 +2443,7 @@ img { max-width: 100%; display: block; }
   .auth-modal {
     position: relative;
     z-index: 10;
-    width: 100%;
+    width: calc(100% - 32px);
     max-width: 420px;
     max-height: 90vh;
     overflow-y: auto;
@@ -2978,12 +2992,81 @@ img { max-width: 100%; display: block; }
 @media (max-width: 768px) {
   body { padding-bottom: calc(var(--mobile-nav-height) + 8px); }
   .mobile-nav { display: flex; }
-  .header__actions .btn--primary { display: none; }
-  .header__inner {
-    grid-template-columns: auto 1fr;
-    gap: 12px;
+  
+  .page {
+    padding-top: 70px !important;
   }
-  .nav--desktop { display: none; }
+
+  .header {
+    top: 0 !important;
+    height: 60px !important;
+  }
+  .header__inner {
+    padding: 0 12px !important;
+    height: 100%;
+  }
+  .header__pill {
+    padding: 12px 0 !important;
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .logo, .header__actions, .nav--desktop {
+    display: none !important;
+  }
+
+  .mobile-header-search {
+    display: flex !important;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 10px 16px;
+    width: 100%;
+    gap: 8px;
+    border: none;
+  }
+  .mobile-header-search input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    width: 100%;
+    outline: none;
+    font-size: 15px;
+  }
+  
+  .mobile-nav {
+    bottom: 16px !important;
+    left: 16px !important;
+    right: 16px !important;
+    border-radius: 20px !important;
+    height: 60px !important;
+    border: 1px solid var(--border) !important;
+    background: var(--bg-secondary) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important;
+  }
+  
+  .mobile-nav__icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .mobile-nav__item--active .mobile-nav__icon-wrapper {
+    background: rgba(93, 122, 255, 0.15);
+    color: var(--accent);
+  }
+  .mobile-nav__item {
+    gap: 2px;
+  }
+  .mobile-nav__item span {
+    font-size: 10px;
+    font-weight: 500;
+  }
+  
   .activity-grid {
     display: flex;
     overflow-x: auto;
@@ -3008,7 +3091,26 @@ img { max-width: 100%; display: block; }
   .logo__text { display: none; }
   .header__search-input { font-size: 13px; }
   .section__header { flex-direction: column; align-items: flex-start; }
+  .section__header-actions { width: 100%; justify-content: flex-end; }
+  .hero-card__cover { display: none; }
+  .hero-card__content { padding: 16px; }
+  .hero-card__stats { flex-wrap: wrap; }
+  .catalog-filters-btn { width: 100%; }
+  
+  .manga-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .manga-grid--catalog { grid-template-columns: repeat(3, 1fr) !important; }
+  .manga-grid--compact { grid-template-columns: repeat(3, 1fr) !important; }
   .tops-item__stats { display: none; }
+  
+  .manga-row .manga-card {
+    flex: 0 0 105px !important;
+  }
+  .manga-row {
+    gap: 8px !important;
+  }
 }
 
 @media (min-width: 769px) {
@@ -3078,6 +3180,41 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .manga-content {
+    flex-direction: column;
+    align-items: center;
+    margin-top: -80px;
+    gap: 24px;
+  }
+  
+  .manga-sidebar {
+    width: 200px;
+  }
+  
+  .manga-main {
+    width: 100%;
+    min-width: 0;
+  }
+  
+  .manga-header__titles {
+    text-align: center;
+  }
+  
+  .manga-header__rating {
+    justify-content: center;
+  }
+  
+  .manga-tags {
+    justify-content: center;
+  }
+  
+  .manga-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 .manga-actions .btn {
@@ -3556,6 +3693,12 @@ img { max-width: 100%; display: block; }
   .auth-submit { height: 38px; }
   .auth-social-btn { height: 38px; }
   .auth-modal__title { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+  .auth-modal { padding: 24px 16px; }
+  .auth-social__row { gap: 6px; }
+  .auth-social__row--triple .auth-social-btn { padding: 0 4px; font-size: 11px; }
 }
 
 /* ===== MANGA BACKGROUND ===== */

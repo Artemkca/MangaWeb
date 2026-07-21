@@ -145,8 +145,26 @@
   font-size: 13px;
 }
 
+.phMeta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.phDescription {
+  color: var(--text-secondary);
+  font-size: 14px;
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.phActions {
+  margin-left: auto;
+}
+
 .editBtn {
-  margin-bottom: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -956,4 +974,106 @@
   88% { transform: translate(-50%, -50%) skewX(-6deg); }
   92% { transform: translate(-50%, -50%) skewX(8deg); }
   96% { transform: translate(-50%, -50%) skewX(-3deg); }
+}
+
+@media (max-width: 768px) {
+  .profileContainer {
+    padding: 70px 12px 100px 12px;
+  }
+  .bannerWrapper {
+    margin-bottom: 16px;
+    padding: 12px;
+    border-radius: 16px;
+  }
+  .banner {
+    height: 180px;
+  }
+  .profileHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: -50px;
+    padding: 0 16px 16px;
+    gap: 12px;
+  }
+  .phAvatar {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  .frameImg {
+    width: 128px !important;
+    height: 128px !important;
+  }
+  .phInfo {
+    align-items: center;
+  }
+  .username {
+    font-size: 24px;
+    text-align: center;
+  }
+  .phMeta {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .phDescription {
+    white-space: normal;
+    text-align: center;
+  }
+  .phActions {
+    width: 100%;
+    margin-top: 8px;
+  }
+  .editBtn {
+    width: 100%;
+    justify-content: center;
+  }
+  .activityGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .layoutGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .mainCol, .sideCol {
+    min-width: 0;
+  }
+  .mainBlock {
+    padding: 16px;
+    border-radius: 16px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .libraryTabs {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px;
+    gap: 16px;
+  }
+  .libraryTabs::-webkit-scrollbar {
+    display: none;
+  }
+  .libraryTabs span {
+    flex-shrink: 0;
+  }
+  .questsGrid {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+  }
+  .questsGrid::-webkit-scrollbar {
+    display: none;
+  }
+  .questsGrid .questCard {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+  }
+  .allQuestsGrid {
+    grid-template-columns: 1fr;
+  }
 }

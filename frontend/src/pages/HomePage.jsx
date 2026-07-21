@@ -26,9 +26,11 @@ export default function HomePage() {
       <div className="container container--wide">
         <section className="section">
           <div className="section__header">
-            <div className="section__title-row">
-              <h2 className="section__title">Самое читаемое</h2>
-              <span className="section__badge">TOP</span>
+            <div className="section__title-row" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h2 className="section__title" style={{ margin: 0 }}>Самое читаемое</h2>
+              <span className="section__badge" style={{ background: '#5d7aff', color: '#fff', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                👑 TOP
+              </span>
             </div>
             <Tabs items={['За день', 'За неделю', 'За месяц']} />
           </div>

@@ -34,7 +34,7 @@ export default function AdminPanel() {
 
   // Bot Chat State
   const [botMessages, setBotMessages] = useState([
-    { role: 'bot', text: 'Привет! Я бот-помощник. Напиши мне название манги, и я сам найду описание, жанры и главных персонажей, а затем заполню форму.' }
+    { role: 'bot', text: 'Привет! Я Помощник для написания. Напиши мне название манги, и я соберу информацию, описание, жанры и главных персонажей, а затем заполню форму.' }
   ]);
   const [botInput, setBotInput] = useState('');
 
@@ -144,87 +144,31 @@ export default function AdminPanel() {
 
     setBotMessages(prev => [...prev, { 
       role: 'bot', 
-      text: `Ищу информацию по "${currentInput}" на внешних базах данных (Shikimori)... ⏳`
+      text: `Ищу информацию по "${currentInput}" на нескольких сайтах одновременно (Shikimori, MangaDex, Remanga)... ⏳`
     }]);
 
     try {
-      const searchRes = await fetch(`/api/proxy/shikimori/search?query=${encodeURIComponent(currentInput)}`);
+      const searchRes = await fetch(`/api/proxy/smart-search?query=${encodeURIComponent(currentInput)}`);
       
       if (!searchRes.ok) {
-        let errorText = '';
-        try { errorText = await searchRes.text(); } catch(e) {}
-        throw new Error(`Ошибка сервера (${searchRes.status}). Возможно, запрос заблокирован.`);
+        throw new Error(`Ошибка сервера (${searchRes.status}). Бэкенд недоступен.`);
       }
 
-      const searchData = await searchRes.json();
+      const data = await searchRes.json();
 
-      if (searchData && searchData.length > 0) {
-        const mangaId = searchData[0].id;
-        const detailRes = await fetch(`/api/proxy/shikimori/mangas/${mangaId}`);
-        if (!detailRes.ok) throw new Error(`Ошибка загрузки деталей (${detailRes.status})`);
+      if (data && (data.description || data.genres.length > 0 || data.coverUrl || data.author)) {
         
-        const data = await detailRes.json();
+        let finalDesc = data.description || 'К сожалению, описание не найдено, но я собрал теги и другие данные!';
+        let finalAuthor = data.author || '';
+        let finalMC = data.mainCharacter || '';
+        let finalGenres = data.genres || [];
+        let title = data.title || currentInput;
 
-        const title = data.russian || data.name;
-        
-        let desc = data.description;
-        if (desc) {
-          desc = desc.replace(/\[\/?(i|b|spoiler|character|person|anime|manga|url)[^\]]*\]/gi, '');
-        }
-
-        const FALLBACK_DATA = {
-          'Игрок скрывает прошлое': {
-            description: 'VR-игра «История континента Аркана» внезапно материализуется в реальном мире. Обычный офисный работник Ли Хо Ёль оказывается в теле своего игрового персонажа, которого создал в школе — высокопарного и пафосного Грандфелла Клауди Арфея Ромео. Теперь ему приходится отыгрывать эту нелепую роль сквозь жгучий стыд, ведь его персонаж — последний легендарный охотник на демонов!',
-            genres: ['Сёнен', 'Экшен', 'Фэнтези', 'Исекай', 'Комедия', 'Магия', 'Система', 'ГГ мужчина', 'Умный ГГ', 'Игровые элементы'],
-            author: 'Badass / Gaechaban',
-            mainCharacter: 'Ли Хо Ёль (Грандфелл)'
-          },
-          'Поднятие уровня в одиночку': {
-            description: 'Слабейший охотник Е-ранга получает уникальную способность интерфейса Игрока, позволяющую ему бесконечно повышать свой уровень.',
-            genres: ['Сёнен', 'Экшен', 'Фэнтези', 'Сверхъестественное', 'Система', 'ГГ имба'],
-            author: 'Chugong',
-            mainCharacter: 'Сон Джин У'
-          },
-          'Расхититель гробниц': {
-            description: 'Мир преобразился с появлением загадочных «божественных гробниц». Внутри них скрыты реликвии — могущественные артефакты из мифов и легенд. Со Джухён был расхитителем гробниц, но его предал работодатель. Находясь на грани смерти, он внезапно переносится на 15 лет в прошлое. Теперь, вооружившись знаниями о будущем, Джухён решает сам выкрасть все реликвии мира, чтобы отомстить предателям и стать величайшим расхитителем гробниц! "То, что было твоим — моё. То, что было моим, естественно, моё!"',
-            genres: ['Сёнен', 'Экшен', 'Фэнтези', 'Приключения', 'Магия', 'ГГ мужчина', 'Умный ГГ', 'Жестокий мир', 'Месть', 'Перерождение', 'Артефакты'],
-            author: 'Sanji Jiksong / 3B2S',
-            mainCharacter: 'Со Джухён'
-          }
-        };
-
-        let finalDesc = desc && desc.trim().length > 0 ? desc : null;
-        let finalAuthor = '';
-        let finalMC = '';
-        let apiGenres = data.genres ? data.genres.map(g => g.russian || g.name) : [];
-        let finalGenres = [...apiGenres];
-        
-        const fallbackKey = Object.keys(FALLBACK_DATA).find(k => title.toLowerCase().includes(k.toLowerCase()) || currentInput.toLowerCase().includes(k.toLowerCase()));
-        
-        if (fallbackKey) {
-           const fallback = FALLBACK_DATA[fallbackKey];
-           if (!finalDesc) finalDesc = fallback.description;
-           finalAuthor = fallback.author;
-           finalMC = fallback.mainCharacter;
-           
-           fallback.genres.forEach(g => {
-             if (!finalGenres.includes(g)) finalGenres.push(g);
-           });
-        }
-        
-        if (!finalDesc) {
-           finalDesc = 'К сожалению, на Шикимори пока нет описания для этой манги, но я собрал для вас все остальные данные!';
-        }
-
-        const score = data.score ? (parseFloat(data.score) / 2).toFixed(1) : 0;
-        const chapters = data.chapters || data.volumes || 0;
-        const coverUrl = data.image ? `https://shikimori.one${data.image.original}` : '';
-        
         setBotMessages(prev => [
           ...prev.slice(0, prev.length - 1),
           { 
             role: 'bot', 
-            text: `Манга "${title}" найдена!\n\nАвтор: ${finalAuthor || 'Неизвестно'}\nГГ: ${finalMC || 'Неизвестно'}\nОписание: ${finalDesc.substring(0, 150)}...\nЖанры: ${finalGenres.join(', ')}\n\nЯ заполнил форму. Проверьте данные и сохраните!`
+            text: `Манга "${title}" успешно проанализирована!\n\nАвтор: ${finalAuthor || 'Неизвестно'}\nГГ: ${finalMC || 'Неизвестно'}\nОписание: ${finalDesc.substring(0, 150)}...\nСобрано уникальных жанров: ${finalGenres.length}\n\nЯ заполнил форму. Проверьте данные и сохраните!`
           }
         ]);
         
@@ -234,9 +178,9 @@ export default function AdminPanel() {
           author: finalAuthor,
           mainCharacter: finalMC,
           description: finalDesc,
-          rating: score,
-          chapters: chapters,
-          cover: coverUrl,
+          rating: data.rating || 0,
+          chapters: data.chapters || 0,
+          cover: data.coverUrl || '',
           genres: Array.from(new Set([...prev.genres, ...finalGenres]))
         }));
       } else {
@@ -244,7 +188,7 @@ export default function AdminPanel() {
           ...prev.slice(0, prev.length - 1),
           { 
             role: 'bot', 
-            text: `К сожалению, манга "${currentInput}" не найдена на Шикимори. 😔\n\nПопробуйте уточнить название.`
+            text: `К сожалению, я не смог найти информацию о "${currentInput}" ни на одном из сайтов. 😔\n\nПопробуйте уточнить название.`
           }
         ]);
       }
@@ -259,13 +203,31 @@ export default function AdminPanel() {
     }
   };
 
+  const modes = ['manual', 'bot', 'downloader'];
+  const titles = {
+    'manual': 'Ручное добавление в каталог',
+    'bot': 'Помощник для написания',
+    'downloader': 'Скачать по ссылке (Скрапер)'
+  };
+
+  const getSlideClass = (slideName) => {
+    const currentIdx = modes.indexOf(viewMode);
+    const targetIdx = modes.indexOf(slideName);
+    if (currentIdx === targetIdx) return styles.slideActive;
+    if (targetIdx < currentIdx) return styles.slideHiddenLeft;
+    return styles.slideHiddenRight;
+  };
+
+  const nextMode = () => setViewMode(modes[(modes.indexOf(viewMode) + 1) % modes.length]);
+  const prevMode = () => setViewMode(modes[(modes.indexOf(viewMode) - 1 + modes.length) % modes.length]);
+
   return (
     <div className={styles.pageLayout}>
       
       <div className={styles.container}>
         
         <div className={styles.headerRow}>
-          <button className={styles.arrowBtn} onClick={() => setViewMode(viewMode === 'manual' ? 'bot' : 'manual')} title="Бот">
+          <button className={styles.arrowBtn} onClick={prevMode} title="Назад">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
@@ -275,11 +237,11 @@ export default function AdminPanel() {
           <div className={styles.titleContainer}>
             <h1 className={styles.title}>Панель для манги</h1>
             <p className={styles.subtitle}>
-              {viewMode === 'manual' ? 'Ручное добавление в каталог' : 'Бот-помощник'}
+              {titles[viewMode]}
             </p>
           </div>
 
-          <button className={styles.arrowBtn} onClick={() => setViewMode(viewMode === 'manual' ? 'bot' : 'manual')} title="Бот">
+          <button className={styles.arrowBtn} onClick={nextMode} title="Вперед">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -290,7 +252,7 @@ export default function AdminPanel() {
         <div className={styles.sliderWrapper}>
           
           {/* Slide 1: Manual Form */}
-          <div className={`${styles.slide} ${viewMode === 'manual' ? styles.slideManual : styles.slideManualHidden}`}>
+          <div className={`${styles.slide} ${getSlideClass('manual')}`}>
             {error && <div className={styles.error}>{error}</div>}
             {success && <div className={styles.success}>{success}</div>}
 
@@ -434,7 +396,7 @@ export default function AdminPanel() {
           </div>
 
           {/* Slide 2: Bot Interface */}
-          <div className={`${styles.slide} ${viewMode === 'bot' ? styles.slideBot : styles.slideBotHidden}`}>
+          <div className={`${styles.slide} ${getSlideClass('bot')}`}>
             <div className={styles.botChat}>
               <div className={styles.botMessages}>
                 {botMessages.map((msg, i) => (
@@ -453,6 +415,31 @@ export default function AdminPanel() {
                 />
                 <button type="submit" className={styles.botSendBtn}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Slide 3: Downloader Interface */}
+          <div className={`${styles.slide} ${getSlideClass('downloader')}`}>
+            <div className={styles.botChat} style={{justifyContent: 'center', alignItems: 'center'}}>
+              <h3 style={{fontSize: '20px', color: '#fff', marginBottom: '16px'}}>Скачать мангу по ссылке</h3>
+              <p style={{color: 'var(--text-secondary)', textAlign: 'center', marginBottom: '32px', maxWidth: '400px'}}>
+                Укажите ссылку на мангу (например, с MangaDex), и система автоматически скачает все главы и упакует их в ZIP-архив.
+              </p>
+              
+              <form style={{display: 'flex', flexDirection: 'column', gap: '16px', width: '100%', maxWidth: '400px'}}>
+                <div className={styles.formGroup}>
+                  <input 
+                    type="url" 
+                    placeholder="https://..." 
+                    className={styles.botInput}
+                    style={{width: '100%'}}
+                    required
+                  />
+                </div>
+                <button type="button" className={styles.submitBtn} onClick={() => alert('Эта функция требует бэкенд-парсера (C#), он будет добавлен в следующем обновлении!')}>
+                  Начать скачивание
                 </button>
               </form>
             </div>
